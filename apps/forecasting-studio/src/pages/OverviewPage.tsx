@@ -13,9 +13,9 @@ export function OverviewPage() {
   return (
     <div className="space-y-8">
       <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-        <p className="text-[11px] uppercase tracking-[0.24em] text-harvest">Supervisor prototype · Member 2</p>
+        <p className="text-[11px] uppercase tracking-[0.24em] text-harvest">Model results</p>
         <h2 className="font-display mt-3 max-w-4xl text-4xl leading-tight md:text-6xl">
-          Weekly vegetable prices with a calibrated interval — not a single number.
+          How accurate the weekly price range is
         </h2>
         <p className="mt-5 max-w-3xl text-lg text-mist">
           Existing Sri Lankan forecasters, including Moratuwa 2026, emit a point estimate from static features.
@@ -32,10 +32,10 @@ export function OverviewPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <Panel kicker="Approved TAF" title="What this component owns">
+        <Panel kicker="Scope" title="What this component produces">
           <p className="text-sm leading-relaxed text-mist">
-            forecast(crop, market, week, commitment) → (point, lower, upper). Member 3’s DCVS needs the range.
-            Member 4 needs the same contract in batch. Grain is crop × market × week.
+            This component forecasts weekly wholesale price as a low, expected, and high value. The next
+            component uses that range for planting viability. Grain is crop × market × week.
           </p>
         </Panel>
         <Panel kicker="Honesty" title="What this file is">
@@ -58,10 +58,10 @@ export function OverviewPage() {
       <Panel kicker="Walk the lecturer through" title="Suggested demo path">
         <div className="grid gap-3 md:grid-cols-4">
           {[
-            ["01 Data", "/data", "Coverage, exclusions, cobweb plot"],
-            ["02 ML Studio", "/studio", "Replay training + metrics"],
-            ["03 Comparison", "/compare", "SARIMA vs LightGBM vs XGBoost"],
-            ["04 Live forecast", "/forecast", "Move the commitment slider"],
+            ["Dashboard", "/", "Forecast a crop and market"],
+            ["Data", "/data", "Price history and coverage"],
+            ["Training", "/studio", "How the models were fit"],
+            ["Comparison", "/compare", "Baseline against the engine"],
           ].map(([label, to, hint]) => (
             <Link key={to} to={to} className="rounded-2xl border border-line bg-ink-2/60 p-4 transition hover:border-harvest/60">
               <p className="font-display text-lg">{label}</p>

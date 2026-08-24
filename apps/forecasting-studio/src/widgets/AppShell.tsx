@@ -2,14 +2,14 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const links = [
-  { to: "/", label: "Overview" },
+  { to: "/", label: "Dashboard" },
+  { to: "/evidence", label: "Results" },
   { to: "/data", label: "Data" },
   { to: "/features", label: "Features" },
-  { to: "/studio", label: "ML Studio" },
+  { to: "/studio", label: "Training" },
   { to: "/compare", label: "Comparison" },
   { to: "/uncertainty", label: "Uncertainty" },
   { to: "/novelty", label: "Novelty" },
-  { to: "/forecast", label: "Live forecast" },
 ];
 
 export function AppShell() {
@@ -18,8 +18,8 @@ export function AppShell() {
     <div className="min-h-screen grid-fade">
       <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col border-r border-line bg-ink-2/90 px-5 py-6 backdrop-blur-md lg:flex">
         <p className="text-[11px] uppercase tracking-[0.24em] text-mist">J26-DS-322 · IT23415836</p>
-        <h1 className="font-display mt-2 text-2xl leading-tight">HTFE Studio</h1>
-        <p className="mt-2 text-sm text-mist">Hybrid Temporal Forecasting Engine · Member 2 prototype</p>
+        <h1 className="font-display mt-2 text-2xl leading-tight">Price Forecast</h1>
+        <p className="mt-2 text-sm text-mist">Weekly vegetable prices with a confidence range</p>
         <nav className="mt-8 flex flex-col gap-1">
           {links.map((link) => (
             <NavLink
@@ -43,7 +43,7 @@ export function AppShell() {
 
       <div className="lg:pl-64">
         <header className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-ink/75 px-4 py-3 backdrop-blur-md lg:hidden">
-          <span className="font-display text-lg">HTFE Studio</span>
+          <span className="font-display text-lg">Price Forecast</span>
           <select
             className="rounded-lg border border-line bg-panel px-2 py-1 text-sm"
             onChange={(e) => navigate(e.target.value)}

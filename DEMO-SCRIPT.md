@@ -4,7 +4,7 @@
 **Time:** about 8–10 minutes  
 **You:** Garusingarachchi Y.B · Hybrid Temporal Forecasting Engine
 
-Start with Overview. Do not jump around. Click only when the script says **CLICK**.
+Start on **The system** (home). That is the group product view. Research pages are evidence, not the story. Click only when the script says **CLICK**.
 
 ---
 
@@ -35,24 +35,25 @@ If the page is blank: wait 5 seconds. If still blank, refresh once.
 
 ---
 
-## 1. Overview — 1 minute
+## 1. The system — 1.5 minutes (start here)
 
 **Say:**
 
-> I am Member 2. I own the forecasting engine.  
-> Existing Sri Lankan work, including the Moratuwa 2026 paper, gives a single price from historical features.  
-> My engine gives a **range**: lower, point, and upper. And it can be asked again mid-season when new planting commitments arrive.  
-> That is the approved TAF: quantified uncertainty, plus cultivation intensity as a **live** feature, not last season’s total area.
+> This is one decision-support system, four members.  
+> Member 1 cleans the data.  
+> **I** am Member 2 — the forecasting engine. I do **not** create the Market Saturation Risk Score. Member 3 does.  
+> I create the **price interval** they need: lower, point, upper.  
+> Member 4 calls the same thing in batch for the simulation.
 
-Point at the four cards.
+Point at the four chain cards. Yours is the highlighted one.
 
-> On held-out 2024–2025 weeks: LightGBM MAE is **Rs. 48.82**. The seasonal baseline was **126**. Coverage is **89.2%** against a 90% target. Width is **Rs. 203**.
+**DRAG** the intensity slider.
 
-Point at the honesty box.
+> When planting commitments change, my interval updates. That packet is what will appear on Member 3’s dashboard — the same idea as their upload appearing on the parent screen. Their MSRS box stays empty here on purpose. I will not invent their score.
 
-> I will be clear up front. This file is a good **price** dataset and an incomplete **novelty** dataset. Commitments here are a labelled simulation. Dambulla is not in the extract.
+**CLICK** My evidence only if they ask “how do we know this number is real?” Otherwise stay on the system, then jump to Comparison if short on time.
 
-**CLICK** Data.
+**If they want the lab:** **CLICK** Data.
 
 ---
 
@@ -174,9 +175,9 @@ Point at week 2 / 5 / 8 / 12.
 
 ---
 
-## 8. Live forecast — 1.5 minutes
+## 8. Handoff contract — 1 minute
 
-> Lecturer asked for no backend yet. This screen **is** the contract Members 3 and 4 will call. Left is the request. Right is lower, point, upper.
+> Same packet as the home screen, in API shape. Left is what Member 3 sends. Middle is what I return. Right is their inbox — MSRS stays a placeholder until their engine is wired.
 
 **CLICK** crop = carrot, market = colombo (or leave defaults).
 

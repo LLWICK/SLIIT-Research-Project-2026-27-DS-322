@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { StudioContext, loadStudioData } from "@/entities/results/load";
 import type { StudioData } from "@/entities/results/types";
 import { AppShell } from "@/widgets/AppShell";
+import { SystemPage } from "@/pages/SystemPage";
 import { OverviewPage } from "@/pages/OverviewPage";
 import { DataPage } from "@/pages/DataPage";
 import { FeaturesPage } from "@/pages/FeaturesPage";
@@ -10,7 +11,6 @@ import { StudioPage } from "@/pages/StudioPage";
 import { ComparisonPage } from "@/pages/ComparisonPage";
 import { UncertaintyPage } from "@/pages/UncertaintyPage";
 import { NoveltyPage } from "@/pages/NoveltyPage";
-import { ForecastPage } from "@/pages/ForecastPage";
 
 export function App() {
   const [data, setData] = useState<StudioData | null>(null);
@@ -47,14 +47,15 @@ export function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<AppShell />}>
-            <Route index element={<OverviewPage />} />
+            <Route index element={<SystemPage />} />
+            <Route path="evidence" element={<OverviewPage />} />
             <Route path="data" element={<DataPage />} />
             <Route path="features" element={<FeaturesPage />} />
             <Route path="studio" element={<StudioPage />} />
             <Route path="compare" element={<ComparisonPage />} />
             <Route path="uncertainty" element={<UncertaintyPage />} />
             <Route path="novelty" element={<NoveltyPage />} />
-            <Route path="forecast" element={<ForecastPage />} />
+            <Route path="forecast" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
