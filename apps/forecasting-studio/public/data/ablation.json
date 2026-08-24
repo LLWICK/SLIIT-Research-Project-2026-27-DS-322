@@ -1,0 +1,158 @@
+{
+  "A": {
+    "features": [
+      "price_lag_1",
+      "price_lag_4",
+      "price_lag_52",
+      "roll_mean_4",
+      "week_of_year",
+      "week_within_season",
+      "is_yala",
+      "is_maha"
+    ],
+    "metrics": {
+      "n_scored": 1484,
+      "mae": 49.3,
+      "rmse": 87.58,
+      "mape": 20.26,
+      "pinball": 14.77,
+      "picp": 89.76,
+      "interval_width": 201.05
+    },
+    "by_crop": {
+      "carrot": {
+        "n_scored": 494,
+        "mae": 69.32,
+        "rmse": 123.13,
+        "mape": 21.94,
+        "pinball": 21.34,
+        "picp": 84.62,
+        "interval_width": 229.96
+      },
+      "leek": {
+        "n_scored": 495,
+        "mae": 28.26,
+        "rmse": 40.03,
+        "mape": 14.8,
+        "pinball": 7.72,
+        "picp": 96.57,
+        "interval_width": 173.8
+      },
+      "tomato": {
+        "n_scored": 495,
+        "mae": 50.35,
+        "rmse": 79.13,
+        "mape": 24.03,
+        "pinball": 15.27,
+        "picp": 88.08,
+        "interval_width": 199.45
+      }
+    }
+  },
+  "B": {
+    "features": [
+      "price_lag_1",
+      "price_lag_4",
+      "price_lag_52",
+      "roll_mean_4",
+      "week_of_year",
+      "week_within_season",
+      "is_yala",
+      "is_maha",
+      "origin_rainfall_mm",
+      "origin_temp_c"
+    ],
+    "metrics": {
+      "n_scored": 1484,
+      "mae": 48.57,
+      "rmse": 86.97,
+      "mape": 19.85,
+      "pinball": 14.63,
+      "picp": 89.96,
+      "interval_width": 207.41
+    },
+    "by_crop": {
+      "carrot": {
+        "n_scored": 494,
+        "mae": 68.82,
+        "rmse": 122.89,
+        "mape": 21.55,
+        "pinball": 21.51,
+        "picp": 85.22,
+        "interval_width": 236.85
+      },
+      "leek": {
+        "n_scored": 495,
+        "mae": 27.94,
+        "rmse": 39.44,
+        "mape": 14.64,
+        "pinball": 7.63,
+        "picp": 96.57,
+        "interval_width": 179.18
+      },
+      "tomato": {
+        "n_scored": 495,
+        "mae": 48.99,
+        "rmse": 77.77,
+        "mape": 23.36,
+        "pinball": 14.75,
+        "picp": 88.08,
+        "interval_width": 206.27
+      }
+    }
+  },
+  "C": {
+    "features": [
+      "price_lag_1",
+      "price_lag_4",
+      "price_lag_52",
+      "roll_mean_4",
+      "week_of_year",
+      "week_within_season",
+      "is_yala",
+      "is_maha",
+      "origin_rainfall_mm",
+      "origin_temp_c",
+      "cultivation_intensity",
+      "committed_hectares"
+    ],
+    "metrics": {
+      "n_scored": 1484,
+      "mae": 48.77,
+      "rmse": 87.08,
+      "mape": 19.95,
+      "pinball": 15.27,
+      "picp": 89.02,
+      "interval_width": 205.81
+    },
+    "by_crop": {
+      "carrot": {
+        "n_scored": 494,
+        "mae": 68.68,
+        "rmse": 122.96,
+        "mape": 21.28,
+        "pinball": 22.66,
+        "picp": 83.4,
+        "interval_width": 232.39
+      },
+      "leek": {
+        "n_scored": 495,
+        "mae": 27.99,
+        "rmse": 39.51,
+        "mape": 14.71,
+        "pinball": 7.7,
+        "picp": 96.36,
+        "interval_width": 178.79
+      },
+      "tomato": {
+        "n_scored": 495,
+        "mae": 49.69,
+        "rmse": 78.0,
+        "mape": 23.86,
+        "pinball": 15.46,
+        "picp": 87.27,
+        "interval_width": 206.31
+      }
+    }
+  }
+}

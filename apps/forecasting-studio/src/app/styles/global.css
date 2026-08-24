@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #07110e;
+  --color-ink-2: #0c1914;
+  --color-panel: #10211b;
+  --color-line: #1d3a30;
+  --color-mist: #8aa396;
+  --color-cream: #eaf3ec;
+  --color-harvest: #c6f31a;
+  --color-amber: #f5b942;
+  --color-sky: #7dd3c0;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(198, 243, 26, 0.08), transparent 50%),
+    radial-gradient(900px 500px at 110% 10%, rgba(245, 185, 66, 0.07), transparent 45%),
+    var(--color-ink);
+  color: var(--color-cream);
+  antialiased: true;
+}
+
+::selection {
+  background: rgba(198, 243, 26, 0.28);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.grid-fade {
+  background-image:
+    linear-gradient(rgba(234, 243, 236, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(234, 243, 236, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #1d3a30;
+}
+
+.recharts-text {
+  fill: #8aa396;
+  font-size: 11px;
+}
+
+select,
+.field {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #1d3a30;
+  background: #07110e;
+  color: #eaf3ec;
+  padding: 0.55rem 0.75rem;
+}
