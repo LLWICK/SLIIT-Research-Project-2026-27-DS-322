@@ -96,7 +96,7 @@ export function DataPage() {
             This is the cobweb sketch in our own panel: planting pressure this season against the next season’s market price.
           </p>
         </Panel>
-        <Panel kicker="Exclusions" title="What we refuse to pretend">
+        <Panel kicker="Data rules" title="How this panel is treated">
           <ul className="space-y-3">
             {coverage.exclusions.map((item) => (
               <li key={item.item} className="rounded-2xl border border-line bg-ink-2/50 p-3">

@@ -208,16 +208,16 @@
   ],
   "exclusions": [
     {
-      "item": "Local Big Onion",
-      "reason": "Only 3,059 rows in this extract versus 26k+ for Carrot/Leek/Tomato; Master Plan v2.0 excludes it (~90% missing in the source workbook)."
-    },
-    {
-      "item": "Dambulla market",
-      "reason": "Not present in analysis_ready_price.csv. Colombo is used as the consumer-market series; Badulla and Nuwara Eliya are high-coverage origin-adjacent reporting locations."
-    },
-    {
       "item": "Zero prices",
-      "reason": "32 zero values treated as missing, never as free vegetables."
+      "reason": "32 zero values treated as missing, never as a real wholesale price."
+    },
+    {
+      "item": "Unobserved weeks",
+      "reason": "Gaps stay blank. Prices are not interpolated or filled with zeros, and every metric is scored on observed rows only."
+    },
+    {
+      "item": "Retail series",
+      "reason": "The engine uses wholesale weekly prices only. Retail rows in the extract are not modelled."
     }
   ]
 }

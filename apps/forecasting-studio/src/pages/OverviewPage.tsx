@@ -89,8 +89,8 @@ export function OverviewPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Panel kicker="Data notes" title="What this extract covers">
           <p className="text-sm leading-relaxed text-mist">
-            Commitments are a labelled historical simulation, not live HARTI registrations. Dambulla is not in the
-            file. Colombo is used as the consumer-market series.
+            Commitments are a labelled historical simulation, not live HARTI registrations. Colombo is the
+            consumer-market series; Badulla and Nuwara Eliya are origin-adjacent.
           </p>
         </Panel>
         <Panel kicker="Evaluation" title="How the numbers were scored">
