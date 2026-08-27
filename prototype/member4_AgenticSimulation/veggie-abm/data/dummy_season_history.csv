@@ -1,0 +1,601 @@
+season_type,season_year,district,crop,avg_retail_price,committed_hectares,source
+Yala,2014,Nuwara Eliya,Carrot,170.45,271.9,dummy
+Yala,2014,Badulla,Carrot,179.44,577.1,dummy
+Yala,2014,Kandy,Carrot,174.55,287.4,dummy
+Yala,2014,Kurunegala,Carrot,189.41,398.5,dummy
+Yala,2014,Matale,Carrot,192.6,523.4,dummy
+Maha,2014,Nuwara Eliya,Carrot,143.49,490.3,dummy
+Maha,2014,Badulla,Carrot,150.34,617.3,dummy
+Maha,2014,Kandy,Carrot,145.58,584.9,dummy
+Maha,2014,Kurunegala,Carrot,149.55,683.8,dummy
+Maha,2014,Matale,Carrot,148.06,594.4,dummy
+Yala,2015,Nuwara Eliya,Carrot,188.65,268.0,dummy
+Yala,2015,Badulla,Carrot,180.92,509.9,dummy
+Yala,2015,Kandy,Carrot,177.16,338.3,dummy
+Yala,2015,Kurunegala,Carrot,195.1,397.2,dummy
+Yala,2015,Matale,Carrot,176.92,258.1,dummy
+Maha,2015,Nuwara Eliya,Carrot,191.54,395.9,dummy
+Maha,2015,Badulla,Carrot,188.64,562.8,dummy
+Maha,2015,Kandy,Carrot,188.52,374.9,dummy
+Maha,2015,Kurunegala,Carrot,188.56,499.6,dummy
+Maha,2015,Matale,Carrot,187.11,295.7,dummy
+Yala,2016,Nuwara Eliya,Carrot,172.23,561.6,dummy
+Yala,2016,Badulla,Carrot,169.43,446.8,dummy
+Yala,2016,Kandy,Carrot,188.11,298.1,dummy
+Yala,2016,Kurunegala,Carrot,183.5,544.4,dummy
+Yala,2016,Matale,Carrot,172.09,496.4,dummy
+Maha,2016,Nuwara Eliya,Carrot,187.78,467.2,dummy
+Maha,2016,Badulla,Carrot,176.44,234.1,dummy
+Maha,2016,Kandy,Carrot,178.88,315.2,dummy
+Maha,2016,Kurunegala,Carrot,170.38,597.0,dummy
+Maha,2016,Matale,Carrot,185.1,246.3,dummy
+Yala,2017,Nuwara Eliya,Carrot,181.46,475.9,dummy
+Yala,2017,Badulla,Carrot,177.25,524.2,dummy
+Yala,2017,Kandy,Carrot,174.08,591.7,dummy
+Yala,2017,Kurunegala,Carrot,176.6,235.4,dummy
+Yala,2017,Matale,Carrot,184.42,550.4,dummy
+Maha,2017,Nuwara Eliya,Carrot,177.98,278.9,dummy
+Maha,2017,Badulla,Carrot,173.24,404.5,dummy
+Maha,2017,Kandy,Carrot,173.4,342.6,dummy
+Maha,2017,Kurunegala,Carrot,161.5,368.4,dummy
+Maha,2017,Matale,Carrot,165.41,264.2,dummy
+Yala,2018,Nuwara Eliya,Carrot,163.71,342.9,dummy
+Yala,2018,Badulla,Carrot,159.39,572.5,dummy
+Yala,2018,Kandy,Carrot,152.15,425.0,dummy
+Yala,2018,Kurunegala,Carrot,151.12,267.0,dummy
+Yala,2018,Matale,Carrot,140.45,427.9,dummy
+Maha,2018,Nuwara Eliya,Carrot,168.67,278.9,dummy
+Maha,2018,Badulla,Carrot,177.0,518.5,dummy
+Maha,2018,Kandy,Carrot,182.01,384.0,dummy
+Maha,2018,Kurunegala,Carrot,179.64,446.7,dummy
+Maha,2018,Matale,Carrot,183.44,240.8,dummy
+Yala,2019,Nuwara Eliya,Carrot,193.35,377.7,dummy
+Yala,2019,Badulla,Carrot,178.67,274.6,dummy
+Yala,2019,Kandy,Carrot,181.16,305.2,dummy
+Yala,2019,Kurunegala,Carrot,176.88,492.1,dummy
+Yala,2019,Matale,Carrot,187.85,496.5,dummy
+Maha,2019,Nuwara Eliya,Carrot,167.33,522.4,dummy
+Maha,2019,Badulla,Carrot,183.99,401.8,dummy
+Maha,2019,Kandy,Carrot,152.65,585.5,dummy
+Maha,2019,Kurunegala,Carrot,162.75,396.4,dummy
+Maha,2019,Matale,Carrot,157.26,338.6,dummy
+Yala,2020,Nuwara Eliya,Carrot,181.7,517.4,dummy
+Yala,2020,Badulla,Carrot,170.95,249.8,dummy
+Yala,2020,Kandy,Carrot,175.9,237.4,dummy
+Yala,2020,Kurunegala,Carrot,182.81,304.8,dummy
+Yala,2020,Matale,Carrot,181.46,478.7,dummy
+Maha,2020,Nuwara Eliya,Carrot,145.91,350.2,dummy
+Maha,2020,Badulla,Carrot,169.62,505.9,dummy
+Maha,2020,Kandy,Carrot,159.73,637.7,dummy
+Maha,2020,Kurunegala,Carrot,160.45,391.9,dummy
+Maha,2020,Matale,Carrot,152.11,379.3,dummy
+Yala,2021,Nuwara Eliya,Carrot,165.67,263.3,dummy
+Yala,2021,Badulla,Carrot,158.69,370.5,dummy
+Yala,2021,Kandy,Carrot,182.91,551.3,dummy
+Yala,2021,Kurunegala,Carrot,168.52,551.0,dummy
+Yala,2021,Matale,Carrot,180.6,403.6,dummy
+Maha,2021,Nuwara Eliya,Carrot,168.94,378.5,dummy
+Maha,2021,Badulla,Carrot,166.91,540.2,dummy
+Maha,2021,Kandy,Carrot,154.08,622.5,dummy
+Maha,2021,Kurunegala,Carrot,179.65,269.8,dummy
+Maha,2021,Matale,Carrot,162.23,283.1,dummy
+Yala,2022,Nuwara Eliya,Carrot,150.77,378.9,dummy
+Yala,2022,Badulla,Carrot,146.03,688.1,dummy
+Yala,2022,Kandy,Carrot,148.54,301.0,dummy
+Yala,2022,Kurunegala,Carrot,146.73,341.1,dummy
+Yala,2022,Matale,Carrot,131.1,550.6,dummy
+Maha,2022,Nuwara Eliya,Carrot,161.52,414.4,dummy
+Maha,2022,Badulla,Carrot,176.67,499.9,dummy
+Maha,2022,Kandy,Carrot,169.19,474.9,dummy
+Maha,2022,Kurunegala,Carrot,173.06,239.1,dummy
+Maha,2022,Matale,Carrot,166.17,344.1,dummy
+Yala,2023,Nuwara Eliya,Carrot,173.94,667.9,dummy
+Yala,2023,Badulla,Carrot,173.33,653.8,dummy
+Yala,2023,Kandy,Carrot,176.84,484.2,dummy
+Yala,2023,Kurunegala,Carrot,176.09,278.0,dummy
+Yala,2023,Matale,Carrot,197.36,421.7,dummy
+Maha,2023,Nuwara Eliya,Carrot,132.36,653.9,dummy
+Maha,2023,Badulla,Carrot,145.06,644.1,dummy
+Maha,2023,Kandy,Carrot,137.6,305.4,dummy
+Maha,2023,Kurunegala,Carrot,127.48,650.1,dummy
+Maha,2023,Matale,Carrot,135.22,516.8,dummy
+Yala,2024,Nuwara Eliya,Carrot,157.57,418.2,dummy
+Yala,2024,Badulla,Carrot,191.15,346.3,dummy
+Yala,2024,Kandy,Carrot,163.28,267.5,dummy
+Yala,2024,Kurunegala,Carrot,197.85,478.0,dummy
+Yala,2024,Matale,Carrot,169.57,205.7,dummy
+Maha,2024,Nuwara Eliya,Carrot,197.05,359.2,dummy
+Maha,2024,Badulla,Carrot,203.83,629.8,dummy
+Maha,2024,Kandy,Carrot,198.16,347.8,dummy
+Maha,2024,Kurunegala,Carrot,197.12,272.8,dummy
+Maha,2024,Matale,Carrot,201.81,246.2,dummy
+Yala,2025,Nuwara Eliya,Carrot,176.02,539.5,dummy
+Yala,2025,Badulla,Carrot,175.13,373.8,dummy
+Yala,2025,Kandy,Carrot,168.36,628.3,dummy
+Yala,2025,Kurunegala,Carrot,173.81,248.3,dummy
+Yala,2025,Matale,Carrot,188.4,342.4,dummy
+Maha,2025,Nuwara Eliya,Carrot,158.05,391.6,dummy
+Maha,2025,Badulla,Carrot,165.3,269.7,dummy
+Maha,2025,Kandy,Carrot,159.76,247.4,dummy
+Maha,2025,Kurunegala,Carrot,163.24,268.5,dummy
+Maha,2025,Matale,Carrot,147.35,628.7,dummy
+Yala,2014,Nuwara Eliya,Leek,168.51,340.2,dummy
+Yala,2014,Badulla,Leek,183.22,543.7,dummy
+Yala,2014,Kandy,Leek,168.64,516.1,dummy
+Yala,2014,Kurunegala,Leek,173.19,610.9,dummy
+Yala,2014,Matale,Leek,155.67,343.0,dummy
+Maha,2014,Nuwara Eliya,Leek,215.16,464.7,dummy
+Maha,2014,Badulla,Leek,205.62,443.3,dummy
+Maha,2014,Kandy,Leek,202.8,635.2,dummy
+Maha,2014,Kurunegala,Leek,212.26,776.2,dummy
+Maha,2014,Matale,Leek,218.4,525.5,dummy
+Yala,2015,Nuwara Eliya,Leek,195.05,712.8,dummy
+Yala,2015,Badulla,Leek,187.92,638.7,dummy
+Yala,2015,Kandy,Leek,196.56,487.4,dummy
+Yala,2015,Kurunegala,Leek,194.62,434.4,dummy
+Yala,2015,Matale,Leek,187.95,841.6,dummy
+Maha,2015,Nuwara Eliya,Leek,179.7,747.1,dummy
+Maha,2015,Badulla,Leek,172.79,875.2,dummy
+Maha,2015,Kandy,Leek,168.87,889.2,dummy
+Maha,2015,Kurunegala,Leek,178.89,666.6,dummy
+Maha,2015,Matale,Leek,164.58,789.4,dummy
+Yala,2016,Nuwara Eliya,Leek,158.05,314.9,dummy
+Yala,2016,Badulla,Leek,160.36,563.5,dummy
+Yala,2016,Kandy,Leek,157.99,511.1,dummy
+Yala,2016,Kurunegala,Leek,158.84,668.8,dummy
+Yala,2016,Matale,Leek,139.57,525.0,dummy
+Maha,2016,Nuwara Eliya,Leek,215.5,288.2,dummy
+Maha,2016,Badulla,Leek,209.19,540.7,dummy
+Maha,2016,Kandy,Leek,208.86,595.0,dummy
+Maha,2016,Kurunegala,Leek,203.03,389.3,dummy
+Maha,2016,Matale,Leek,203.4,589.5,dummy
+Yala,2017,Nuwara Eliya,Leek,174.71,358.6,dummy
+Yala,2017,Badulla,Leek,162.35,783.0,dummy
+Yala,2017,Kandy,Leek,184.12,481.6,dummy
+Yala,2017,Kurunegala,Leek,164.37,574.1,dummy
+Yala,2017,Matale,Leek,178.66,698.1,dummy
+Maha,2017,Nuwara Eliya,Leek,210.35,638.2,dummy
+Maha,2017,Badulla,Leek,225.34,324.1,dummy
+Maha,2017,Kandy,Leek,181.63,595.9,dummy
+Maha,2017,Kurunegala,Leek,197.23,570.4,dummy
+Maha,2017,Matale,Leek,215.07,268.5,dummy
+Yala,2018,Nuwara Eliya,Leek,151.57,491.5,dummy
+Yala,2018,Badulla,Leek,161.98,411.2,dummy
+Yala,2018,Kandy,Leek,146.69,657.0,dummy
+Yala,2018,Kurunegala,Leek,158.27,767.6,dummy
+Yala,2018,Matale,Leek,161.46,402.0,dummy
+Maha,2018,Nuwara Eliya,Leek,183.01,308.6,dummy
+Maha,2018,Badulla,Leek,174.56,276.5,dummy
+Maha,2018,Kandy,Leek,182.72,336.0,dummy
+Maha,2018,Kurunegala,Leek,177.37,364.9,dummy
+Maha,2018,Matale,Leek,178.53,604.3,dummy
+Yala,2019,Nuwara Eliya,Leek,177.52,595.7,dummy
+Yala,2019,Badulla,Leek,167.68,397.8,dummy
+Yala,2019,Kandy,Leek,196.94,300.2,dummy
+Yala,2019,Kurunegala,Leek,191.7,769.1,dummy
+Yala,2019,Matale,Leek,202.43,645.4,dummy
+Maha,2019,Nuwara Eliya,Leek,186.19,632.3,dummy
+Maha,2019,Badulla,Leek,179.94,366.6,dummy
+Maha,2019,Kandy,Leek,190.84,387.8,dummy
+Maha,2019,Kurunegala,Leek,211.04,677.0,dummy
+Maha,2019,Matale,Leek,198.14,621.9,dummy
+Yala,2020,Nuwara Eliya,Leek,169.46,726.0,dummy
+Yala,2020,Badulla,Leek,180.9,353.1,dummy
+Yala,2020,Kandy,Leek,176.56,358.5,dummy
+Yala,2020,Kurunegala,Leek,190.53,502.8,dummy
+Yala,2020,Matale,Leek,189.6,596.1,dummy
+Maha,2020,Nuwara Eliya,Leek,176.91,458.2,dummy
+Maha,2020,Badulla,Leek,187.85,686.0,dummy
+Maha,2020,Kandy,Leek,194.68,823.7,dummy
+Maha,2020,Kurunegala,Leek,194.35,576.5,dummy
+Maha,2020,Matale,Leek,210.85,557.0,dummy
+Yala,2021,Nuwara Eliya,Leek,164.85,457.3,dummy
+Yala,2021,Badulla,Leek,171.91,631.4,dummy
+Yala,2021,Kandy,Leek,164.96,518.2,dummy
+Yala,2021,Kurunegala,Leek,154.29,407.8,dummy
+Yala,2021,Matale,Leek,168.18,464.3,dummy
+Maha,2021,Nuwara Eliya,Leek,205.0,372.1,dummy
+Maha,2021,Badulla,Leek,210.98,546.5,dummy
+Maha,2021,Kandy,Leek,217.36,588.7,dummy
+Maha,2021,Kurunegala,Leek,211.71,418.6,dummy
+Maha,2021,Matale,Leek,203.06,538.0,dummy
+Yala,2022,Nuwara Eliya,Leek,215.67,625.0,dummy
+Yala,2022,Badulla,Leek,207.09,855.5,dummy
+Yala,2022,Kandy,Leek,199.54,619.3,dummy
+Yala,2022,Kurunegala,Leek,205.58,802.1,dummy
+Yala,2022,Matale,Leek,207.95,825.3,dummy
+Maha,2022,Nuwara Eliya,Leek,165.01,497.9,dummy
+Maha,2022,Badulla,Leek,168.9,429.2,dummy
+Maha,2022,Kandy,Leek,158.64,792.6,dummy
+Maha,2022,Kurunegala,Leek,149.29,846.5,dummy
+Maha,2022,Matale,Leek,168.57,556.3,dummy
+Yala,2023,Nuwara Eliya,Leek,155.6,409.4,dummy
+Yala,2023,Badulla,Leek,163.42,707.9,dummy
+Yala,2023,Kandy,Leek,163.66,383.9,dummy
+Yala,2023,Kurunegala,Leek,157.57,570.6,dummy
+Yala,2023,Matale,Leek,159.25,540.1,dummy
+Maha,2023,Nuwara Eliya,Leek,176.63,352.4,dummy
+Maha,2023,Badulla,Leek,197.83,709.4,dummy
+Maha,2023,Kandy,Leek,174.81,560.6,dummy
+Maha,2023,Kurunegala,Leek,181.18,791.2,dummy
+Maha,2023,Matale,Leek,178.88,503.4,dummy
+Yala,2024,Nuwara Eliya,Leek,175.66,571.3,dummy
+Yala,2024,Badulla,Leek,155.25,398.1,dummy
+Yala,2024,Kandy,Leek,166.6,860.9,dummy
+Yala,2024,Kurunegala,Leek,168.11,448.4,dummy
+Yala,2024,Matale,Leek,172.26,605.8,dummy
+Maha,2024,Nuwara Eliya,Leek,177.56,304.0,dummy
+Maha,2024,Badulla,Leek,183.55,465.0,dummy
+Maha,2024,Kandy,Leek,183.74,478.3,dummy
+Maha,2024,Kurunegala,Leek,175.87,228.1,dummy
+Maha,2024,Matale,Leek,191.35,424.9,dummy
+Yala,2025,Nuwara Eliya,Leek,196.68,723.0,dummy
+Yala,2025,Badulla,Leek,175.77,572.6,dummy
+Yala,2025,Kandy,Leek,169.3,619.5,dummy
+Yala,2025,Kurunegala,Leek,170.58,479.0,dummy
+Yala,2025,Matale,Leek,181.5,512.1,dummy
+Maha,2025,Nuwara Eliya,Leek,167.44,453.7,dummy
+Maha,2025,Badulla,Leek,156.2,283.9,dummy
+Maha,2025,Kandy,Leek,162.98,512.8,dummy
+Maha,2025,Kurunegala,Leek,160.92,594.1,dummy
+Maha,2025,Matale,Leek,154.2,420.8,dummy
+Yala,2014,Nuwara Eliya,Tomato,167.25,830.1,dummy
+Yala,2014,Badulla,Tomato,154.77,803.3,dummy
+Yala,2014,Kandy,Tomato,155.46,843.7,dummy
+Yala,2014,Kurunegala,Tomato,180.67,404.1,dummy
+Yala,2014,Matale,Tomato,157.39,618.7,dummy
+Maha,2014,Nuwara Eliya,Tomato,177.24,932.4,dummy
+Maha,2014,Badulla,Tomato,160.61,774.9,dummy
+Maha,2014,Kandy,Tomato,171.36,339.8,dummy
+Maha,2014,Kurunegala,Tomato,182.18,621.6,dummy
+Maha,2014,Matale,Tomato,159.53,606.1,dummy
+Yala,2015,Nuwara Eliya,Tomato,131.31,392.9,dummy
+Yala,2015,Badulla,Tomato,139.24,874.8,dummy
+Yala,2015,Kandy,Tomato,138.61,888.6,dummy
+Yala,2015,Kurunegala,Tomato,139.22,586.3,dummy
+Yala,2015,Matale,Tomato,137.16,409.3,dummy
+Maha,2015,Nuwara Eliya,Tomato,170.44,653.3,dummy
+Maha,2015,Badulla,Tomato,184.32,622.4,dummy
+Maha,2015,Kandy,Tomato,195.34,351.4,dummy
+Maha,2015,Kurunegala,Tomato,182.41,649.7,dummy
+Maha,2015,Matale,Tomato,176.48,485.4,dummy
+Yala,2016,Nuwara Eliya,Tomato,142.74,961.7,dummy
+Yala,2016,Badulla,Tomato,117.51,508.3,dummy
+Yala,2016,Kandy,Tomato,150.66,584.4,dummy
+Yala,2016,Kurunegala,Tomato,120.69,550.5,dummy
+Yala,2016,Matale,Tomato,131.72,618.1,dummy
+Maha,2016,Nuwara Eliya,Tomato,152.07,308.0,dummy
+Maha,2016,Badulla,Tomato,153.36,641.2,dummy
+Maha,2016,Kandy,Tomato,149.46,789.3,dummy
+Maha,2016,Kurunegala,Tomato,147.13,478.1,dummy
+Maha,2016,Matale,Tomato,135.36,566.1,dummy
+Yala,2017,Nuwara Eliya,Tomato,150.67,579.3,dummy
+Yala,2017,Badulla,Tomato,143.61,502.9,dummy
+Yala,2017,Kandy,Tomato,154.42,407.9,dummy
+Yala,2017,Kurunegala,Tomato,153.34,553.9,dummy
+Yala,2017,Matale,Tomato,149.53,490.0,dummy
+Maha,2017,Nuwara Eliya,Tomato,166.99,525.3,dummy
+Maha,2017,Badulla,Tomato,155.41,705.1,dummy
+Maha,2017,Kandy,Tomato,174.0,416.6,dummy
+Maha,2017,Kurunegala,Tomato,148.11,519.6,dummy
+Maha,2017,Matale,Tomato,172.21,550.5,dummy
+Yala,2018,Nuwara Eliya,Tomato,137.75,489.7,dummy
+Yala,2018,Badulla,Tomato,137.99,818.3,dummy
+Yala,2018,Kandy,Tomato,138.01,632.0,dummy
+Yala,2018,Kurunegala,Tomato,140.91,764.4,dummy
+Yala,2018,Matale,Tomato,143.86,581.3,dummy
+Maha,2018,Nuwara Eliya,Tomato,167.31,354.2,dummy
+Maha,2018,Badulla,Tomato,157.26,311.1,dummy
+Maha,2018,Kandy,Tomato,163.48,752.3,dummy
+Maha,2018,Kurunegala,Tomato,168.61,482.3,dummy
+Maha,2018,Matale,Tomato,154.3,754.6,dummy
+Yala,2019,Nuwara Eliya,Tomato,117.24,322.1,dummy
+Yala,2019,Badulla,Tomato,129.7,578.7,dummy
+Yala,2019,Kandy,Tomato,116.53,313.8,dummy
+Yala,2019,Kurunegala,Tomato,129.31,503.8,dummy
+Yala,2019,Matale,Tomato,117.27,682.5,dummy
+Maha,2019,Nuwara Eliya,Tomato,162.63,484.6,dummy
+Maha,2019,Badulla,Tomato,154.32,323.6,dummy
+Maha,2019,Kandy,Tomato,161.03,265.0,dummy
+Maha,2019,Kurunegala,Tomato,150.02,523.1,dummy
+Maha,2019,Matale,Tomato,159.89,492.3,dummy
+Yala,2020,Nuwara Eliya,Tomato,141.38,462.5,dummy
+Yala,2020,Badulla,Tomato,152.22,551.0,dummy
+Yala,2020,Kandy,Tomato,161.83,409.5,dummy
+Yala,2020,Kurunegala,Tomato,150.48,804.3,dummy
+Yala,2020,Matale,Tomato,163.15,540.2,dummy
+Maha,2020,Nuwara Eliya,Tomato,164.85,387.2,dummy
+Maha,2020,Badulla,Tomato,168.91,309.0,dummy
+Maha,2020,Kandy,Tomato,149.42,322.4,dummy
+Maha,2020,Kurunegala,Tomato,170.73,679.7,dummy
+Maha,2020,Matale,Tomato,154.29,648.8,dummy
+Yala,2021,Nuwara Eliya,Tomato,184.53,705.0,dummy
+Yala,2021,Badulla,Tomato,166.16,345.2,dummy
+Yala,2021,Kandy,Tomato,169.41,706.1,dummy
+Yala,2021,Kurunegala,Tomato,160.72,739.1,dummy
+Yala,2021,Matale,Tomato,184.42,574.8,dummy
+Maha,2021,Nuwara Eliya,Tomato,132.55,562.4,dummy
+Maha,2021,Badulla,Tomato,136.47,756.4,dummy
+Maha,2021,Kandy,Tomato,133.19,628.1,dummy
+Maha,2021,Kurunegala,Tomato,130.63,397.2,dummy
+Maha,2021,Matale,Tomato,128.98,581.7,dummy
+Yala,2022,Nuwara Eliya,Tomato,162.29,601.3,dummy
+Yala,2022,Badulla,Tomato,151.28,406.7,dummy
+Yala,2022,Kandy,Tomato,149.47,544.4,dummy
+Yala,2022,Kurunegala,Tomato,141.21,320.4,dummy
+Yala,2022,Matale,Tomato,149.83,334.9,dummy
+Maha,2022,Nuwara Eliya,Tomato,182.51,266.9,dummy
+Maha,2022,Badulla,Tomato,167.56,560.4,dummy
+Maha,2022,Kandy,Tomato,167.83,721.9,dummy
+Maha,2022,Kurunegala,Tomato,158.4,535.3,dummy
+Maha,2022,Matale,Tomato,161.21,399.5,dummy
+Yala,2023,Nuwara Eliya,Tomato,154.21,654.5,dummy
+Yala,2023,Badulla,Tomato,177.77,291.4,dummy
+Yala,2023,Kandy,Tomato,178.03,411.3,dummy
+Yala,2023,Kurunegala,Tomato,162.19,423.9,dummy
+Yala,2023,Matale,Tomato,172.26,592.6,dummy
+Maha,2023,Nuwara Eliya,Tomato,165.34,692.5,dummy
+Maha,2023,Badulla,Tomato,163.79,962.9,dummy
+Maha,2023,Kandy,Tomato,164.76,658.6,dummy
+Maha,2023,Kurunegala,Tomato,168.55,841.3,dummy
+Maha,2023,Matale,Tomato,161.22,589.4,dummy
+Yala,2024,Nuwara Eliya,Tomato,145.2,754.2,dummy
+Yala,2024,Badulla,Tomato,139.8,932.1,dummy
+Yala,2024,Kandy,Tomato,134.92,446.1,dummy
+Yala,2024,Kurunegala,Tomato,129.91,618.5,dummy
+Yala,2024,Matale,Tomato,143.47,879.1,dummy
+Maha,2024,Nuwara Eliya,Tomato,185.56,683.4,dummy
+Maha,2024,Badulla,Tomato,171.7,593.9,dummy
+Maha,2024,Kandy,Tomato,175.11,779.4,dummy
+Maha,2024,Kurunegala,Tomato,178.99,720.6,dummy
+Maha,2024,Matale,Tomato,198.68,391.0,dummy
+Yala,2025,Nuwara Eliya,Tomato,191.62,566.5,dummy
+Yala,2025,Badulla,Tomato,177.32,896.1,dummy
+Yala,2025,Kandy,Tomato,204.17,529.0,dummy
+Yala,2025,Kurunegala,Tomato,169.94,698.1,dummy
+Yala,2025,Matale,Tomato,172.98,711.5,dummy
+Maha,2025,Nuwara Eliya,Tomato,167.68,546.3,dummy
+Maha,2025,Badulla,Tomato,168.16,393.1,dummy
+Maha,2025,Kandy,Tomato,149.36,737.7,dummy
+Maha,2025,Kurunegala,Tomato,157.26,906.1,dummy
+Maha,2025,Matale,Tomato,164.89,373.0,dummy
+Yala,2014,Nuwara Eliya,Cabbage,149.87,417.9,dummy
+Yala,2014,Badulla,Cabbage,156.54,310.6,dummy
+Yala,2014,Kandy,Cabbage,159.97,401.4,dummy
+Yala,2014,Kurunegala,Cabbage,139.78,471.3,dummy
+Yala,2014,Matale,Cabbage,154.29,249.7,dummy
+Maha,2014,Nuwara Eliya,Cabbage,200.79,457.3,dummy
+Maha,2014,Badulla,Cabbage,187.52,493.1,dummy
+Maha,2014,Kandy,Cabbage,187.7,482.6,dummy
+Maha,2014,Kurunegala,Cabbage,210.91,211.9,dummy
+Maha,2014,Matale,Cabbage,173.71,349.7,dummy
+Yala,2015,Nuwara Eliya,Cabbage,176.24,361.9,dummy
+Yala,2015,Badulla,Cabbage,177.11,261.5,dummy
+Yala,2015,Kandy,Cabbage,173.83,469.4,dummy
+Yala,2015,Kurunegala,Cabbage,184.22,428.8,dummy
+Yala,2015,Matale,Cabbage,183.42,302.5,dummy
+Maha,2015,Nuwara Eliya,Cabbage,178.77,267.3,dummy
+Maha,2015,Badulla,Cabbage,182.43,234.7,dummy
+Maha,2015,Kandy,Cabbage,185.15,227.0,dummy
+Maha,2015,Kurunegala,Cabbage,177.57,509.1,dummy
+Maha,2015,Matale,Cabbage,189.64,345.4,dummy
+Yala,2016,Nuwara Eliya,Cabbage,225.82,490.1,dummy
+Yala,2016,Badulla,Cabbage,225.05,373.9,dummy
+Yala,2016,Kandy,Cabbage,207.34,270.1,dummy
+Yala,2016,Kurunegala,Cabbage,211.95,522.3,dummy
+Yala,2016,Matale,Cabbage,208.94,463.3,dummy
+Maha,2016,Nuwara Eliya,Cabbage,152.43,500.3,dummy
+Maha,2016,Badulla,Cabbage,154.26,304.9,dummy
+Maha,2016,Kandy,Cabbage,163.2,701.0,dummy
+Maha,2016,Kurunegala,Cabbage,156.61,701.4,dummy
+Maha,2016,Matale,Cabbage,145.34,508.9,dummy
+Yala,2017,Nuwara Eliya,Cabbage,220.73,207.7,dummy
+Yala,2017,Badulla,Cabbage,223.78,275.6,dummy
+Yala,2017,Kandy,Cabbage,221.58,323.8,dummy
+Yala,2017,Kurunegala,Cabbage,222.09,346.2,dummy
+Yala,2017,Matale,Cabbage,222.6,499.5,dummy
+Maha,2017,Nuwara Eliya,Cabbage,176.71,199.1,dummy
+Maha,2017,Badulla,Cabbage,166.44,256.6,dummy
+Maha,2017,Kandy,Cabbage,168.41,256.9,dummy
+Maha,2017,Kurunegala,Cabbage,172.57,342.4,dummy
+Maha,2017,Matale,Cabbage,186.54,394.5,dummy
+Yala,2018,Nuwara Eliya,Cabbage,170.77,419.5,dummy
+Yala,2018,Badulla,Cabbage,168.89,550.0,dummy
+Yala,2018,Kandy,Cabbage,178.98,207.0,dummy
+Yala,2018,Kurunegala,Cabbage,168.66,231.7,dummy
+Yala,2018,Matale,Cabbage,172.98,417.0,dummy
+Maha,2018,Nuwara Eliya,Cabbage,177.3,466.1,dummy
+Maha,2018,Badulla,Cabbage,156.12,440.9,dummy
+Maha,2018,Kandy,Cabbage,171.91,369.8,dummy
+Maha,2018,Kurunegala,Cabbage,169.95,320.3,dummy
+Maha,2018,Matale,Cabbage,171.16,447.8,dummy
+Yala,2019,Nuwara Eliya,Cabbage,159.07,523.5,dummy
+Yala,2019,Badulla,Cabbage,168.55,436.1,dummy
+Yala,2019,Kandy,Cabbage,176.01,544.2,dummy
+Yala,2019,Kurunegala,Cabbage,160.63,465.6,dummy
+Yala,2019,Matale,Cabbage,167.71,399.2,dummy
+Maha,2019,Nuwara Eliya,Cabbage,196.87,323.4,dummy
+Maha,2019,Badulla,Cabbage,193.37,296.4,dummy
+Maha,2019,Kandy,Cabbage,197.49,330.7,dummy
+Maha,2019,Kurunegala,Cabbage,204.07,208.2,dummy
+Maha,2019,Matale,Cabbage,204.93,406.5,dummy
+Yala,2020,Nuwara Eliya,Cabbage,151.49,287.9,dummy
+Yala,2020,Badulla,Cabbage,147.26,561.3,dummy
+Yala,2020,Kandy,Cabbage,155.79,481.8,dummy
+Yala,2020,Kurunegala,Cabbage,152.76,319.8,dummy
+Yala,2020,Matale,Cabbage,158.02,323.2,dummy
+Maha,2020,Nuwara Eliya,Cabbage,182.5,362.8,dummy
+Maha,2020,Badulla,Cabbage,181.77,505.9,dummy
+Maha,2020,Kandy,Cabbage,203.96,262.9,dummy
+Maha,2020,Kurunegala,Cabbage,216.12,285.7,dummy
+Maha,2020,Matale,Cabbage,198.9,313.2,dummy
+Yala,2021,Nuwara Eliya,Cabbage,172.37,585.5,dummy
+Yala,2021,Badulla,Cabbage,170.89,401.9,dummy
+Yala,2021,Kandy,Cabbage,156.43,576.5,dummy
+Yala,2021,Kurunegala,Cabbage,170.01,444.7,dummy
+Yala,2021,Matale,Cabbage,158.01,482.0,dummy
+Maha,2021,Nuwara Eliya,Cabbage,181.8,467.3,dummy
+Maha,2021,Badulla,Cabbage,179.07,485.1,dummy
+Maha,2021,Kandy,Cabbage,191.97,415.1,dummy
+Maha,2021,Kurunegala,Cabbage,177.78,321.8,dummy
+Maha,2021,Matale,Cabbage,192.36,242.9,dummy
+Yala,2022,Nuwara Eliya,Cabbage,180.53,438.5,dummy
+Yala,2022,Badulla,Cabbage,177.78,290.3,dummy
+Yala,2022,Kandy,Cabbage,176.07,549.4,dummy
+Yala,2022,Kurunegala,Cabbage,172.18,204.9,dummy
+Yala,2022,Matale,Cabbage,195.08,524.0,dummy
+Maha,2022,Nuwara Eliya,Cabbage,182.18,231.3,dummy
+Maha,2022,Badulla,Cabbage,175.88,562.9,dummy
+Maha,2022,Kandy,Cabbage,196.45,245.6,dummy
+Maha,2022,Kurunegala,Cabbage,178.89,420.6,dummy
+Maha,2022,Matale,Cabbage,186.54,556.2,dummy
+Yala,2023,Nuwara Eliya,Cabbage,196.86,290.3,dummy
+Yala,2023,Badulla,Cabbage,182.1,438.3,dummy
+Yala,2023,Kandy,Cabbage,202.18,502.0,dummy
+Yala,2023,Kurunegala,Cabbage,189.95,347.9,dummy
+Yala,2023,Matale,Cabbage,203.57,377.0,dummy
+Maha,2023,Nuwara Eliya,Cabbage,167.47,605.3,dummy
+Maha,2023,Badulla,Cabbage,172.19,240.3,dummy
+Maha,2023,Kandy,Cabbage,178.47,596.1,dummy
+Maha,2023,Kurunegala,Cabbage,173.19,388.1,dummy
+Maha,2023,Matale,Cabbage,172.4,222.6,dummy
+Yala,2024,Nuwara Eliya,Cabbage,207.86,434.9,dummy
+Yala,2024,Badulla,Cabbage,225.55,299.2,dummy
+Yala,2024,Kandy,Cabbage,213.52,407.7,dummy
+Yala,2024,Kurunegala,Cabbage,213.86,323.6,dummy
+Yala,2024,Matale,Cabbage,217.31,210.2,dummy
+Maha,2024,Nuwara Eliya,Cabbage,148.01,482.4,dummy
+Maha,2024,Badulla,Cabbage,155.73,258.0,dummy
+Maha,2024,Kandy,Cabbage,153.87,436.9,dummy
+Maha,2024,Kurunegala,Cabbage,153.6,249.6,dummy
+Maha,2024,Matale,Cabbage,154.94,617.4,dummy
+Yala,2025,Nuwara Eliya,Cabbage,156.18,441.1,dummy
+Yala,2025,Badulla,Cabbage,169.19,439.8,dummy
+Yala,2025,Kandy,Cabbage,168.45,298.2,dummy
+Yala,2025,Kurunegala,Cabbage,158.55,252.5,dummy
+Yala,2025,Matale,Cabbage,158.29,334.8,dummy
+Maha,2025,Nuwara Eliya,Cabbage,137.13,281.2,dummy
+Maha,2025,Badulla,Cabbage,145.82,489.3,dummy
+Maha,2025,Kandy,Cabbage,138.25,229.1,dummy
+Maha,2025,Kurunegala,Cabbage,148.21,264.1,dummy
+Maha,2025,Matale,Cabbage,147.74,351.3,dummy
+Yala,2014,Nuwara Eliya,Big Onion (Local),101.21,720.2,dummy
+Yala,2014,Badulla,Big Onion (Local),87.58,719.0,dummy
+Yala,2014,Kandy,Big Onion (Local),92.55,377.5,dummy
+Yala,2014,Kurunegala,Big Onion (Local),87.16,413.3,dummy
+Yala,2014,Matale,Big Onion (Local),90.21,558.5,dummy
+Maha,2014,Nuwara Eliya,Big Onion (Local),99.87,307.6,dummy
+Maha,2014,Badulla,Big Onion (Local),92.02,643.4,dummy
+Maha,2014,Kandy,Big Onion (Local),96.65,444.0,dummy
+Maha,2014,Kurunegala,Big Onion (Local),93.58,734.8,dummy
+Maha,2014,Matale,Big Onion (Local),102.48,619.9,dummy
+Yala,2015,Nuwara Eliya,Big Onion (Local),100.48,431.9,dummy
+Yala,2015,Badulla,Big Onion (Local),99.41,623.7,dummy
+Yala,2015,Kandy,Big Onion (Local),89.73,265.6,dummy
+Yala,2015,Kurunegala,Big Onion (Local),98.12,739.2,dummy
+Yala,2015,Matale,Big Onion (Local),95.68,356.2,dummy
+Maha,2015,Nuwara Eliya,Big Onion (Local),102.12,798.8,dummy
+Maha,2015,Badulla,Big Onion (Local),108.08,397.9,dummy
+Maha,2015,Kandy,Big Onion (Local),93.87,387.0,dummy
+Maha,2015,Kurunegala,Big Onion (Local),93.22,397.3,dummy
+Maha,2015,Matale,Big Onion (Local),96.04,393.4,dummy
+Yala,2016,Nuwara Eliya,Big Onion (Local),89.58,707.4,dummy
+Yala,2016,Badulla,Big Onion (Local),88.63,447.6,dummy
+Yala,2016,Kandy,Big Onion (Local),94.09,445.9,dummy
+Yala,2016,Kurunegala,Big Onion (Local),90.44,577.5,dummy
+Yala,2016,Matale,Big Onion (Local),89.4,722.0,dummy
+Maha,2016,Nuwara Eliya,Big Onion (Local),84.16,233.9,dummy
+Maha,2016,Badulla,Big Onion (Local),101.11,236.5,dummy
+Maha,2016,Kandy,Big Onion (Local),100.95,476.8,dummy
+Maha,2016,Kurunegala,Big Onion (Local),98.54,390.1,dummy
+Maha,2016,Matale,Big Onion (Local),97.32,206.9,dummy
+Yala,2017,Nuwara Eliya,Big Onion (Local),90.91,558.6,dummy
+Yala,2017,Badulla,Big Onion (Local),83.44,347.7,dummy
+Yala,2017,Kandy,Big Onion (Local),88.79,518.0,dummy
+Yala,2017,Kurunegala,Big Onion (Local),84.9,465.6,dummy
+Yala,2017,Matale,Big Onion (Local),90.93,325.8,dummy
+Maha,2017,Nuwara Eliya,Big Onion (Local),106.61,669.6,dummy
+Maha,2017,Badulla,Big Onion (Local),109.25,420.9,dummy
+Maha,2017,Kandy,Big Onion (Local),112.61,456.6,dummy
+Maha,2017,Kurunegala,Big Onion (Local),102.09,699.3,dummy
+Maha,2017,Matale,Big Onion (Local),103.48,437.0,dummy
+Yala,2018,Nuwara Eliya,Big Onion (Local),99.2,572.9,dummy
+Yala,2018,Badulla,Big Onion (Local),94.65,628.0,dummy
+Yala,2018,Kandy,Big Onion (Local),97.53,503.7,dummy
+Yala,2018,Kurunegala,Big Onion (Local),95.37,354.2,dummy
+Yala,2018,Matale,Big Onion (Local),98.2,728.5,dummy
+Maha,2018,Nuwara Eliya,Big Onion (Local),87.59,668.5,dummy
+Maha,2018,Badulla,Big Onion (Local),91.01,706.5,dummy
+Maha,2018,Kandy,Big Onion (Local),90.71,584.3,dummy
+Maha,2018,Kurunegala,Big Onion (Local),94.48,294.2,dummy
+Maha,2018,Matale,Big Onion (Local),89.74,475.2,dummy
+Yala,2019,Nuwara Eliya,Big Onion (Local),111.27,238.4,dummy
+Yala,2019,Badulla,Big Onion (Local),101.81,470.4,dummy
+Yala,2019,Kandy,Big Onion (Local),91.76,550.5,dummy
+Yala,2019,Kurunegala,Big Onion (Local),107.03,441.1,dummy
+Yala,2019,Matale,Big Onion (Local),104.22,223.8,dummy
+Maha,2019,Nuwara Eliya,Big Onion (Local),104.06,405.3,dummy
+Maha,2019,Badulla,Big Onion (Local),97.75,357.6,dummy
+Maha,2019,Kandy,Big Onion (Local),89.31,591.9,dummy
+Maha,2019,Kurunegala,Big Onion (Local),104.17,481.2,dummy
+Maha,2019,Matale,Big Onion (Local),96.64,679.4,dummy
+Yala,2020,Nuwara Eliya,Big Onion (Local),81.33,636.0,dummy
+Yala,2020,Badulla,Big Onion (Local),94.22,605.0,dummy
+Yala,2020,Kandy,Big Onion (Local),79.53,491.2,dummy
+Yala,2020,Kurunegala,Big Onion (Local),96.39,511.0,dummy
+Yala,2020,Matale,Big Onion (Local),89.22,401.5,dummy
+Maha,2020,Nuwara Eliya,Big Onion (Local),114.73,576.2,dummy
+Maha,2020,Badulla,Big Onion (Local),122.78,346.2,dummy
+Maha,2020,Kandy,Big Onion (Local),114.57,225.7,dummy
+Maha,2020,Kurunegala,Big Onion (Local),119.15,415.1,dummy
+Maha,2020,Matale,Big Onion (Local),109.31,285.8,dummy
+Yala,2021,Nuwara Eliya,Big Onion (Local),79.49,298.5,dummy
+Yala,2021,Badulla,Big Onion (Local),69.79,564.9,dummy
+Yala,2021,Kandy,Big Onion (Local),78.63,353.5,dummy
+Yala,2021,Kurunegala,Big Onion (Local),71.74,466.5,dummy
+Yala,2021,Matale,Big Onion (Local),76.84,799.9,dummy
+Maha,2021,Nuwara Eliya,Big Onion (Local),126.8,253.0,dummy
+Maha,2021,Badulla,Big Onion (Local),121.45,597.4,dummy
+Maha,2021,Kandy,Big Onion (Local),125.39,404.7,dummy
+Maha,2021,Kurunegala,Big Onion (Local),119.53,233.5,dummy
+Maha,2021,Matale,Big Onion (Local),136.94,650.6,dummy
+Yala,2022,Nuwara Eliya,Big Onion (Local),77.07,486.0,dummy
+Yala,2022,Badulla,Big Onion (Local),79.67,330.4,dummy
+Yala,2022,Kandy,Big Onion (Local),78.86,810.7,dummy
+Yala,2022,Kurunegala,Big Onion (Local),79.3,809.1,dummy
+Yala,2022,Matale,Big Onion (Local),75.53,627.3,dummy
+Maha,2022,Nuwara Eliya,Big Onion (Local),108.11,391.0,dummy
+Maha,2022,Badulla,Big Onion (Local),107.83,607.7,dummy
+Maha,2022,Kandy,Big Onion (Local),105.33,285.2,dummy
+Maha,2022,Kurunegala,Big Onion (Local),110.25,605.9,dummy
+Maha,2022,Matale,Big Onion (Local),108.34,565.7,dummy
+Yala,2023,Nuwara Eliya,Big Onion (Local),100.52,614.5,dummy
+Yala,2023,Badulla,Big Onion (Local),111.29,287.0,dummy
+Yala,2023,Kandy,Big Onion (Local),110.26,478.7,dummy
+Yala,2023,Kurunegala,Big Onion (Local),117.35,640.4,dummy
+Yala,2023,Matale,Big Onion (Local),93.63,551.6,dummy
+Maha,2023,Nuwara Eliya,Big Onion (Local),91.59,455.3,dummy
+Maha,2023,Badulla,Big Onion (Local),86.2,311.7,dummy
+Maha,2023,Kandy,Big Onion (Local),86.98,676.4,dummy
+Maha,2023,Kurunegala,Big Onion (Local),97.89,756.1,dummy
+Maha,2023,Matale,Big Onion (Local),93.26,282.8,dummy
+Yala,2024,Nuwara Eliya,Big Onion (Local),125.8,291.5,dummy
+Yala,2024,Badulla,Big Onion (Local),118.01,582.4,dummy
+Yala,2024,Kandy,Big Onion (Local),124.9,298.6,dummy
+Yala,2024,Kurunegala,Big Onion (Local),123.84,265.1,dummy
+Yala,2024,Matale,Big Onion (Local),131.37,281.9,dummy
+Maha,2024,Nuwara Eliya,Big Onion (Local),89.82,696.1,dummy
+Maha,2024,Badulla,Big Onion (Local),97.33,804.1,dummy
+Maha,2024,Kandy,Big Onion (Local),93.09,843.3,dummy
+Maha,2024,Kurunegala,Big Onion (Local),83.84,524.2,dummy
+Maha,2024,Matale,Big Onion (Local),91.93,448.8,dummy
+Yala,2025,Nuwara Eliya,Big Onion (Local),95.26,635.5,dummy
+Yala,2025,Badulla,Big Onion (Local),103.01,341.5,dummy
+Yala,2025,Kandy,Big Onion (Local),91.88,576.7,dummy
+Yala,2025,Kurunegala,Big Onion (Local),100.7,467.5,dummy
+Yala,2025,Matale,Big Onion (Local),99.85,611.1,dummy
+Maha,2025,Nuwara Eliya,Big Onion (Local),81.46,294.3,dummy
+Maha,2025,Badulla,Big Onion (Local),88.35,494.1,dummy
+Maha,2025,Kandy,Big Onion (Local),75.61,453.9,dummy
+Maha,2025,Kurunegala,Big Onion (Local),93.69,478.0,dummy
+Maha,2025,Matale,Big Onion (Local),90.32,446.7,dummy
