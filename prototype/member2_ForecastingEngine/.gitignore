@@ -1,0 +1,8 @@
+.venv
+.env
+__pycache__
+*.pyc
+.streamlit/secrets.toml
+htfe-studio/outputs/forecast_packet.json
+htfe-studio/outputs/shots/
+htfe-studio/outputs/_shots.py

@@ -1,0 +1,1442 @@
+[
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2015",
+    "intensity_t": 0.063,
+    "price_t1": 112.83,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2016",
+    "intensity_t": 0.041,
+    "price_t1": 85.24,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2016",
+    "intensity_t": 0.032,
+    "price_t1": 156.84,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2017",
+    "intensity_t": 0.04,
+    "price_t1": 107.4,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2017",
+    "intensity_t": 0.034,
+    "price_t1": 151.53,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2018",
+    "intensity_t": 0.04,
+    "price_t1": 116.02,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2018",
+    "intensity_t": 0.042,
+    "price_t1": 91.01,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2019",
+    "intensity_t": 0.045,
+    "price_t1": 184.74,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2019",
+    "intensity_t": 0.04,
+    "price_t1": 93.94,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2020",
+    "intensity_t": 0.056,
+    "price_t1": 117.59,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2020",
+    "intensity_t": 0.036,
+    "price_t1": 105.79,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2021",
+    "intensity_t": 0.041,
+    "price_t1": 235.22,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2021",
+    "intensity_t": 0.041,
+    "price_t1": 197.57,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2022",
+    "intensity_t": 0.048,
+    "price_t1": 234.26,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2022",
+    "intensity_t": 0.034,
+    "price_t1": 255.84,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2023",
+    "intensity_t": 0.048,
+    "price_t1": 409.36,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2023",
+    "intensity_t": 0.042,
+    "price_t1": 232.42,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2024",
+    "intensity_t": 0.048,
+    "price_t1": 142.19,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "maha_2024",
+    "intensity_t": 0.037,
+    "price_t1": 398.36,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "carrot",
+    "market": "badulla",
+    "season_t": "yala_2025",
+    "intensity_t": 0.046,
+    "price_t1": 166.15,
+    "season_t1": "maha_2025"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2015",
+    "intensity_t": 0.064,
+    "price_t1": 119.2,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2016",
+    "intensity_t": 0.041,
+    "price_t1": 83.2,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2016",
+    "intensity_t": 0.029,
+    "price_t1": 172.87,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2017",
+    "intensity_t": 0.039,
+    "price_t1": 122.68,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2017",
+    "intensity_t": 0.036,
+    "price_t1": 201.43,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2018",
+    "intensity_t": 0.044,
+    "price_t1": 153.98,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2018",
+    "intensity_t": 0.04,
+    "price_t1": 102.82,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2019",
+    "intensity_t": 0.05,
+    "price_t1": 262.07,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2019",
+    "intensity_t": 0.045,
+    "price_t1": 110.42,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2020",
+    "intensity_t": 0.054,
+    "price_t1": 139.56,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2020",
+    "intensity_t": 0.043,
+    "price_t1": 132.53,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2021",
+    "intensity_t": 0.043,
+    "price_t1": 286.74,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2021",
+    "intensity_t": 0.038,
+    "price_t1": 240.22,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2022",
+    "intensity_t": 0.047,
+    "price_t1": 277.08,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2022",
+    "intensity_t": 0.033,
+    "price_t1": 286.99,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2023",
+    "intensity_t": 0.045,
+    "price_t1": 520.36,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2023",
+    "intensity_t": 0.042,
+    "price_t1": 251.05,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2024",
+    "intensity_t": 0.044,
+    "price_t1": 164.48,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "maha_2024",
+    "intensity_t": 0.039,
+    "price_t1": 434.67,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "carrot",
+    "market": "colombo",
+    "season_t": "yala_2025",
+    "intensity_t": 0.048,
+    "price_t1": 182.43,
+    "season_t1": "maha_2025"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2015",
+    "intensity_t": 0.062,
+    "price_t1": 113.96,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2016",
+    "intensity_t": 0.044,
+    "price_t1": 78.65,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2016",
+    "intensity_t": 0.024,
+    "price_t1": 153.43,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2017",
+    "intensity_t": 0.043,
+    "price_t1": 120.06,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2017",
+    "intensity_t": 0.037,
+    "price_t1": 183.23,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2018",
+    "intensity_t": 0.039,
+    "price_t1": 147.0,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2018",
+    "intensity_t": 0.034,
+    "price_t1": 93.18,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2019",
+    "intensity_t": 0.043,
+    "price_t1": 240.62,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2019",
+    "intensity_t": 0.047,
+    "price_t1": 105.44,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2020",
+    "intensity_t": 0.046,
+    "price_t1": 123.91,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2020",
+    "intensity_t": 0.03,
+    "price_t1": 114.86,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2021",
+    "intensity_t": 0.045,
+    "price_t1": 273.17,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2021",
+    "intensity_t": 0.046,
+    "price_t1": 220.17,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2022",
+    "intensity_t": 0.05,
+    "price_t1": 253.78,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2022",
+    "intensity_t": 0.042,
+    "price_t1": 276.71,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2023",
+    "intensity_t": 0.038,
+    "price_t1": 528.83,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2023",
+    "intensity_t": 0.037,
+    "price_t1": 249.55,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2024",
+    "intensity_t": 0.051,
+    "price_t1": 151.5,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2024",
+    "intensity_t": 0.038,
+    "price_t1": 436.37,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "carrot",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2025",
+    "intensity_t": 0.047,
+    "price_t1": 177.25,
+    "season_t1": "maha_2025"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2015",
+    "intensity_t": 0.071,
+    "price_t1": 98.77,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2016",
+    "intensity_t": 0.042,
+    "price_t1": 67.0,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2016",
+    "intensity_t": 0.035,
+    "price_t1": 56.12,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2017",
+    "intensity_t": 0.048,
+    "price_t1": 152.77,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2017",
+    "intensity_t": 0.034,
+    "price_t1": 133.63,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2018",
+    "intensity_t": 0.039,
+    "price_t1": 87.33,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2018",
+    "intensity_t": 0.044,
+    "price_t1": 50.83,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2019",
+    "intensity_t": 0.04,
+    "price_t1": 189.0,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2019",
+    "intensity_t": 0.031,
+    "price_t1": 74.99,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2020",
+    "intensity_t": 0.054,
+    "price_t1": 51.76,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2020",
+    "intensity_t": 0.042,
+    "price_t1": 124.66,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2021",
+    "intensity_t": 0.043,
+    "price_t1": 201.6,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2021",
+    "intensity_t": 0.035,
+    "price_t1": 131.63,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2022",
+    "intensity_t": 0.042,
+    "price_t1": 240.02,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2022",
+    "intensity_t": 0.04,
+    "price_t1": 172.69,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2023",
+    "intensity_t": 0.042,
+    "price_t1": 197.82,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2023",
+    "intensity_t": 0.037,
+    "price_t1": 293.85,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2024",
+    "intensity_t": 0.055,
+    "price_t1": 171.97,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "maha_2024",
+    "intensity_t": 0.041,
+    "price_t1": 155.47,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "leek",
+    "market": "badulla",
+    "season_t": "yala_2025",
+    "intensity_t": 0.045,
+    "price_t1": 156.57,
+    "season_t1": "maha_2025"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2015",
+    "intensity_t": 0.071,
+    "price_t1": 101.84,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2016",
+    "intensity_t": 0.043,
+    "price_t1": 72.45,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2016",
+    "intensity_t": 0.03,
+    "price_t1": 58.23,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2017",
+    "intensity_t": 0.047,
+    "price_t1": 169.83,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2017",
+    "intensity_t": 0.034,
+    "price_t1": 145.66,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2018",
+    "intensity_t": 0.042,
+    "price_t1": 104.67,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2018",
+    "intensity_t": 0.039,
+    "price_t1": 53.68,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2019",
+    "intensity_t": 0.045,
+    "price_t1": 223.22,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2019",
+    "intensity_t": 0.038,
+    "price_t1": 83.03,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2020",
+    "intensity_t": 0.052,
+    "price_t1": 65.44,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2020",
+    "intensity_t": 0.049,
+    "price_t1": 139.79,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2021",
+    "intensity_t": 0.043,
+    "price_t1": 225.48,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2021",
+    "intensity_t": 0.035,
+    "price_t1": 163.28,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2022",
+    "intensity_t": 0.042,
+    "price_t1": 271.19,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2022",
+    "intensity_t": 0.04,
+    "price_t1": 200.1,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2023",
+    "intensity_t": 0.041,
+    "price_t1": 222.71,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2023",
+    "intensity_t": 0.039,
+    "price_t1": 303.3,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2024",
+    "intensity_t": 0.051,
+    "price_t1": 188.75,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "maha_2024",
+    "intensity_t": 0.041,
+    "price_t1": 175.14,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "leek",
+    "market": "colombo",
+    "season_t": "yala_2025",
+    "intensity_t": 0.046,
+    "price_t1": 173.77,
+    "season_t1": "maha_2025"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2015",
+    "intensity_t": 0.072,
+    "price_t1": 91.23,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2016",
+    "intensity_t": 0.04,
+    "price_t1": 63.77,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2016",
+    "intensity_t": 0.021,
+    "price_t1": 48.43,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2017",
+    "intensity_t": 0.043,
+    "price_t1": 158.41,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2017",
+    "intensity_t": 0.036,
+    "price_t1": 126.82,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2018",
+    "intensity_t": 0.034,
+    "price_t1": 92.28,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2018",
+    "intensity_t": 0.047,
+    "price_t1": 46.18,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2019",
+    "intensity_t": 0.044,
+    "price_t1": 188.54,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2019",
+    "intensity_t": 0.032,
+    "price_t1": 72.22,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2020",
+    "intensity_t": 0.052,
+    "price_t1": 45.73,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2020",
+    "intensity_t": 0.031,
+    "price_t1": 128.37,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2021",
+    "intensity_t": 0.043,
+    "price_t1": 201.97,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2021",
+    "intensity_t": 0.03,
+    "price_t1": 134.93,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2022",
+    "intensity_t": 0.042,
+    "price_t1": 247.11,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2022",
+    "intensity_t": 0.039,
+    "price_t1": 170.43,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2023",
+    "intensity_t": 0.039,
+    "price_t1": 216.94,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2023",
+    "intensity_t": 0.042,
+    "price_t1": 290.36,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2024",
+    "intensity_t": 0.04,
+    "price_t1": 164.38,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2024",
+    "intensity_t": 0.039,
+    "price_t1": 176.21,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "leek",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2025",
+    "intensity_t": 0.046,
+    "price_t1": 165.0,
+    "season_t1": "maha_2025"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2015",
+    "intensity_t": 0.066,
+    "price_t1": 93.51,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2016",
+    "intensity_t": 0.04,
+    "price_t1": 32.88,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2016",
+    "intensity_t": 0.035,
+    "price_t1": 81.57,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2017",
+    "intensity_t": 0.051,
+    "price_t1": 78.45,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2017",
+    "intensity_t": 0.045,
+    "price_t1": 87.96,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2018",
+    "intensity_t": 0.038,
+    "price_t1": 87.09,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2018",
+    "intensity_t": 0.037,
+    "price_t1": 48.96,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2019",
+    "intensity_t": 0.038,
+    "price_t1": 121.51,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2019",
+    "intensity_t": 0.032,
+    "price_t1": 67.99,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2020",
+    "intensity_t": 0.055,
+    "price_t1": 77.81,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2020",
+    "intensity_t": 0.041,
+    "price_t1": 74.44,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2021",
+    "intensity_t": 0.046,
+    "price_t1": 184.28,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2021",
+    "intensity_t": 0.033,
+    "price_t1": 268.04,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2022",
+    "intensity_t": 0.04,
+    "price_t1": 165.87,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2022",
+    "intensity_t": 0.038,
+    "price_t1": 166.98,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2023",
+    "intensity_t": 0.049,
+    "price_t1": 295.44,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2023",
+    "intensity_t": 0.038,
+    "price_t1": 181.15,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2024",
+    "intensity_t": 0.047,
+    "price_t1": 208.27,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "maha_2024",
+    "intensity_t": 0.043,
+    "price_t1": 250.0,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "tomato",
+    "market": "badulla",
+    "season_t": "yala_2025",
+    "intensity_t": 0.046,
+    "price_t1": 202.99,
+    "season_t1": "maha_2025"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2015",
+    "intensity_t": 0.069,
+    "price_t1": 106.59,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2016",
+    "intensity_t": 0.042,
+    "price_t1": 39.67,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2016",
+    "intensity_t": 0.031,
+    "price_t1": 99.11,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2017",
+    "intensity_t": 0.051,
+    "price_t1": 86.78,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2017",
+    "intensity_t": 0.043,
+    "price_t1": 96.66,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2018",
+    "intensity_t": 0.043,
+    "price_t1": 133.14,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2018",
+    "intensity_t": 0.033,
+    "price_t1": 65.54,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2019",
+    "intensity_t": 0.043,
+    "price_t1": 163.17,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2019",
+    "intensity_t": 0.036,
+    "price_t1": 87.04,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2020",
+    "intensity_t": 0.05,
+    "price_t1": 100.85,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2020",
+    "intensity_t": 0.048,
+    "price_t1": 86.1,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2021",
+    "intensity_t": 0.042,
+    "price_t1": 210.26,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2021",
+    "intensity_t": 0.034,
+    "price_t1": 311.39,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2022",
+    "intensity_t": 0.038,
+    "price_t1": 208.9,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2022",
+    "intensity_t": 0.04,
+    "price_t1": 216.45,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2023",
+    "intensity_t": 0.045,
+    "price_t1": 351.0,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2023",
+    "intensity_t": 0.04,
+    "price_t1": 215.8,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2024",
+    "intensity_t": 0.042,
+    "price_t1": 258.53,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "maha_2024",
+    "intensity_t": 0.041,
+    "price_t1": 337.35,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "tomato",
+    "market": "colombo",
+    "season_t": "yala_2025",
+    "intensity_t": 0.045,
+    "price_t1": 234.32,
+    "season_t1": "maha_2025"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2015",
+    "intensity_t": 0.074,
+    "price_t1": 89.52,
+    "season_t1": "yala_2016"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2016",
+    "intensity_t": 0.046,
+    "price_t1": 40.31,
+    "season_t1": "maha_2016"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2016",
+    "intensity_t": 0.034,
+    "price_t1": 79.12,
+    "season_t1": "yala_2017"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2017",
+    "intensity_t": 0.05,
+    "price_t1": 77.65,
+    "season_t1": "maha_2017"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2017",
+    "intensity_t": 0.042,
+    "price_t1": 80.07,
+    "season_t1": "yala_2018"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2018",
+    "intensity_t": 0.047,
+    "price_t1": 125.94,
+    "season_t1": "maha_2018"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2018",
+    "intensity_t": 0.034,
+    "price_t1": 57.09,
+    "season_t1": "yala_2019"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2019",
+    "intensity_t": 0.041,
+    "price_t1": 163.5,
+    "season_t1": "maha_2019"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2019",
+    "intensity_t": 0.032,
+    "price_t1": 70.61,
+    "season_t1": "yala_2020"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2020",
+    "intensity_t": 0.048,
+    "price_t1": 75.55,
+    "season_t1": "maha_2020"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2020",
+    "intensity_t": 0.029,
+    "price_t1": 73.31,
+    "season_t1": "yala_2021"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2021",
+    "intensity_t": 0.037,
+    "price_t1": 193.61,
+    "season_t1": "maha_2021"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2021",
+    "intensity_t": 0.037,
+    "price_t1": 249.77,
+    "season_t1": "yala_2022"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2022",
+    "intensity_t": 0.037,
+    "price_t1": 171.17,
+    "season_t1": "maha_2022"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2022",
+    "intensity_t": 0.042,
+    "price_t1": 178.57,
+    "season_t1": "yala_2023"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2023",
+    "intensity_t": 0.042,
+    "price_t1": 306.44,
+    "season_t1": "maha_2023"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2023",
+    "intensity_t": 0.037,
+    "price_t1": 171.73,
+    "season_t1": "yala_2024"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2024",
+    "intensity_t": 0.039,
+    "price_t1": 218.0,
+    "season_t1": "maha_2024"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "maha_2024",
+    "intensity_t": 0.033,
+    "price_t1": 256.47,
+    "season_t1": "yala_2025"
+  },
+  {
+    "crop": "tomato",
+    "market": "nuwara_eliya",
+    "season_t": "yala_2025",
+    "intensity_t": 0.043,
+    "price_t1": 256.06,
+    "season_t1": "maha_2025"
+  }
+]
