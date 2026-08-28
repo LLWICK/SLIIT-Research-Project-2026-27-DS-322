@@ -1,0 +1,50 @@
+[
+  {
+    "model": "SARIMA-family",
+    "id": "sarima",
+    "n_scored": 1484,
+    "mae": 126.21,
+    "rmse": 188.85,
+    "mape": 64.14,
+    "pinball": 38.51,
+    "picp": 78.17,
+    "interval_width": 345.57,
+    "backend": "seasonal_naive_52"
+  },
+  {
+    "model": "LightGBM quantile + CQR",
+    "id": "lightgbm",
+    "n_scored": 1484,
+    "mae": 48.82,
+    "rmse": 87.08,
+    "mape": 20.0,
+    "pinball": 15.26,
+    "picp": 89.22,
+    "interval_width": 203.15,
+    "backend": "lightgbm"
+  },
+  {
+    "model": "XGBoost quantile + CQR",
+    "id": "xgboost",
+    "n_scored": 1484,
+    "mae": 52.78,
+    "rmse": 96.44,
+    "mape": 20.27,
+    "pinball": 18.23,
+    "picp": 89.22,
+    "interval_width": 257.58,
+    "backend": "xgboost"
+  },
+  {
+    "model": "LSTM-style MLP (optional)",
+    "id": "lstm",
+    "n_scored": 1484,
+    "mae": 44.12,
+    "rmse": 72.39,
+    "mape": 18.97,
+    "pinball": 14.56,
+    "picp": 69.61,
+    "interval_width": 92.67,
+    "backend": "mlp_sequential_prototype"
+  }
+]

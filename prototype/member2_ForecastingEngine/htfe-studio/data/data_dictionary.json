@@ -1,0 +1,62 @@
+[
+  {
+    "column": "crop",
+    "dtype": "category",
+    "role": "key",
+    "notes": "carrot / leek / tomato"
+  },
+  {
+    "column": "market",
+    "dtype": "category",
+    "role": "key",
+    "notes": "Price observation location, not a growing district"
+  },
+  {
+    "column": "week_start",
+    "dtype": "date",
+    "role": "key",
+    "notes": "Monday-anchored week (W-MON)"
+  },
+  {
+    "column": "price",
+    "dtype": "float LKR/kg",
+    "role": "target",
+    "notes": "Wholesale; zeros treated as missing"
+  },
+  {
+    "column": "is_observed",
+    "dtype": "bool",
+    "role": "quality",
+    "notes": "All reported metrics filter on this"
+  },
+  {
+    "column": "disruption_flag",
+    "dtype": "bool",
+    "role": "slice",
+    "notes": "2020\u20132021 reported separately"
+  },
+  {
+    "column": "price_lag_1 / _4 / _52",
+    "dtype": "float",
+    "role": "feature",
+    "notes": "Grouped by crop__market \u2014 never global"
+  },
+  {
+    "column": "origin_rainfall_mm / origin_temp_c",
+    "dtype": "float",
+    "role": "feature",
+    "notes": "Mean across the market's supply districts"
+  },
+  {
+    "column": "cultivation_intensity",
+    "dtype": "float",
+    "role": "novelty",
+    "notes": "As-of-week cumulative origin hectares / benchmark. Source=simulated"
+  },
+  {
+    "column": "commitment_source",
+    "dtype": "category",
+    "role": "provenance",
+    "notes": "simulated until HARTI registrations arrive"
+  }
+]

@@ -1,0 +1,1291 @@
+{
+  "lightgbm": {
+    "backend": "lightgbm",
+    "qhat": 37.675,
+    "metrics": {
+      "overall": {
+        "n_scored": 1484,
+        "mae": 48.82,
+        "rmse": 87.08,
+        "mape": 20.0,
+        "pinball": 15.26,
+        "picp": 89.22,
+        "interval_width": 203.15
+      },
+      "by_crop": {
+        "carrot": {
+          "n_scored": 494,
+          "mae": 68.72,
+          "rmse": 122.97,
+          "mape": 21.31,
+          "pinball": 22.61,
+          "picp": 83.6,
+          "interval_width": 227.6
+        },
+        "leek": {
+          "n_scored": 495,
+          "mae": 27.98,
+          "rmse": 39.57,
+          "mape": 14.68,
+          "pinball": 7.71,
+          "picp": 96.16,
+          "interval_width": 178.1
+        },
+        "tomato": {
+          "n_scored": 495,
+          "mae": 49.79,
+          "rmse": 77.96,
+          "mape": 24.01,
+          "pinball": 15.49,
+          "picp": 87.88,
+          "interval_width": 203.79
+        }
+      },
+      "by_market": {
+        "badulla": {
+          "n_scored": 629,
+          "mae": 37.28,
+          "rmse": 59.65,
+          "mape": 17.68,
+          "pinball": 11.16,
+          "picp": 92.85,
+          "interval_width": 191.83
+        },
+        "colombo": {
+          "n_scored": 573,
+          "mae": 51.22,
+          "rmse": 77.78,
+          "mape": 20.16,
+          "pinball": 15.31,
+          "picp": 88.48,
+          "interval_width": 210.86
+        },
+        "nuwara_eliya": {
+          "n_scored": 282,
+          "mae": 69.67,
+          "rmse": 140.28,
+          "mape": 24.83,
+          "pinball": 24.32,
+          "picp": 82.62,
+          "interval_width": 212.71
+        }
+      },
+      "by_season": {
+        "maha": {
+          "n_scored": 500,
+          "mae": 41.28,
+          "rmse": 95.97,
+          "mape": 18.9,
+          "pinball": 13.58,
+          "picp": 91.6,
+          "interval_width": 177.93
+        },
+        "transition": {
+          "n_scored": 375,
+          "mae": 48.94,
+          "rmse": 82.13,
+          "mape": 19.07,
+          "pinball": 15.12,
+          "picp": 88.8,
+          "interval_width": 201.58
+        },
+        "yala": {
+          "n_scored": 609,
+          "mae": 54.93,
+          "rmse": 82.24,
+          "mape": 21.47,
+          "pinball": 16.74,
+          "picp": 87.52,
+          "interval_width": 224.82
+        }
+      },
+      "non_disruption": {
+        "n_scored": 1484,
+        "mae": 48.82,
+        "rmse": 87.08,
+        "mape": 20.0,
+        "pinball": 15.26,
+        "picp": 89.22,
+        "interval_width": 203.15
+      }
+    },
+    "train_curve": [
+      {
+        "iter": 1,
+        "mae": null
+      },
+      {
+        "iter": 2,
+        "mae": null
+      },
+      {
+        "iter": 3,
+        "mae": null
+      },
+      {
+        "iter": 4,
+        "mae": null
+      },
+      {
+        "iter": 5,
+        "mae": null
+      },
+      {
+        "iter": 6,
+        "mae": null
+      },
+      {
+        "iter": 7,
+        "mae": null
+      },
+      {
+        "iter": 8,
+        "mae": null
+      },
+      {
+        "iter": 9,
+        "mae": null
+      },
+      {
+        "iter": 10,
+        "mae": null
+      },
+      {
+        "iter": 11,
+        "mae": null
+      },
+      {
+        "iter": 12,
+        "mae": null
+      },
+      {
+        "iter": 13,
+        "mae": null
+      },
+      {
+        "iter": 14,
+        "mae": null
+      },
+      {
+        "iter": 15,
+        "mae": null
+      },
+      {
+        "iter": 16,
+        "mae": null
+      },
+      {
+        "iter": 17,
+        "mae": null
+      },
+      {
+        "iter": 18,
+        "mae": null
+      },
+      {
+        "iter": 19,
+        "mae": null
+      },
+      {
+        "iter": 20,
+        "mae": null
+      },
+      {
+        "iter": 21,
+        "mae": null
+      },
+      {
+        "iter": 22,
+        "mae": null
+      },
+      {
+        "iter": 23,
+        "mae": null
+      },
+      {
+        "iter": 24,
+        "mae": null
+      },
+      {
+        "iter": 25,
+        "mae": null
+      },
+      {
+        "iter": 26,
+        "mae": null
+      },
+      {
+        "iter": 27,
+        "mae": null
+      },
+      {
+        "iter": 28,
+        "mae": null
+      },
+      {
+        "iter": 29,
+        "mae": null
+      },
+      {
+        "iter": 30,
+        "mae": null
+      },
+      {
+        "iter": 31,
+        "mae": null
+      },
+      {
+        "iter": 32,
+        "mae": null
+      },
+      {
+        "iter": 33,
+        "mae": null
+      },
+      {
+        "iter": 34,
+        "mae": null
+      },
+      {
+        "iter": 35,
+        "mae": null
+      },
+      {
+        "iter": 36,
+        "mae": null
+      },
+      {
+        "iter": 37,
+        "mae": null
+      },
+      {
+        "iter": 38,
+        "mae": null
+      },
+      {
+        "iter": 39,
+        "mae": null
+      },
+      {
+        "iter": 40,
+        "mae": null
+      },
+      {
+        "iter": 41,
+        "mae": null
+      },
+      {
+        "iter": 42,
+        "mae": null
+      },
+      {
+        "iter": 43,
+        "mae": null
+      },
+      {
+        "iter": 44,
+        "mae": null
+      },
+      {
+        "iter": 45,
+        "mae": null
+      },
+      {
+        "iter": 46,
+        "mae": null
+      },
+      {
+        "iter": 47,
+        "mae": null
+      },
+      {
+        "iter": 48,
+        "mae": null
+      },
+      {
+        "iter": 49,
+        "mae": null
+      },
+      {
+        "iter": 50,
+        "mae": null
+      },
+      {
+        "iter": 51,
+        "mae": null
+      },
+      {
+        "iter": 52,
+        "mae": null
+      },
+      {
+        "iter": 53,
+        "mae": null
+      },
+      {
+        "iter": 54,
+        "mae": null
+      },
+      {
+        "iter": 55,
+        "mae": null
+      },
+      {
+        "iter": 56,
+        "mae": null
+      },
+      {
+        "iter": 57,
+        "mae": null
+      },
+      {
+        "iter": 58,
+        "mae": null
+      },
+      {
+        "iter": 59,
+        "mae": null
+      },
+      {
+        "iter": 60,
+        "mae": null
+      },
+      {
+        "iter": 61,
+        "mae": null
+      },
+      {
+        "iter": 62,
+        "mae": null
+      },
+      {
+        "iter": 63,
+        "mae": null
+      },
+      {
+        "iter": 64,
+        "mae": null
+      },
+      {
+        "iter": 65,
+        "mae": null
+      },
+      {
+        "iter": 66,
+        "mae": null
+      },
+      {
+        "iter": 67,
+        "mae": null
+      },
+      {
+        "iter": 68,
+        "mae": null
+      },
+      {
+        "iter": 69,
+        "mae": null
+      },
+      {
+        "iter": 70,
+        "mae": null
+      },
+      {
+        "iter": 71,
+        "mae": null
+      },
+      {
+        "iter": 72,
+        "mae": null
+      },
+      {
+        "iter": 73,
+        "mae": null
+      },
+      {
+        "iter": 74,
+        "mae": null
+      },
+      {
+        "iter": 75,
+        "mae": null
+      },
+      {
+        "iter": 76,
+        "mae": null
+      },
+      {
+        "iter": 77,
+        "mae": null
+      },
+      {
+        "iter": 78,
+        "mae": null
+      },
+      {
+        "iter": 79,
+        "mae": null
+      },
+      {
+        "iter": 80,
+        "mae": null
+      },
+      {
+        "iter": 81,
+        "mae": null
+      },
+      {
+        "iter": 82,
+        "mae": null
+      },
+      {
+        "iter": 83,
+        "mae": null
+      },
+      {
+        "iter": 84,
+        "mae": null
+      },
+      {
+        "iter": 85,
+        "mae": null
+      },
+      {
+        "iter": 86,
+        "mae": null
+      },
+      {
+        "iter": 87,
+        "mae": null
+      },
+      {
+        "iter": 88,
+        "mae": null
+      },
+      {
+        "iter": 89,
+        "mae": null
+      },
+      {
+        "iter": 90,
+        "mae": null
+      },
+      {
+        "iter": 91,
+        "mae": null
+      },
+      {
+        "iter": 92,
+        "mae": null
+      },
+      {
+        "iter": 93,
+        "mae": null
+      },
+      {
+        "iter": 94,
+        "mae": null
+      },
+      {
+        "iter": 95,
+        "mae": null
+      },
+      {
+        "iter": 96,
+        "mae": null
+      },
+      {
+        "iter": 97,
+        "mae": null
+      },
+      {
+        "iter": 98,
+        "mae": null
+      },
+      {
+        "iter": 99,
+        "mae": null
+      },
+      {
+        "iter": 100,
+        "mae": null
+      },
+      {
+        "iter": 101,
+        "mae": null
+      },
+      {
+        "iter": 102,
+        "mae": null
+      },
+      {
+        "iter": 103,
+        "mae": null
+      },
+      {
+        "iter": 104,
+        "mae": null
+      },
+      {
+        "iter": 105,
+        "mae": null
+      },
+      {
+        "iter": 106,
+        "mae": null
+      },
+      {
+        "iter": 107,
+        "mae": null
+      },
+      {
+        "iter": 108,
+        "mae": null
+      },
+      {
+        "iter": 109,
+        "mae": null
+      },
+      {
+        "iter": 110,
+        "mae": null
+      },
+      {
+        "iter": 111,
+        "mae": null
+      },
+      {
+        "iter": 112,
+        "mae": null
+      },
+      {
+        "iter": 113,
+        "mae": null
+      },
+      {
+        "iter": 114,
+        "mae": null
+      },
+      {
+        "iter": 115,
+        "mae": null
+      },
+      {
+        "iter": 116,
+        "mae": null
+      },
+      {
+        "iter": 117,
+        "mae": null
+      },
+      {
+        "iter": 118,
+        "mae": null
+      },
+      {
+        "iter": 119,
+        "mae": null
+      },
+      {
+        "iter": 120,
+        "mae": null
+      },
+      {
+        "iter": 121,
+        "mae": null
+      },
+      {
+        "iter": 122,
+        "mae": null
+      },
+      {
+        "iter": 123,
+        "mae": null
+      },
+      {
+        "iter": 124,
+        "mae": null
+      },
+      {
+        "iter": 125,
+        "mae": null
+      },
+      {
+        "iter": 126,
+        "mae": null
+      },
+      {
+        "iter": 127,
+        "mae": null
+      },
+      {
+        "iter": 128,
+        "mae": null
+      },
+      {
+        "iter": 129,
+        "mae": null
+      },
+      {
+        "iter": 130,
+        "mae": null
+      },
+      {
+        "iter": 131,
+        "mae": null
+      },
+      {
+        "iter": 132,
+        "mae": null
+      },
+      {
+        "iter": 133,
+        "mae": null
+      },
+      {
+        "iter": 134,
+        "mae": null
+      },
+      {
+        "iter": 135,
+        "mae": null
+      },
+      {
+        "iter": 136,
+        "mae": null
+      },
+      {
+        "iter": 137,
+        "mae": null
+      },
+      {
+        "iter": 138,
+        "mae": null
+      },
+      {
+        "iter": 139,
+        "mae": null
+      },
+      {
+        "iter": 140,
+        "mae": null
+      }
+    ],
+    "note": null
+  },
+  "xgboost": {
+    "backend": "xgboost",
+    "qhat": 48.848,
+    "metrics": {
+      "overall": {
+        "n_scored": 1484,
+        "mae": 52.78,
+        "rmse": 96.44,
+        "mape": 20.27,
+        "pinball": 18.23,
+        "picp": 89.22,
+        "interval_width": 257.58
+      },
+      "by_crop": {
+        "carrot": {
+          "n_scored": 494,
+          "mae": 75.12,
+          "rmse": 136.46,
+          "mape": 21.92,
+          "pinball": 28.34,
+          "picp": 81.58,
+          "interval_width": 270.72
+        },
+        "leek": {
+          "n_scored": 495,
+          "mae": 30.33,
+          "rmse": 45.08,
+          "mape": 14.85,
+          "pinball": 8.72,
+          "picp": 97.17,
+          "interval_width": 241.72
+        },
+        "tomato": {
+          "n_scored": 495,
+          "mae": 52.92,
+          "rmse": 85.25,
+          "mape": 24.03,
+          "pinball": 17.64,
+          "picp": 88.89,
+          "interval_width": 260.34
+        }
+      },
+      "by_market": {
+        "badulla": {
+          "n_scored": 629,
+          "mae": 39.48,
+          "rmse": 66.2,
+          "mape": 17.71,
+          "pinball": 13.38,
+          "picp": 91.73,
+          "interval_width": 250.66
+        },
+        "colombo": {
+          "n_scored": 573,
+          "mae": 55.86,
+          "rmse": 88.12,
+          "mape": 20.42,
+          "pinball": 18.55,
+          "picp": 89.01,
+          "interval_width": 263.76
+        },
+        "nuwara_eliya": {
+          "n_scored": 282,
+          "mae": 76.17,
+          "rmse": 152.95,
+          "mape": 25.65,
+          "pinball": 28.37,
+          "picp": 84.04,
+          "interval_width": 260.48
+        }
+      },
+      "by_season": {
+        "maha": {
+          "n_scored": 500,
+          "mae": 43.13,
+          "rmse": 102.53,
+          "mape": 18.94,
+          "pinball": 14.5,
+          "picp": 93.4,
+          "interval_width": 243.16
+        },
+        "transition": {
+          "n_scored": 375,
+          "mae": 55.29,
+          "rmse": 97.7,
+          "mape": 19.92,
+          "pinball": 19.88,
+          "picp": 87.73,
+          "interval_width": 250.26
+        },
+        "yala": {
+          "n_scored": 609,
+          "mae": 59.14,
+          "rmse": 90.31,
+          "mape": 21.57,
+          "pinball": 20.27,
+          "picp": 86.7,
+          "interval_width": 273.93
+        }
+      },
+      "non_disruption": {
+        "n_scored": 1484,
+        "mae": 52.78,
+        "rmse": 96.44,
+        "mape": 20.27,
+        "pinball": 18.23,
+        "picp": 89.22,
+        "interval_width": 257.58
+      }
+    },
+    "train_curve": [
+      {
+        "iter": 11,
+        "mae": 22.15,
+        "elapsed_s": 0.15
+      },
+      {
+        "iter": 23,
+        "mae": 21.66,
+        "elapsed_s": 0.29
+      },
+      {
+        "iter": 35,
+        "mae": 21.17,
+        "elapsed_s": 0.44
+      },
+      {
+        "iter": 46,
+        "mae": 20.68,
+        "elapsed_s": 0.58
+      },
+      {
+        "iter": 58,
+        "mae": 20.19,
+        "elapsed_s": 0.73
+      },
+      {
+        "iter": 70,
+        "mae": 19.7,
+        "elapsed_s": 0.88
+      },
+      {
+        "iter": 81,
+        "mae": 19.22,
+        "elapsed_s": 1.02
+      },
+      {
+        "iter": 93,
+        "mae": 18.73,
+        "elapsed_s": 1.17
+      },
+      {
+        "iter": 105,
+        "mae": 18.24,
+        "elapsed_s": 1.31
+      },
+      {
+        "iter": 116,
+        "mae": 17.75,
+        "elapsed_s": 1.46
+      },
+      {
+        "iter": 128,
+        "mae": 17.26,
+        "elapsed_s": 1.61
+      },
+      {
+        "iter": 140,
+        "mae": 16.77,
+        "elapsed_s": 1.75
+      }
+    ],
+    "note": null
+  },
+  "sarima": {
+    "backend": "seasonal_naive_52",
+    "qhat": null,
+    "metrics": {
+      "overall": {
+        "n_scored": 1484,
+        "mae": 126.21,
+        "rmse": 188.85,
+        "mape": 64.14,
+        "pinball": 38.51,
+        "picp": 78.17,
+        "interval_width": 345.57
+      },
+      "by_crop": {
+        "carrot": {
+          "n_scored": 494,
+          "mae": 165.29,
+          "rmse": 243.5,
+          "mape": 61.32,
+          "pinball": 52.4,
+          "picp": 70.85,
+          "interval_width": 370.04
+        },
+        "leek": {
+          "n_scored": 495,
+          "mae": 76.52,
+          "rmse": 102.69,
+          "mape": 42.63,
+          "pinball": 20.73,
+          "picp": 90.1,
+          "interval_width": 307.74
+        },
+        "tomato": {
+          "n_scored": 495,
+          "mae": 136.89,
+          "rmse": 192.86,
+          "mape": 88.45,
+          "pinball": 42.42,
+          "picp": 73.54,
+          "interval_width": 358.99
+        }
+      },
+      "by_market": {
+        "badulla": {
+          "n_scored": 629,
+          "mae": 109.71,
+          "rmse": 162.71,
+          "mape": 53.66,
+          "pinball": 32.57,
+          "picp": 82.83,
+          "interval_width": 348.72
+        },
+        "colombo": {
+          "n_scored": 573,
+          "mae": 132.72,
+          "rmse": 184.42,
+          "mape": 72.09,
+          "pinball": 39.8,
+          "picp": 76.96,
+          "interval_width": 351.36
+        },
+        "nuwara_eliya": {
+          "n_scored": 282,
+          "mae": 149.78,
+          "rmse": 243.96,
+          "mape": 71.34,
+          "pinball": 49.12,
+          "picp": 70.21,
+          "interval_width": 326.8
+        }
+      },
+      "by_season": {
+        "maha": {
+          "n_scored": 500,
+          "mae": 113.4,
+          "rmse": 181.98,
+          "mape": 68.07,
+          "pinball": 33.51,
+          "picp": 82.6,
+          "interval_width": 345.96
+        },
+        "transition": {
+          "n_scored": 375,
+          "mae": 121.66,
+          "rmse": 188.87,
+          "mape": 46.61,
+          "pinball": 38.4,
+          "picp": 81.07,
+          "interval_width": 345.35
+        },
+        "yala": {
+          "n_scored": 609,
+          "mae": 139.53,
+          "rmse": 194.29,
+          "mape": 71.69,
+          "pinball": 42.67,
+          "picp": 72.74,
+          "interval_width": 345.39
+        }
+      },
+      "non_disruption": {
+        "n_scored": 1484,
+        "mae": 126.21,
+        "rmse": 188.85,
+        "mape": 64.14,
+        "pinball": 38.51,
+        "picp": 78.17,
+        "interval_width": 345.57
+      }
+    },
+    "train_curve": [
+      {
+        "series": "carrot__badulla",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      },
+      {
+        "series": "carrot__colombo",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      },
+      {
+        "series": "carrot__nuwara_eliya",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      },
+      {
+        "series": "leek__badulla",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      },
+      {
+        "series": "leek__colombo",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      },
+      {
+        "series": "leek__nuwara_eliya",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      },
+      {
+        "series": "tomato__badulla",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      },
+      {
+        "series": "tomato__colombo",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      },
+      {
+        "series": "tomato__nuwara_eliya",
+        "method": "seasonal_naive_52",
+        "elapsed_s": 0.0
+      }
+    ],
+    "note": null
+  },
+  "lstm": {
+    "backend": "mlp_sequential_prototype",
+    "qhat": null,
+    "metrics": {
+      "overall": {
+        "n_scored": 1484,
+        "mae": 44.12,
+        "rmse": 72.39,
+        "mape": 18.97,
+        "pinball": 14.56,
+        "picp": 69.61,
+        "interval_width": 92.67
+      },
+      "by_crop": {
+        "carrot": {
+          "n_scored": 494,
+          "mae": 57.12,
+          "rmse": 93.53,
+          "mape": 19.53,
+          "pinball": 19.72,
+          "picp": 58.5,
+          "interval_width": 92.67
+        },
+        "leek": {
+          "n_scored": 495,
+          "mae": 28.2,
+          "rmse": 40.26,
+          "mape": 14.55,
+          "pinball": 7.95,
+          "picp": 81.82,
+          "interval_width": 92.67
+        },
+        "tomato": {
+          "n_scored": 495,
+          "mae": 47.07,
+          "rmse": 73.22,
+          "mape": 22.83,
+          "pinball": 16.01,
+          "picp": 68.48,
+          "interval_width": 92.67
+        }
+      },
+      "by_market": {
+        "badulla": {
+          "n_scored": 629,
+          "mae": 34.85,
+          "rmse": 55.04,
+          "mape": 16.6,
+          "pinball": 11.12,
+          "picp": 76.15,
+          "interval_width": 92.67
+        },
+        "colombo": {
+          "n_scored": 573,
+          "mae": 45.19,
+          "rmse": 63.77,
+          "mape": 19.32,
+          "pinball": 14.16,
+          "picp": 66.32,
+          "interval_width": 92.67
+        },
+        "nuwara_eliya": {
+          "n_scored": 282,
+          "mae": 62.61,
+          "rmse": 112.07,
+          "mape": 23.54,
+          "pinball": 23.02,
+          "picp": 61.7,
+          "interval_width": 92.67
+        }
+      },
+      "by_season": {
+        "maha": {
+          "n_scored": 500,
+          "mae": 39.82,
+          "rmse": 78.84,
+          "mape": 18.43,
+          "pinball": 13.22,
+          "picp": 75.0,
+          "interval_width": 92.67
+        },
+        "transition": {
+          "n_scored": 375,
+          "mae": 42.92,
+          "rmse": 66.08,
+          "mape": 18.38,
+          "pinball": 13.84,
+          "picp": 72.53,
+          "interval_width": 92.67
+        },
+        "yala": {
+          "n_scored": 609,
+          "mae": 48.39,
+          "rmse": 70.55,
+          "mape": 19.78,
+          "pinball": 16.1,
+          "picp": 63.38,
+          "interval_width": 92.67
+        }
+      },
+      "non_disruption": {
+        "n_scored": 1484,
+        "mae": 44.12,
+        "rmse": 72.39,
+        "mape": 18.97,
+        "pinball": 14.56,
+        "picp": 69.61,
+        "interval_width": 92.67
+      }
+    },
+    "train_curve": [
+      {
+        "epoch": 1,
+        "mae": 23.95,
+        "loss": 1156.37,
+        "elapsed_s": 0.15
+      },
+      {
+        "epoch": 2,
+        "mae": 22.5,
+        "loss": 1038.52,
+        "elapsed_s": 0.18
+      },
+      {
+        "epoch": 3,
+        "mae": 22.06,
+        "loss": 1003.41,
+        "elapsed_s": 0.21
+      },
+      {
+        "epoch": 4,
+        "mae": 22.05,
+        "loss": 1001.89,
+        "elapsed_s": 0.24
+      },
+      {
+        "epoch": 5,
+        "mae": 21.92,
+        "loss": 990.91,
+        "elapsed_s": 0.28
+      },
+      {
+        "epoch": 6,
+        "mae": 21.91,
+        "loss": 989.2,
+        "elapsed_s": 0.31
+      },
+      {
+        "epoch": 7,
+        "mae": 21.76,
+        "loss": 977.98,
+        "elapsed_s": 0.34
+      },
+      {
+        "epoch": 8,
+        "mae": 21.75,
+        "loss": 976.11,
+        "elapsed_s": 0.38
+      },
+      {
+        "epoch": 9,
+        "mae": 21.7,
+        "loss": 971.54,
+        "elapsed_s": 0.41
+      },
+      {
+        "epoch": 10,
+        "mae": 21.68,
+        "loss": 969.63,
+        "elapsed_s": 0.44
+      },
+      {
+        "epoch": 11,
+        "mae": 21.58,
+        "loss": 962.18,
+        "elapsed_s": 0.47
+      },
+      {
+        "epoch": 12,
+        "mae": 21.52,
+        "loss": 959.18,
+        "elapsed_s": 0.5
+      },
+      {
+        "epoch": 13,
+        "mae": 21.43,
+        "loss": 951.84,
+        "elapsed_s": 0.54
+      },
+      {
+        "epoch": 14,
+        "mae": 21.38,
+        "loss": 948.21,
+        "elapsed_s": 0.57
+      },
+      {
+        "epoch": 15,
+        "mae": 21.37,
+        "loss": 948.23,
+        "elapsed_s": 0.61
+      },
+      {
+        "epoch": 16,
+        "mae": 21.27,
+        "loss": 939.53,
+        "elapsed_s": 0.64
+      },
+      {
+        "epoch": 17,
+        "mae": 21.3,
+        "loss": 942.89,
+        "elapsed_s": 0.67
+      },
+      {
+        "epoch": 18,
+        "mae": 21.23,
+        "loss": 936.26,
+        "elapsed_s": 0.71
+      },
+      {
+        "epoch": 19,
+        "mae": 21.21,
+        "loss": 937.01,
+        "elapsed_s": 0.74
+      },
+      {
+        "epoch": 20,
+        "mae": 21.15,
+        "loss": 930.74,
+        "elapsed_s": 0.78
+      },
+      {
+        "epoch": 21,
+        "mae": 21.09,
+        "loss": 925.07,
+        "elapsed_s": 0.81
+      },
+      {
+        "epoch": 22,
+        "mae": 21.03,
+        "loss": 921.97,
+        "elapsed_s": 0.84
+      },
+      {
+        "epoch": 23,
+        "mae": 20.92,
+        "loss": 913.49,
+        "elapsed_s": 0.88
+      },
+      {
+        "epoch": 24,
+        "mae": 20.94,
+        "loss": 913.63,
+        "elapsed_s": 0.91
+      },
+      {
+        "epoch": 25,
+        "mae": 20.89,
+        "loss": 911.49,
+        "elapsed_s": 0.94
+      },
+      {
+        "epoch": 26,
+        "mae": 20.88,
+        "loss": 910.33,
+        "elapsed_s": 0.97
+      },
+      {
+        "epoch": 27,
+        "mae": 20.79,
+        "loss": 905.44,
+        "elapsed_s": 1.0
+      },
+      {
+        "epoch": 28,
+        "mae": 20.89,
+        "loss": 911.92,
+        "elapsed_s": 1.03
+      }
+    ],
+    "note": "Optional stretch item. Small CPU MLP on the same leak-safe features \u2014 not a production LSTM."
+  }
+}
