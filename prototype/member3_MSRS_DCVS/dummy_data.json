@@ -1,0 +1,39 @@
+{
+    "crops": {
+        "Carrot": {
+            "market_demand_capacity_ha": 2300.0,
+            "weather_suitability_base": 0.85,
+            "price_forecast_base": 0.90
+        },
+        "Leek": {
+            "market_demand_capacity_ha": 1350.0,
+            "weather_suitability_base": 0.75,
+            "price_forecast_base": 0.80
+        },
+        "Big Onion (Local)": {
+            "market_demand_capacity_ha": 4000.0,
+            "weather_suitability_base": 0.95,
+            "price_forecast_base": 0.85
+        }
+    },
+    "historical_scenarios": [
+        {
+            "scenario_name": "Carrot Glut 2021 (Cobweb Crash)",
+            "crop": "Carrot",
+            "committed_area_ha": 3100.0,
+            "notes": "Farmers over-planted due to high prices in the previous season. Overshoot > 1.3"
+        },
+        {
+            "scenario_name": "Stable Big Onion Season 2022",
+            "crop": "Big Onion (Local)",
+            "committed_area_ha": 3800.0,
+            "notes": "Planting was well within the 4000ha national demand. Healthy market."
+        },
+        {
+            "scenario_name": "Leek Shortage 2023",
+            "crop": "Leek",
+            "committed_area_ha": 950.0,
+            "notes": "Under-planted due to high fertilizer costs. High DCVS expected due to low MSRS."
+        }
+    ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "feature": "price_lag_1",
+    "importance": 64.895,
+    "std": 0.963
+  },
+  {
+    "feature": "roll_mean_4",
+    "importance": 15.751,
+    "std": 0.507
+  },
+  {
+    "feature": "week_within_season",
+    "importance": 0.518,
+    "std": 0.066
+  },
+  {
+    "feature": "cultivation_intensity",
+    "importance": 0.309,
+    "std": 0.089
+  },
+  {
+    "feature": "week_of_year",
+    "importance": 0.064,
+    "std": 0.113
+  },
+  {
+    "feature": "price_lag_4",
+    "importance": 0.063,
+    "std": 0.153
+  },
+  {
+    "feature": "origin_rainfall_mm",
+    "importance": 0.047,
+    "std": 0.096
+  },
+  {
+    "feature": "committed_hectares",
+    "importance": 0.035,
+    "std": 0.131
+  },
+  {
+    "feature": "origin_temp_c",
+    "importance": -0.011,
+    "std": 0.04
+  },
+  {
+    "feature": "is_yala",
+    "importance": -0.017,
+    "std": 0.01
+  },
+  {
+    "feature": "is_maha",
+    "importance": -0.031,
+    "std": 0.013
+  },
+  {
+    "feature": "price_lag_52",
+    "importance": -0.083,
+    "std": 0.057
+  }
+]
