@@ -1,0 +1,23 @@
+{
+  "project": "J26-DS-322",
+  "member": "Garusingarachchi Y.B \u00b7 IT23415836 \u00b7 Member 2",
+  "engine": "Hybrid Temporal Forecasting Engine",
+  "version": "demo-1.0.0",
+  "generated_at": "2026-08-24T07:45:42.402644+00:00",
+  "seed": 42,
+  "confidence_level": 0.9,
+  "commitment_source": "simulated",
+  "panel_grain": "crop \u00d7 market \u00d7 week",
+  "elapsed_s": 15.2,
+  "n_panel": 7442,
+  "n_scored_test": 1484,
+  "backends": {
+    "lightgbm": "lightgbm",
+    "xgboost": "xgboost"
+  },
+  "libraries": {
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1",
+    "sklearn": "1.9.0"
+  }
+}

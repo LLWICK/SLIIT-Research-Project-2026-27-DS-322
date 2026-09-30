@@ -1,0 +1,223 @@
+{
+  "by_crop": [
+    {
+      "crop": "big_onion_local",
+      "price_type": "retail",
+      "rows": 1797,
+      "observed": 1797,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "big_onion_local",
+      "price_type": "wholesale",
+      "rows": 796,
+      "observed": 796,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "cabbage",
+      "price_type": "retail",
+      "rows": 16008,
+      "observed": 16008,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "cabbage",
+      "price_type": "wholesale",
+      "rows": 6212,
+      "observed": 6212,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "carrot",
+      "price_type": "retail",
+      "rows": 16020,
+      "observed": 16020,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "carrot",
+      "price_type": "wholesale",
+      "rows": 5782,
+      "observed": 5782,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "leek",
+      "price_type": "retail",
+      "rows": 15988,
+      "observed": 15988,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "leek",
+      "price_type": "wholesale",
+      "rows": 5750,
+      "observed": 5750,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "tomato",
+      "price_type": "retail",
+      "rows": 15993,
+      "observed": 15993,
+      "missing": 0,
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "tomato",
+      "price_type": "wholesale",
+      "rows": 6485,
+      "observed": 6485,
+      "missing": 0,
+      "coverage_pct": 100.0
+    }
+  ],
+  "by_series": [
+    {
+      "crop": "carrot",
+      "market": "badulla",
+      "rows": 1048,
+      "observed": 1048,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "carrot",
+      "market": "colombo",
+      "rows": 959,
+      "observed": 959,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "carrot",
+      "market": "nuwara_eliya",
+      "rows": 473,
+      "observed": 473,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "leek",
+      "market": "badulla",
+      "rows": 1050,
+      "observed": 1050,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "leek",
+      "market": "colombo",
+      "rows": 959,
+      "observed": 959,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "leek",
+      "market": "nuwara_eliya",
+      "rows": 473,
+      "observed": 473,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "tomato",
+      "market": "badulla",
+      "rows": 1050,
+      "observed": 1050,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "tomato",
+      "market": "colombo",
+      "rows": 959,
+      "observed": 959,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    },
+    {
+      "crop": "tomato",
+      "market": "nuwara_eliya",
+      "rows": 471,
+      "observed": 471,
+      "start": "2016-01-04",
+      "end": "2025-12-22",
+      "coverage_pct": 100.0
+    }
+  ],
+  "by_year": [
+    {
+      "year": 2016,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2017,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2018,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2019,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2020,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2021,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2022,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2023,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2024,
+      "coverage_pct": 100.0
+    },
+    {
+      "year": 2025,
+      "coverage_pct": 100.0
+    }
+  ],
+  "exclusions": [
+    {
+      "item": "Zero prices",
+      "reason": "32 zero values treated as missing, never as a real wholesale price."
+    },
+    {
+      "item": "Unobserved weeks",
+      "reason": "Gaps stay blank. Prices are not interpolated or filled with zeros, and every metric is scored on observed rows only."
+    },
+    {
+      "item": "Retail series",
+      "reason": "The engine uses wholesale weekly prices only. Retail rows in the extract are not modelled."
+    }
+  ]
+}

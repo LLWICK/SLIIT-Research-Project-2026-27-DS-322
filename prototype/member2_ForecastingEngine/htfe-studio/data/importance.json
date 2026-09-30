@@ -1,62 +1,62 @@
 [
   {
-    "feature": "price_lag_1",
-    "importance": 64.895,
-    "std": 0.963
-  },
-  {
-    "feature": "roll_mean_4",
-    "importance": 15.751,
-    "std": 0.507
+    "feature": "log_price",
+    "importance": 1.0,
+    "std": 0.0
   },
   {
     "feature": "week_within_season",
-    "importance": 0.518,
-    "std": 0.066
+    "importance": 0.494,
+    "std": 0.0
   },
   {
-    "feature": "cultivation_intensity",
-    "importance": 0.309,
-    "std": 0.089
+    "feature": "price_lag_1",
+    "importance": 0.402,
+    "std": 0.0
   },
   {
-    "feature": "week_of_year",
-    "importance": 0.064,
-    "std": 0.113
+    "feature": "roll_std_4",
+    "importance": 0.336,
+    "std": 0.0
   },
   {
-    "feature": "price_lag_4",
-    "importance": 0.063,
-    "std": 0.153
+    "feature": "price_lag_2",
+    "importance": 0.327,
+    "std": 0.0
   },
   {
-    "feature": "origin_rainfall_mm",
-    "importance": 0.047,
-    "std": 0.096
+    "feature": "weather_precip_mm",
+    "importance": 0.296,
+    "std": 0.0
   },
   {
-    "feature": "committed_hectares",
-    "importance": 0.035,
-    "std": 0.131
+    "feature": "weather_precip_mm_lag_1",
+    "importance": 0.268,
+    "std": 0.0
   },
   {
-    "feature": "origin_temp_c",
-    "importance": -0.011,
-    "std": 0.04
+    "feature": "price_lag_12",
+    "importance": 0.253,
+    "std": 0.0
   },
   {
-    "feature": "is_yala",
-    "importance": -0.017,
-    "std": 0.01
+    "feature": "price_lag_8",
+    "importance": 0.251,
+    "std": 0.0
   },
   {
-    "feature": "is_maha",
-    "importance": -0.031,
-    "std": 0.013
+    "feature": "crop",
+    "importance": 0.214,
+    "std": 0.0
   },
   {
     "feature": "price_lag_52",
-    "importance": -0.083,
-    "std": 0.057
+    "importance": 0.19,
+    "std": 0.0
+  },
+  {
+    "feature": "weather_rh_mean_pct_lag_2",
+    "importance": 0.18,
+    "std": 0.0
   }
 ]

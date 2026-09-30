@@ -16,18 +16,24 @@ def render(data: dict[str, Any]) -> None:
     lgb = next(row for row in comparison if row["id"] == "lightgbm")
     preds = pd.DataFrame(load_predictions())
 
+    qhat = models["lightgbm"].get("qhat")
     page_header(
-        "Chronological CQR",
-        "90% targeted coverage, empirically evaluated",
-        "We do not claim an i.i.d. mathematical guarantee on agricultural prices. "
-        f"We conformalize the 5th/95th LightGBM quantiles on a contiguous calibration block "
-        f"(q̂ = {models['lightgbm']['qhat']}) and then measure PICP on the later test weeks.",
+        "Forecast intervals",
+        "Raw 5% and 95% quantiles" if qhat is None else "90% targeted coverage, empirically evaluated",
+        "These bands are the LightGBM 5th and 95th percentiles on the 1-week-ahead test weeks. "
+        "They are not conformal yet, so the coverage is descriptive rather than a calibrated 90% guarantee."
+        if qhat is None
+        else (
+            "We do not claim an i.i.d. mathematical guarantee on agricultural prices. "
+            f"We conformalize the 5th/95th LightGBM quantiles on a contiguous calibration block "
+            f"(q̂ = {qhat}) and then measure PICP on the later test weeks."
+        ),
     )
 
     c1, c2, c3 = st.columns(3)
     c1.metric("Empirical PICP", f"{lgb['picp']}%", "Target 90%")
     c2.metric("Mean width (Rs.)", f"{lgb['interval_width']:.0f}", "Sharpness half of the result")
-    c3.metric("CQR q-hat", str(models["lightgbm"]["qhat"]), "Added to both tails")
+    c3.metric("CQR q-hat", "not run" if qhat is None else str(qhat), "Raw quantiles only" if qhat is None else "Added to both tails")
 
     with st.container(border=True):
         crops = sorted(preds["crop"].unique())
@@ -56,4 +62,7 @@ def render(data: dict[str, Any]) -> None:
         fig.add_trace(go.Scatter(x=slice_df["week_start"], y=slice_df["point"], mode="lines", line=dict(color=HARVEST, width=2), name="Median forecast"))
         fig.update_layout(yaxis_title="Rs. / kg")
         show_chart(fig, 420)
-        st.caption("Amber = realised wholesale price. Blue = median forecast. Band = calibrated 90% interval.")
+        st.caption(
+            "Amber = realised wholesale price. Blue = median forecast. "
+            + ("Band = split conformal interval around the LightGBM quantiles." if qhat is not None else "Band = raw 5% to 95% quantile, not conformal.")
+        )

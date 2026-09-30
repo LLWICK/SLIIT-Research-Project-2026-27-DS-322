@@ -48,15 +48,15 @@ def render(data: dict[str, Any]) -> None:
     with mae_col:
         with st.container(border=True):
             section_title("Point accuracy", "MAE (LKR/kg)")
-            fig = go.Figure(go.Bar(x=ids, y=[row["mae"] for row in comparison], marker_color=HARVEST, name="MAE"))
+            fig = go.Figure(go.Bar(x=ids, y=[row["mae"] or 0 for row in comparison], marker_color=HARVEST, name="MAE"))
             fig.update_layout(showlegend=False, yaxis_title="Rs. / kg")
             show_chart(fig, 300)
     with picp_col:
         with st.container(border=True):
             section_title("Uncertainty quality", "PICP vs interval width")
             fig2 = go.Figure()
-            fig2.add_trace(go.Bar(x=ids, y=[row["picp"] for row in comparison], marker_color=SKY, name="PICP"))
-            fig2.add_trace(go.Bar(x=ids, y=[row["interval_width"] for row in comparison], marker_color=AMBER, name="Width"))
+            fig2.add_trace(go.Bar(x=ids, y=[row["picp"] or 0 for row in comparison], marker_color=SKY, name="PICP"))
+            fig2.add_trace(go.Bar(x=ids, y=[row["interval_width"] or 0 for row in comparison], marker_color=AMBER, name="Width"))
             fig2.update_layout(barmode="group")
             show_chart(fig2, 300)
 

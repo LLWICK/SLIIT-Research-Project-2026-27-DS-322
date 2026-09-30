@@ -1,0 +1,60 @@
+{
+  "version": "methodology-20260930_1316",
+  "seed": 42,
+  "elapsed_s": 405.8,
+  "feature_set": "B",
+  "progress_in_model": false,
+  "cultivation_progress_source": "unavailable_no_district_monthly_series",
+  "macros": {
+    "status": "not_found",
+    "columns": [],
+    "path": null
+  },
+  "optuna": {
+    "lightgbm": {
+      "num_leaves": 23,
+      "learning_rate": 0.02398402896164091,
+      "min_child_samples": 22,
+      "subsample": 0.8326107381627229,
+      "colsample_bytree": 0.7513738560818595
+    },
+    "xgboost": {
+      "max_depth": 5,
+      "learning_rate": 0.09217299101946078,
+      "min_child_weight": 18.893243139249282,
+      "subsample": 0.6680893482344493,
+      "colsample_bytree": 0.6634723977479348
+    }
+  },
+  "cqr": {
+    "method": "split_cqr_romano2019",
+    "mapie_version": "1.5.0",
+    "mapie_note": "MAPIE is installed, but ConformalizedQuantileRegressor refits an estimator and does not accept the three already-fit LightGBM quantile boosters. The conformity score MAPIE uses for CQR was applied to those boosters on the 2023 block.",
+    "alpha": 0.1,
+    "qhat_by_horizon": {
+      "1": 6.0156,
+      "2": 2.7084,
+      "4": 11.7757,
+      "8": 20.2185,
+      "12": 17.58
+    },
+    "qhat": 6.0156,
+    "limit": "Time-ordered prices are not exchangeable, so this is an empirical calibration, not a universal 90% guarantee."
+  },
+  "sarimax": "reused from artifacts/latest price-only walk-forward",
+  "python": "3.13.14",
+  "libraries": {
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1",
+    "optuna": "5.0.0",
+    "mapie": "1.5.0",
+    "shap": "0.52.0"
+  },
+  "live_note": "The trained model has no cultivation_progress column, so a later monthly update cannot be passed in. No week 2/5/8/12 path was used, and no hectares were invented.",
+  "eval_markets": [
+    "Dambulla",
+    "Colombo",
+    "Meegoda",
+    "Nuwara Eliya"
+  ]
+}

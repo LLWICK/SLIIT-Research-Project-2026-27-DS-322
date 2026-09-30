@@ -1,0 +1,112 @@
+# Market prices join to origin-district weather and DCS supply.
+# supply_districts are DCS district names (Welimada and Bandarawela sit inside Badulla,
+# so they are weather points only and are not added again as supply rows).
+# assumption: true means the origin list is a research judgement, not a published flow table.
+carrot:
+  "Nuwara Eliya":
+    weather: [nuwara_eliya]
+    supply_districts: ["Nuwara Eliya"]
+    assumption: false
+    note: "Producer market in the main carrot district."
+  Dambulla:
+    weather: [nuwara_eliya, badulla, welimada, bandarawela]
+    supply_districts: ["Nuwara Eliya", Badulla]
+    assumption: true
+    note: "Upcountry supply into the Dambulla wholesale hub."
+  Colombo:
+    weather: [nuwara_eliya, badulla, welimada, bandarawela]
+    supply_districts: ["Nuwara Eliya", Badulla]
+    assumption: true
+    note: "Consumer market fed by highland carrot."
+  Meegoda:
+    weather: [nuwara_eliya, badulla, welimada, bandarawela]
+    supply_districts: ["Nuwara Eliya", Badulla]
+    assumption: true
+    note: "Same highland shed as Colombo."
+  Kandy:
+    weather: [kandy, nuwara_eliya]
+    supply_districts: [Kandy, "Nuwara Eliya"]
+    assumption: true
+    note: "Train-pool market. Kandy has its own DCS carrot extent."
+  Keppetipola:
+    weather: [keppetipola, badulla, welimada]
+    supply_districts: [Badulla]
+    assumption: true
+    note: "Train-pool producer market in Badulla district."
+  Thambuttegama:
+    weather: [dambulla]
+    supply_districts: [Anuradhapura]
+    assumption: true
+    note: "Train-pool. Nearest fetched weather point is Dambulla; supply is Anuradhapura."
+leeks:
+  "Nuwara Eliya":
+    weather: [nuwara_eliya]
+    supply_districts: ["Nuwara Eliya"]
+    assumption: false
+    note: "Producer market."
+  Dambulla:
+    weather: [nuwara_eliya, badulla, welimada, bandarawela]
+    supply_districts: ["Nuwara Eliya", Badulla]
+    assumption: true
+    note: "Upcountry leeks into Dambulla."
+  Colombo:
+    weather: [nuwara_eliya, badulla]
+    supply_districts: ["Nuwara Eliya", Badulla]
+    assumption: true
+    note: "Consumer market."
+  Meegoda:
+    weather: [nuwara_eliya, badulla]
+    supply_districts: ["Nuwara Eliya", Badulla]
+    assumption: true
+    note: "Consumer market."
+  Kandy:
+    weather: [kandy, nuwara_eliya]
+    supply_districts: ["Nuwara Eliya", Kandy]
+    assumption: true
+    note: "Train-pool."
+  Keppetipola:
+    weather: [keppetipola, badulla]
+    supply_districts: [Badulla, "Nuwara Eliya"]
+    assumption: true
+    note: "Train-pool."
+  Thambuttegama:
+    weather: [dambulla]
+    supply_districts: ["Nuwara Eliya"]
+    assumption: true
+    note: "Train-pool. Leeks are not an Anuradhapura crop; origin stays upcountry."
+tomato:
+  "Nuwara Eliya":
+    weather: [nuwara_eliya, matale]
+    supply_districts: ["Nuwara Eliya", Matale]
+    assumption: true
+    note: "DCS shows Matale tomato as well as Nuwara Eliya."
+  Dambulla:
+    weather: [matale, nuwara_eliya, badulla]
+    supply_districts: [Matale, "Nuwara Eliya", Badulla]
+    assumption: true
+    note: "Dambulla is in Matale district."
+  Colombo:
+    weather: [matale, badulla, nuwara_eliya]
+    supply_districts: [Matale, Badulla, "Nuwara Eliya"]
+    assumption: true
+    note: "Wider tomato shed than carrot."
+  Meegoda:
+    weather: [matale, badulla, nuwara_eliya]
+    supply_districts: [Matale, Badulla, "Nuwara Eliya"]
+    assumption: true
+    note: "Wider tomato shed than carrot."
+  Kandy:
+    weather: [kandy, matale]
+    supply_districts: [Kandy, Matale]
+    assumption: true
+    note: "Train-pool."
+  Keppetipola:
+    weather: [keppetipola, badulla]
+    supply_districts: [Badulla]
+    assumption: true
+    note: "Train-pool."
+  Thambuttegama:
+    weather: [dambulla, matale]
+    supply_districts: [Anuradhapura, Matale]
+    assumption: true
+    note: "Train-pool. Tomato is grown more widely than carrot."

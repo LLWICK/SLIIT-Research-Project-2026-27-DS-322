@@ -1,0 +1,361 @@
+model,horizon,target_form,unique_id,crop,market,n_scored,mae,rmse,mape,pinball,picp,interval_width
+sarimax,1,level,carrot__Colombo,carrot,Colombo,102,75.89,131.23,23.08,,,
+sarimax,1,level,carrot__Dambulla,carrot,Dambulla,98,88.06,165.53,24.21,,,
+sarimax,1,level,carrot__Meegoda,carrot,Meegoda,100,81.21,153.91,19.4,,,
+sarimax,1,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,86,86.25,162.38,22.66,,,
+sarimax,1,level,leeks__Colombo,leeks,Colombo,102,38.02,53.07,18.91,,,
+sarimax,1,level,leeks__Dambulla,leeks,Dambulla,98,36.73,57.87,17.09,,,
+sarimax,1,level,leeks__Meegoda,leeks,Meegoda,100,34.26,50.33,14.15,,,
+sarimax,1,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,86,30.14,46.01,13.79,,,
+sarimax,1,level,tomato__Colombo,tomato,Colombo,102,62.78,90.4,25.94,,,
+sarimax,1,level,tomato__Dambulla,tomato,Dambulla,98,69.33,99.92,36.44,,,
+sarimax,1,level,tomato__Meegoda,tomato,Meegoda,100,69.99,99.87,29.47,,,
+sarimax,1,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,86,68.17,100.14,33.68,,,
+sarimax,2,level,carrot__Colombo,carrot,Colombo,101,97.97,157.77,31.76,,,
+sarimax,2,level,carrot__Dambulla,carrot,Dambulla,97,103.56,189.33,31.49,,,
+sarimax,2,level,carrot__Meegoda,carrot,Meegoda,99,119.39,213.98,29.67,,,
+sarimax,2,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,85,120.34,206.68,32.41,,,
+sarimax,2,level,leeks__Colombo,leeks,Colombo,101,50.8,67.17,23.76,,,
+sarimax,2,level,leeks__Dambulla,leeks,Dambulla,97,51.51,73.52,23.79,,,
+sarimax,2,level,leeks__Meegoda,leeks,Meegoda,99,50.36,69.32,20.11,,,
+sarimax,2,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,85,49.3,68.81,21.3,,,
+sarimax,2,level,tomato__Colombo,tomato,Colombo,101,90.71,129.84,37.07,,,
+sarimax,2,level,tomato__Dambulla,tomato,Dambulla,97,88.29,129.11,49.19,,,
+sarimax,2,level,tomato__Meegoda,tomato,Meegoda,99,93.69,130.82,41.16,,,
+sarimax,2,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,85,93.66,137.19,51.73,,,
+sarimax,4,level,carrot__Colombo,carrot,Colombo,99,146.82,225.36,49.37,,,
+sarimax,4,level,carrot__Dambulla,carrot,Dambulla,95,156.52,251.14,50.3,,,
+sarimax,4,level,carrot__Meegoda,carrot,Meegoda,97,165.65,278.31,47.69,,,
+sarimax,4,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,82,157.32,246.85,53.45,,,
+sarimax,4,level,leeks__Colombo,leeks,Colombo,99,69.16,93.95,32.67,,,
+sarimax,4,level,leeks__Dambulla,leeks,Dambulla,95,70.96,99.77,32.52,,,
+sarimax,4,level,leeks__Meegoda,leeks,Meegoda,97,74.04,98.26,30.7,,,
+sarimax,4,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,82,77.34,102.52,34.37,,,
+sarimax,4,level,tomato__Colombo,tomato,Colombo,99,142.07,195.45,66.51,,,
+sarimax,4,level,tomato__Dambulla,tomato,Dambulla,95,132.02,179.71,77.24,,,
+sarimax,4,level,tomato__Meegoda,tomato,Meegoda,97,131.7,174.77,64.06,,,
+sarimax,4,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,82,134.64,189.61,83.07,,,
+sarimax,8,level,carrot__Colombo,carrot,Colombo,95,201.64,278.51,83.67,,,
+sarimax,8,level,carrot__Dambulla,carrot,Dambulla,91,203.44,295.1,85.28,,,
+sarimax,8,level,carrot__Meegoda,carrot,Meegoda,93,225.76,337.96,80.96,,,
+sarimax,8,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,226.79,320.79,93.37,,,
+sarimax,8,level,leeks__Colombo,leeks,Colombo,95,103.2,131.82,54.17,,,
+sarimax,8,level,leeks__Dambulla,leeks,Dambulla,91,101.93,134.14,51.25,,,
+sarimax,8,level,leeks__Meegoda,leeks,Meegoda,93,94.74,124.16,43.69,,,
+sarimax,8,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,108.43,143.34,54.39,,,
+sarimax,8,level,tomato__Colombo,tomato,Colombo,95,201.92,280.28,131.1,,,
+sarimax,8,level,tomato__Dambulla,tomato,Dambulla,91,178.96,243.05,161.29,,,
+sarimax,8,level,tomato__Meegoda,tomato,Meegoda,93,152.2,199.23,88.64,,,
+sarimax,8,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,178.39,249.11,180.66,,,
+sarimax,12,level,carrot__Colombo,carrot,Colombo,91,215.07,307.3,105.62,,,
+sarimax,12,level,carrot__Dambulla,carrot,Dambulla,87,225.18,320.51,108.6,,,
+sarimax,12,level,carrot__Meegoda,carrot,Meegoda,89,240.8,363.25,101.01,,,
+sarimax,12,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,237.23,342.59,115.56,,,
+sarimax,12,level,leeks__Colombo,leeks,Colombo,91,114.82,145.35,63.41,,,
+sarimax,12,level,leeks__Dambulla,leeks,Dambulla,87,116.8,149.33,62.91,,,
+sarimax,12,level,leeks__Meegoda,leeks,Meegoda,89,106.84,134.66,51.11,,,
+sarimax,12,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,128.99,159.61,70.57,,,
+sarimax,12,level,tomato__Colombo,tomato,Colombo,91,238.68,310.18,169.97,,,
+sarimax,12,level,tomato__Dambulla,tomato,Dambulla,87,196.86,261.28,200.13,,,
+sarimax,12,level,tomato__Meegoda,tomato,Meegoda,89,154.35,197.34,89.82,,,
+sarimax,12,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,199.59,269.62,212.09,,,
+lightgbm,1,logret,carrot__Colombo,carrot,Colombo,102,67.83,116.09,20.31,33.91,80.39,249.43
+lightgbm,1,logret,carrot__Dambulla,carrot,Dambulla,98,76.27,154.99,19.64,38.13,78.57,250.32
+lightgbm,1,logret,carrot__Meegoda,carrot,Meegoda,100,76.75,154.88,17.59,38.37,87.0,292.05
+lightgbm,1,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,86,83.85,159.7,20.97,41.92,81.4,280.08
+lightgbm,1,logret,leeks__Colombo,leeks,Colombo,102,34.91,48.09,17.65,17.46,86.27,152.79
+lightgbm,1,logret,leeks__Dambulla,leeks,Dambulla,98,34.17,52.33,15.46,17.08,86.73,155.94
+lightgbm,1,logret,leeks__Meegoda,leeks,Meegoda,100,31.05,46.91,12.48,15.53,94.0,176.16
+lightgbm,1,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,86,28.77,43.91,13.28,14.39,96.51,159.06
+lightgbm,1,logret,tomato__Colombo,tomato,Colombo,102,60.13,90.71,23.17,30.07,85.29,233.69
+lightgbm,1,logret,tomato__Dambulla,tomato,Dambulla,98,65.37,93.17,32.91,32.69,68.37,193.1
+lightgbm,1,logret,tomato__Meegoda,tomato,Meegoda,100,65.18,94.99,25.13,32.59,78.0,244.26
+lightgbm,1,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,86,68.1,98.84,33.51,34.05,72.09,200.83
+lightgbm,2,logret,carrot__Colombo,carrot,Colombo,101,85.17,135.69,26.5,42.59,80.2,352.94
+lightgbm,2,logret,carrot__Dambulla,carrot,Dambulla,97,87.37,165.13,25.25,43.68,78.35,356.86
+lightgbm,2,logret,carrot__Meegoda,carrot,Meegoda,99,101.37,189.59,23.57,50.68,84.85,412.84
+lightgbm,2,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,85,102.68,183.36,26.69,51.34,80.0,395.04
+lightgbm,2,logret,leeks__Colombo,leeks,Colombo,101,41.72,57.73,19.83,20.86,91.09,206.31
+lightgbm,2,logret,leeks__Dambulla,leeks,Dambulla,97,42.68,60.88,19.05,21.34,85.57,211.37
+lightgbm,2,logret,leeks__Meegoda,leeks,Meegoda,99,40.39,58.42,15.65,20.19,93.94,240.73
+lightgbm,2,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,85,39.54,55.47,17.7,19.77,90.59,217.83
+lightgbm,2,logret,tomato__Colombo,tomato,Colombo,101,78.96,116.52,31.53,39.48,89.11,331.96
+lightgbm,2,logret,tomato__Dambulla,tomato,Dambulla,97,77.73,111.56,43.34,38.86,75.26,269.18
+lightgbm,2,logret,tomato__Meegoda,tomato,Meegoda,99,83.56,120.71,33.64,41.78,83.84,343.29
+lightgbm,2,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,85,83.12,119.53,45.19,41.56,71.76,284.91
+lightgbm,4,logret,carrot__Colombo,carrot,Colombo,99,107.99,164.65,35.34,54.0,85.86,511.91
+lightgbm,4,logret,carrot__Dambulla,carrot,Dambulla,95,121.93,194.29,38.48,60.97,80.0,518.3
+lightgbm,4,logret,carrot__Meegoda,carrot,Meegoda,97,127.45,196.75,35.93,63.73,83.51,589.7
+lightgbm,4,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,82,119.93,183.19,37.59,59.96,79.27,563.37
+lightgbm,4,logret,leeks__Colombo,leeks,Colombo,99,48.69,73.13,22.24,24.34,88.89,304.31
+lightgbm,4,logret,leeks__Dambulla,leeks,Dambulla,95,48.16,71.65,20.73,24.08,91.58,314.7
+lightgbm,4,logret,leeks__Meegoda,leeks,Meegoda,97,55.44,81.03,21.0,27.72,94.85,355.01
+lightgbm,4,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,82,50.68,73.75,22.22,25.34,93.9,320.88
+lightgbm,4,logret,tomato__Colombo,tomato,Colombo,99,113.55,166.41,48.95,56.77,78.79,451.84
+lightgbm,4,logret,tomato__Dambulla,tomato,Dambulla,95,102.27,145.4,57.36,51.14,74.74,371.38
+lightgbm,4,logret,tomato__Meegoda,tomato,Meegoda,97,114.14,164.69,45.13,57.07,79.38,467.9
+lightgbm,4,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,82,110.6,158.54,67.24,55.3,73.17,393.91
+lightgbm,8,logret,carrot__Colombo,carrot,Colombo,95,138.15,184.28,58.03,69.08,72.63,632.43
+lightgbm,8,logret,carrot__Dambulla,carrot,Dambulla,91,142.88,187.84,59.18,71.44,76.92,664.67
+lightgbm,8,logret,carrot__Meegoda,carrot,Meegoda,93,153.51,206.49,52.52,76.75,79.57,718.32
+lightgbm,8,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,162.71,207.44,67.45,81.35,73.42,713.59
+lightgbm,8,logret,leeks__Colombo,leeks,Colombo,95,65.49,94.43,34.35,32.74,86.32,384.06
+lightgbm,8,logret,leeks__Dambulla,leeks,Dambulla,91,66.77,92.07,34.88,33.38,90.11,399.26
+lightgbm,8,logret,leeks__Meegoda,leeks,Meegoda,93,72.37,99.9,31.88,36.18,93.55,440.7
+lightgbm,8,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,70.28,101.34,35.82,35.14,91.14,399.8
+lightgbm,8,logret,tomato__Colombo,tomato,Colombo,95,147.71,205.57,71.72,73.85,64.21,525.6
+lightgbm,8,logret,tomato__Dambulla,tomato,Dambulla,91,120.77,167.93,82.73,60.39,65.93,456.99
+lightgbm,8,logret,tomato__Meegoda,tomato,Meegoda,93,144.02,202.66,63.77,72.01,67.74,549.94
+lightgbm,8,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,120.64,162.67,92.22,60.32,65.82,476.77
+lightgbm,12,logret,carrot__Colombo,carrot,Colombo,91,153.76,215.05,61.89,76.88,71.43,929.23
+lightgbm,12,logret,carrot__Dambulla,carrot,Dambulla,87,151.02,210.54,61.01,75.51,73.56,951.12
+lightgbm,12,logret,carrot__Meegoda,carrot,Meegoda,89,169.9,233.66,57.53,84.95,75.28,1088.03
+lightgbm,12,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,178.77,231.25,74.19,89.39,73.42,1004.0
+lightgbm,12,logret,leeks__Colombo,leeks,Colombo,91,78.35,103.56,44.18,39.17,94.51,570.48
+lightgbm,12,logret,leeks__Dambulla,leeks,Dambulla,87,75.2,98.19,42.87,37.6,95.4,594.04
+lightgbm,12,logret,leeks__Meegoda,leeks,Meegoda,89,85.7,111.22,42.27,42.85,96.63,663.07
+lightgbm,12,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,79.06,111.02,43.18,39.53,97.47,587.65
+lightgbm,12,logret,tomato__Colombo,tomato,Colombo,91,146.21,204.23,72.54,73.1,62.64,749.88
+lightgbm,12,logret,tomato__Dambulla,tomato,Dambulla,87,118.06,159.23,84.46,59.03,63.22,631.61
+lightgbm,12,logret,tomato__Meegoda,tomato,Meegoda,89,144.93,204.89,64.79,72.46,67.42,776.63
+lightgbm,12,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,123.03,171.85,91.72,61.52,65.82,658.87
+lightgbm_ratio,1,ratio,carrot__Colombo,carrot,Colombo,102,80.48,139.19,23.34,,,
+lightgbm_ratio,1,ratio,carrot__Dambulla,carrot,Dambulla,98,86.8,178.02,22.09,,,
+lightgbm_ratio,1,ratio,carrot__Meegoda,carrot,Meegoda,100,97.07,192.5,21.91,,,
+lightgbm_ratio,1,ratio,carrot__Nuwara Eliya,carrot,Nuwara Eliya,86,101.17,189.54,24.39,,,
+lightgbm_ratio,1,ratio,leeks__Colombo,leeks,Colombo,102,34.86,48.45,17.64,,,
+lightgbm_ratio,1,ratio,leeks__Dambulla,leeks,Dambulla,98,36.35,55.15,16.08,,,
+lightgbm_ratio,1,ratio,leeks__Meegoda,leeks,Meegoda,100,35.83,55.2,14.32,,,
+lightgbm_ratio,1,ratio,leeks__Nuwara Eliya,leeks,Nuwara Eliya,86,31.54,48.07,14.49,,,
+lightgbm_ratio,1,ratio,tomato__Colombo,tomato,Colombo,102,66.97,100.83,26.45,,,
+lightgbm_ratio,1,ratio,tomato__Dambulla,tomato,Dambulla,98,69.43,94.96,36.55,,,
+lightgbm_ratio,1,ratio,tomato__Meegoda,tomato,Meegoda,100,75.2,106.63,28.91,,,
+lightgbm_ratio,1,ratio,tomato__Nuwara Eliya,tomato,Nuwara Eliya,86,77.45,109.92,39.78,,,
+lightgbm_ratio,2,ratio,carrot__Colombo,carrot,Colombo,101,100.23,163.87,30.81,,,
+lightgbm_ratio,2,ratio,carrot__Dambulla,carrot,Dambulla,97,102.25,190.88,29.03,,,
+lightgbm_ratio,2,ratio,carrot__Meegoda,carrot,Meegoda,99,110.57,219.56,26.6,,,
+lightgbm_ratio,2,ratio,carrot__Nuwara Eliya,carrot,Nuwara Eliya,85,112.63,207.43,30.91,,,
+lightgbm_ratio,2,ratio,leeks__Colombo,leeks,Colombo,101,41.24,58.75,20.53,,,
+lightgbm_ratio,2,ratio,leeks__Dambulla,leeks,Dambulla,97,43.49,62.86,19.38,,,
+lightgbm_ratio,2,ratio,leeks__Meegoda,leeks,Meegoda,99,46.31,67.14,18.08,,,
+lightgbm_ratio,2,ratio,leeks__Nuwara Eliya,leeks,Nuwara Eliya,85,44.65,62.13,20.3,,,
+lightgbm_ratio,2,ratio,tomato__Colombo,tomato,Colombo,101,93.55,132.8,39.6,,,
+lightgbm_ratio,2,ratio,tomato__Dambulla,tomato,Dambulla,97,88.82,118.56,51.19,,,
+lightgbm_ratio,2,ratio,tomato__Meegoda,tomato,Meegoda,99,94.48,134.6,39.53,,,
+lightgbm_ratio,2,ratio,tomato__Nuwara Eliya,tomato,Nuwara Eliya,85,98.77,137.43,56.19,,,
+lightgbm_ratio,4,ratio,carrot__Colombo,carrot,Colombo,99,109.45,168.68,36.6,,,
+lightgbm_ratio,4,ratio,carrot__Dambulla,carrot,Dambulla,95,115.67,181.98,37.37,,,
+lightgbm_ratio,4,ratio,carrot__Meegoda,carrot,Meegoda,97,128.91,195.07,36.51,,,
+lightgbm_ratio,4,ratio,carrot__Nuwara Eliya,carrot,Nuwara Eliya,82,127.29,186.19,43.17,,,
+lightgbm_ratio,4,ratio,leeks__Colombo,leeks,Colombo,99,56.07,79.71,26.69,,,
+lightgbm_ratio,4,ratio,leeks__Dambulla,leeks,Dambulla,95,54.27,77.22,24.87,,,
+lightgbm_ratio,4,ratio,leeks__Meegoda,leeks,Meegoda,97,59.19,85.13,23.42,,,
+lightgbm_ratio,4,ratio,leeks__Nuwara Eliya,leeks,Nuwara Eliya,82,54.72,80.41,25.32,,,
+lightgbm_ratio,4,ratio,tomato__Colombo,tomato,Colombo,99,133.32,184.18,58.57,,,
+lightgbm_ratio,4,ratio,tomato__Dambulla,tomato,Dambulla,95,114.09,149.43,67.98,,,
+lightgbm_ratio,4,ratio,tomato__Meegoda,tomato,Meegoda,97,134.51,181.36,56.04,,,
+lightgbm_ratio,4,ratio,tomato__Nuwara Eliya,tomato,Nuwara Eliya,82,124.44,166.89,82.27,,,
+lightgbm_ratio,8,ratio,carrot__Colombo,carrot,Colombo,95,148.99,193.42,69.17,,,
+lightgbm_ratio,8,ratio,carrot__Dambulla,carrot,Dambulla,91,155.83,201.96,71.12,,,
+lightgbm_ratio,8,ratio,carrot__Meegoda,carrot,Meegoda,93,171.44,220.04,66.37,,,
+lightgbm_ratio,8,ratio,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,169.55,213.78,79.48,,,
+lightgbm_ratio,8,ratio,leeks__Colombo,leeks,Colombo,95,76.89,101.38,43.55,,,
+lightgbm_ratio,8,ratio,leeks__Dambulla,leeks,Dambulla,91,80.8,103.74,45.31,,,
+lightgbm_ratio,8,ratio,leeks__Meegoda,leeks,Meegoda,93,81.61,106.85,39.12,,,
+lightgbm_ratio,8,ratio,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,80.66,105.24,43.77,,,
+lightgbm_ratio,8,ratio,tomato__Colombo,tomato,Colombo,95,173.22,236.18,102.43,,,
+lightgbm_ratio,8,ratio,tomato__Dambulla,tomato,Dambulla,91,146.49,193.14,119.45,,,
+lightgbm_ratio,8,ratio,tomato__Meegoda,tomato,Meegoda,93,172.76,234.43,93.67,,,
+lightgbm_ratio,8,ratio,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,134.23,181.13,124.99,,,
+lightgbm_ratio,12,ratio,carrot__Colombo,carrot,Colombo,91,162.45,214.83,72.75,,,
+lightgbm_ratio,12,ratio,carrot__Dambulla,carrot,Dambulla,87,169.5,219.73,76.0,,,
+lightgbm_ratio,12,ratio,carrot__Meegoda,carrot,Meegoda,89,178.61,233.12,66.06,,,
+lightgbm_ratio,12,ratio,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,179.13,225.26,78.57,,,
+lightgbm_ratio,12,ratio,leeks__Colombo,leeks,Colombo,91,82.0,100.68,48.56,,,
+lightgbm_ratio,12,ratio,leeks__Dambulla,leeks,Dambulla,87,80.59,99.45,48.11,,,
+lightgbm_ratio,12,ratio,leeks__Meegoda,leeks,Meegoda,89,84.64,106.75,42.92,,,
+lightgbm_ratio,12,ratio,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,82.78,109.19,47.76,,,
+lightgbm_ratio,12,ratio,tomato__Colombo,tomato,Colombo,91,140.77,197.76,80.35,,,
+lightgbm_ratio,12,ratio,tomato__Dambulla,tomato,Dambulla,87,120.82,160.52,99.03,,,
+lightgbm_ratio,12,ratio,tomato__Meegoda,tomato,Meegoda,89,142.68,195.22,70.8,,,
+lightgbm_ratio,12,ratio,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,113.87,157.55,88.32,,,
+naive_last,1,level,carrot__Colombo,carrot,Colombo,102,75.84,128.53,23.05,,,
+naive_last,1,level,carrot__Dambulla,carrot,Dambulla,98,87.39,173.8,23.24,,,
+naive_last,1,level,carrot__Meegoda,carrot,Meegoda,100,82.12,155.49,19.66,,,
+naive_last,1,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,86,89.45,168.71,22.59,,,
+naive_last,1,level,leeks__Colombo,leeks,Colombo,102,39.12,53.9,19.62,,,
+naive_last,1,level,leeks__Dambulla,leeks,Dambulla,98,38.04,59.46,17.58,,,
+naive_last,1,level,leeks__Meegoda,leeks,Meegoda,100,35.17,51.22,14.4,,,
+naive_last,1,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,86,30.1,46.13,13.75,,,
+naive_last,1,level,tomato__Colombo,tomato,Colombo,102,62.62,90.35,25.98,,,
+naive_last,1,level,tomato__Dambulla,tomato,Dambulla,98,69.07,100.69,35.78,,,
+naive_last,1,level,tomato__Meegoda,tomato,Meegoda,100,70.86,104.98,27.98,,,
+naive_last,1,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,86,68.16,99.72,33.43,,,
+naive_last,2,level,carrot__Colombo,carrot,Colombo,101,98.57,157.34,32.02,,,
+naive_last,2,level,carrot__Dambulla,carrot,Dambulla,97,102.64,188.79,31.3,,,
+naive_last,2,level,carrot__Meegoda,carrot,Meegoda,99,117.98,211.25,29.46,,,
+naive_last,2,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,85,119.04,205.58,32.14,,,
+naive_last,2,level,leeks__Colombo,leeks,Colombo,101,51.29,67.64,24.04,,,
+naive_last,2,level,leeks__Dambulla,leeks,Dambulla,97,50.88,74.04,23.75,,,
+naive_last,2,level,leeks__Meegoda,leeks,Meegoda,99,52.33,71.39,20.63,,,
+naive_last,2,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,85,49.04,68.65,21.16,,,
+naive_last,2,level,tomato__Colombo,tomato,Colombo,101,91.23,130.93,38.31,,,
+naive_last,2,level,tomato__Dambulla,tomato,Dambulla,97,88.35,129.77,48.42,,,
+naive_last,2,level,tomato__Meegoda,tomato,Meegoda,99,98.38,139.01,39.78,,,
+naive_last,2,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,85,93.72,137.2,52.19,,,
+naive_last,4,level,carrot__Colombo,carrot,Colombo,99,148.19,218.36,51.19,,,
+naive_last,4,level,carrot__Dambulla,carrot,Dambulla,95,155.53,249.77,50.81,,,
+naive_last,4,level,carrot__Meegoda,carrot,Meegoda,97,164.6,273.61,48.17,,,
+naive_last,4,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,82,155.61,243.87,53.21,,,
+naive_last,4,level,leeks__Colombo,leeks,Colombo,99,70.5,94.96,33.38,,,
+naive_last,4,level,leeks__Dambulla,leeks,Dambulla,95,71.0,100.73,32.54,,,
+naive_last,4,level,leeks__Meegoda,leeks,Meegoda,97,78.99,105.95,32.05,,,
+naive_last,4,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,82,76.83,102.05,34.09,,,
+naive_last,4,level,tomato__Colombo,tomato,Colombo,99,144.27,197.6,69.2,,,
+naive_last,4,level,tomato__Dambulla,tomato,Dambulla,95,131.54,179.4,76.41,,,
+naive_last,4,level,tomato__Meegoda,tomato,Meegoda,97,149.57,202.67,65.94,,,
+naive_last,4,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,82,135.48,190.5,83.99,,,
+naive_last,8,level,carrot__Colombo,carrot,Colombo,95,199.6,267.54,85.31,,,
+naive_last,8,level,carrot__Dambulla,carrot,Dambulla,91,205.74,295.79,87.45,,,
+naive_last,8,level,carrot__Meegoda,carrot,Meegoda,93,227.94,337.4,82.95,,,
+naive_last,8,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,227.11,322.68,94.09,,,
+naive_last,8,level,leeks__Colombo,leeks,Colombo,95,105.54,133.76,55.56,,,
+naive_last,8,level,leeks__Dambulla,leeks,Dambulla,91,101.71,134.76,50.99,,,
+naive_last,8,level,leeks__Meegoda,leeks,Meegoda,93,109.08,144.17,49.67,,,
+naive_last,8,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,107.29,142.55,53.67,,,
+naive_last,8,level,tomato__Colombo,tomato,Colombo,95,202.22,278.99,133.18,,,
+naive_last,8,level,tomato__Dambulla,tomato,Dambulla,91,179.04,244.25,160.3,,,
+naive_last,8,level,tomato__Meegoda,tomato,Meegoda,93,202.34,280.13,119.27,,,
+naive_last,8,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,178.25,249.14,181.73,,,
+naive_last,12,level,carrot__Colombo,carrot,Colombo,91,216.75,300.58,109.31,,,
+naive_last,12,level,carrot__Dambulla,carrot,Dambulla,87,227.36,323.66,111.21,,,
+naive_last,12,level,carrot__Meegoda,carrot,Meegoda,89,244.79,366.57,103.91,,,
+naive_last,12,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,240.33,346.03,116.88,,,
+naive_last,12,level,leeks__Colombo,leeks,Colombo,91,118.02,147.73,65.48,,,
+naive_last,12,level,leeks__Dambulla,leeks,Dambulla,87,117.95,151.72,63.43,,,
+naive_last,12,level,leeks__Meegoda,leeks,Meegoda,89,129.49,164.23,61.38,,,
+naive_last,12,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,127.63,158.64,69.65,,,
+naive_last,12,level,tomato__Colombo,tomato,Colombo,91,234.2,304.93,166.52,,,
+naive_last,12,level,tomato__Dambulla,tomato,Dambulla,87,195.98,263.08,200.32,,,
+naive_last,12,level,tomato__Meegoda,tomato,Meegoda,89,230.27,306.86,143.53,,,
+naive_last,12,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,198.77,269.47,210.99,,,
+seasonal_naive_52,1,level,carrot__Colombo,carrot,Colombo,101,210.95,330.66,71.56,,,
+seasonal_naive_52,1,level,carrot__Dambulla,carrot,Dambulla,97,224.58,373.05,78.58,,,
+seasonal_naive_52,1,level,carrot__Meegoda,carrot,Meegoda,97,251.38,428.79,70.91,,,
+seasonal_naive_52,1,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,82,228.0,363.37,72.07,,,
+seasonal_naive_52,1,level,leeks__Colombo,leeks,Colombo,101,99.55,127.67,51.88,,,
+seasonal_naive_52,1,level,leeks__Dambulla,leeks,Dambulla,97,111.24,144.78,55.24,,,
+seasonal_naive_52,1,level,leeks__Meegoda,leeks,Meegoda,97,110.72,146.6,49.25,,,
+seasonal_naive_52,1,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,82,110.88,142.34,53.09,,,
+seasonal_naive_52,1,level,tomato__Colombo,tomato,Colombo,101,191.46,258.74,89.93,,,
+seasonal_naive_52,1,level,tomato__Dambulla,tomato,Dambulla,97,158.27,218.26,90.05,,,
+seasonal_naive_52,1,level,tomato__Meegoda,tomato,Meegoda,97,180.49,246.88,77.82,,,
+seasonal_naive_52,1,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,82,171.23,237.0,106.64,,,
+seasonal_naive_52,2,level,carrot__Colombo,carrot,Colombo,100,199.93,307.75,66.46,,,
+seasonal_naive_52,2,level,carrot__Dambulla,carrot,Dambulla,96,212.72,343.2,74.18,,,
+seasonal_naive_52,2,level,carrot__Meegoda,carrot,Meegoda,96,234.62,390.27,67.87,,,
+seasonal_naive_52,2,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,81,226.16,356.99,76.11,,,
+seasonal_naive_52,2,level,leeks__Colombo,leeks,Colombo,100,99.0,127.34,51.48,,,
+seasonal_naive_52,2,level,leeks__Dambulla,leeks,Dambulla,96,109.92,143.46,54.28,,,
+seasonal_naive_52,2,level,leeks__Meegoda,leeks,Meegoda,96,109.2,143.51,48.85,,,
+seasonal_naive_52,2,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,81,112.91,144.27,53.8,,,
+seasonal_naive_52,2,level,tomato__Colombo,tomato,Colombo,100,188.79,257.65,89.28,,,
+seasonal_naive_52,2,level,tomato__Dambulla,tomato,Dambulla,96,158.81,219.85,92.17,,,
+seasonal_naive_52,2,level,tomato__Meegoda,tomato,Meegoda,96,178.65,245.94,77.34,,,
+seasonal_naive_52,2,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,81,167.17,229.08,106.0,,,
+seasonal_naive_52,4,level,carrot__Colombo,carrot,Colombo,98,184.98,280.23,68.86,,,
+seasonal_naive_52,4,level,carrot__Dambulla,carrot,Dambulla,94,195.46,311.65,76.37,,,
+seasonal_naive_52,4,level,carrot__Meegoda,carrot,Meegoda,94,209.95,346.74,70.1,,,
+seasonal_naive_52,4,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,197.67,286.58,75.13,,,
+seasonal_naive_52,4,level,leeks__Colombo,leeks,Colombo,98,97.83,126.45,51.74,,,
+seasonal_naive_52,4,level,leeks__Dambulla,leeks,Dambulla,94,106.69,139.88,53.35,,,
+seasonal_naive_52,4,level,leeks__Meegoda,leeks,Meegoda,94,106.61,141.33,49.11,,,
+seasonal_naive_52,4,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,108.48,140.39,53.53,,,
+seasonal_naive_52,4,level,tomato__Colombo,tomato,Colombo,98,185.86,256.04,89.5,,,
+seasonal_naive_52,4,level,tomato__Dambulla,tomato,Dambulla,94,150.23,210.22,87.0,,,
+seasonal_naive_52,4,level,tomato__Meegoda,tomato,Meegoda,94,173.3,240.07,77.18,,,
+seasonal_naive_52,4,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,163.69,227.04,104.18,,,
+seasonal_naive_52,8,level,carrot__Colombo,carrot,Colombo,94,173.13,264.5,72.12,,,
+seasonal_naive_52,8,level,carrot__Dambulla,carrot,Dambulla,90,184.94,298.5,81.52,,,
+seasonal_naive_52,8,level,carrot__Meegoda,carrot,Meegoda,90,199.97,335.02,73.99,,,
+seasonal_naive_52,8,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,77,185.68,270.03,77.94,,,
+seasonal_naive_52,8,level,leeks__Colombo,leeks,Colombo,94,96.36,125.43,52.7,,,
+seasonal_naive_52,8,level,leeks__Dambulla,leeks,Dambulla,90,104.23,136.16,53.85,,,
+seasonal_naive_52,8,level,leeks__Meegoda,leeks,Meegoda,90,103.26,138.46,50.03,,,
+seasonal_naive_52,8,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,77,103.87,133.88,54.65,,,
+seasonal_naive_52,8,level,tomato__Colombo,tomato,Colombo,94,171.1,237.43,86.86,,,
+seasonal_naive_52,8,level,tomato__Dambulla,tomato,Dambulla,90,140.78,196.98,90.44,,,
+seasonal_naive_52,8,level,tomato__Meegoda,tomato,Meegoda,90,164.56,230.34,75.65,,,
+seasonal_naive_52,8,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,77,154.34,217.84,109.69,,,
+seasonal_naive_52,12,level,carrot__Colombo,carrot,Colombo,90,171.02,265.86,72.19,,,
+seasonal_naive_52,12,level,carrot__Dambulla,carrot,Dambulla,86,179.76,295.77,81.65,,,
+seasonal_naive_52,12,level,carrot__Meegoda,carrot,Meegoda,86,201.67,340.85,74.67,,,
+seasonal_naive_52,12,level,carrot__Nuwara Eliya,carrot,Nuwara Eliya,75,180.52,268.12,76.65,,,
+seasonal_naive_52,12,level,leeks__Colombo,leeks,Colombo,90,98.52,127.57,54.08,,,
+seasonal_naive_52,12,level,leeks__Dambulla,leeks,Dambulla,86,108.98,141.39,57.33,,,
+seasonal_naive_52,12,level,leeks__Meegoda,leeks,Meegoda,86,105.31,140.25,50.59,,,
+seasonal_naive_52,12,level,leeks__Nuwara Eliya,leeks,Nuwara Eliya,75,105.99,137.83,55.48,,,
+seasonal_naive_52,12,level,tomato__Colombo,tomato,Colombo,90,174.23,241.77,93.29,,,
+seasonal_naive_52,12,level,tomato__Dambulla,tomato,Dambulla,86,140.71,196.0,96.26,,,
+seasonal_naive_52,12,level,tomato__Meegoda,tomato,Meegoda,86,167.59,234.96,79.2,,,
+seasonal_naive_52,12,level,tomato__Nuwara Eliya,tomato,Nuwara Eliya,75,154.42,219.51,103.9,,,
+xgboost,1,logret,carrot__Colombo,carrot,Colombo,102,68.53,116.4,20.33,34.26,80.39,231.33
+xgboost,1,logret,carrot__Dambulla,carrot,Dambulla,98,77.74,155.34,19.76,38.87,78.57,232.36
+xgboost,1,logret,carrot__Meegoda,carrot,Meegoda,100,77.91,157.74,17.68,38.96,86.0,267.92
+xgboost,1,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,86,86.13,159.65,21.68,43.06,80.23,260.81
+xgboost,1,logret,leeks__Colombo,leeks,Colombo,102,33.92,46.51,17.32,16.96,85.29,144.27
+xgboost,1,logret,leeks__Dambulla,leeks,Dambulla,98,32.95,51.22,14.94,16.48,86.73,147.78
+xgboost,1,logret,leeks__Meegoda,leeks,Meegoda,100,29.66,44.8,12.03,14.83,95.0,166.09
+xgboost,1,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,86,27.41,41.9,12.82,13.7,97.67,152.2
+xgboost,1,logret,tomato__Colombo,tomato,Colombo,102,56.19,82.85,23.22,28.09,82.35,217.02
+xgboost,1,logret,tomato__Dambulla,tomato,Dambulla,98,67.62,95.46,33.76,33.81,66.33,179.76
+xgboost,1,logret,tomato__Meegoda,tomato,Meegoda,100,64.6,92.89,25.25,32.3,77.0,226.0
+xgboost,1,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,86,66.39,96.67,33.17,33.19,69.77,190.09
+xgboost,2,logret,carrot__Colombo,carrot,Colombo,101,86.09,139.42,26.01,43.05,79.21,332.45
+xgboost,2,logret,carrot__Dambulla,carrot,Dambulla,97,90.01,168.13,25.67,45.0,78.35,333.8
+xgboost,2,logret,carrot__Meegoda,carrot,Meegoda,99,101.82,190.07,23.03,50.91,83.84,386.37
+xgboost,2,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,85,101.8,187.58,25.51,50.9,80.0,370.83
+xgboost,2,logret,leeks__Colombo,leeks,Colombo,101,42.2,58.24,19.83,21.1,91.09,205.41
+xgboost,2,logret,leeks__Dambulla,leeks,Dambulla,97,42.37,60.1,19.35,21.19,84.54,209.36
+xgboost,2,logret,leeks__Meegoda,leeks,Meegoda,99,44.2,61.8,17.04,22.1,94.95,237.33
+xgboost,2,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,85,41.41,59.03,18.12,20.71,94.12,214.77
+xgboost,2,logret,tomato__Colombo,tomato,Colombo,101,78.68,117.39,32.68,39.34,85.15,321.69
+xgboost,2,logret,tomato__Dambulla,tomato,Dambulla,97,81.68,115.6,46.91,40.84,70.1,263.82
+xgboost,2,logret,tomato__Meegoda,tomato,Meegoda,99,82.97,120.67,33.58,41.49,80.81,334.6
+xgboost,2,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,85,86.35,123.79,46.92,43.18,67.06,278.6
+xgboost,4,logret,carrot__Colombo,carrot,Colombo,99,109.24,162.05,34.52,54.62,77.78,480.71
+xgboost,4,logret,carrot__Dambulla,carrot,Dambulla,95,112.4,178.93,33.96,56.2,77.89,486.2
+xgboost,4,logret,carrot__Meegoda,carrot,Meegoda,97,122.23,183.09,33.34,61.12,83.51,555.02
+xgboost,4,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,82,124.92,183.84,37.74,62.46,74.39,528.46
+xgboost,4,logret,leeks__Colombo,leeks,Colombo,99,49.79,75.09,22.6,24.9,90.91,291.97
+xgboost,4,logret,leeks__Dambulla,leeks,Dambulla,95,53.84,77.18,23.1,26.92,90.53,301.25
+xgboost,4,logret,leeks__Meegoda,leeks,Meegoda,97,57.61,84.01,21.5,28.81,92.78,336.34
+xgboost,4,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,82,53.35,78.5,22.71,26.67,91.46,300.91
+xgboost,4,logret,tomato__Colombo,tomato,Colombo,99,111.98,169.42,44.41,55.99,75.76,417.56
+xgboost,4,logret,tomato__Dambulla,tomato,Dambulla,95,96.39,139.93,54.58,48.19,69.47,347.52
+xgboost,4,logret,tomato__Meegoda,tomato,Meegoda,97,114.55,169.7,41.7,57.28,73.2,431.47
+xgboost,4,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,82,111.97,159.91,68.93,55.98,69.51,365.08
+xgboost,8,logret,carrot__Colombo,carrot,Colombo,95,135.94,185.13,55.87,67.97,62.11,528.87
+xgboost,8,logret,carrot__Dambulla,carrot,Dambulla,91,136.67,186.68,54.83,68.34,63.74,543.43
+xgboost,8,logret,carrot__Meegoda,carrot,Meegoda,93,153.57,207.14,51.69,76.78,70.97,602.58
+xgboost,8,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,157.58,197.61,66.23,78.79,58.23,581.01
+xgboost,8,logret,leeks__Colombo,leeks,Colombo,95,70.38,100.24,35.79,35.19,86.32,329.28
+xgboost,8,logret,leeks__Dambulla,leeks,Dambulla,91,69.72,97.31,34.96,34.86,91.21,342.04
+xgboost,8,logret,leeks__Meegoda,leeks,Meegoda,93,74.95,104.07,32.32,37.47,93.55,378.07
+xgboost,8,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,70.71,101.23,34.45,35.36,91.14,347.61
+xgboost,8,logret,tomato__Colombo,tomato,Colombo,95,150.42,210.11,74.92,75.21,61.05,425.6
+xgboost,8,logret,tomato__Dambulla,tomato,Dambulla,91,128.61,174.14,89.73,64.3,64.84,367.04
+xgboost,8,logret,tomato__Meegoda,tomato,Meegoda,93,152.1,208.47,69.85,76.05,63.44,437.53
+xgboost,8,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,127.46,167.68,105.86,63.73,58.23,380.49
+xgboost,12,logret,carrot__Colombo,carrot,Colombo,91,155.79,220.06,60.49,77.89,65.93,915.62
+xgboost,12,logret,carrot__Dambulla,carrot,Dambulla,87,152.17,214.55,61.34,76.08,67.82,939.21
+xgboost,12,logret,carrot__Meegoda,carrot,Meegoda,89,169.73,239.88,55.09,84.86,66.29,1072.83
+xgboost,12,logret,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,182.27,240.56,71.35,91.14,70.89,994.66
+xgboost,12,logret,leeks__Colombo,leeks,Colombo,91,83.37,107.66,47.91,41.68,95.6,574.39
+xgboost,12,logret,leeks__Dambulla,leeks,Dambulla,87,80.71,106.68,46.5,40.36,96.55,595.78
+xgboost,12,logret,leeks__Meegoda,leeks,Meegoda,89,89.63,117.99,43.27,44.82,100.0,663.25
+xgboost,12,logret,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,85.98,115.16,46.63,42.99,96.2,588.92
+xgboost,12,logret,tomato__Colombo,tomato,Colombo,91,142.66,202.31,68.59,71.33,63.74,748.5
+xgboost,12,logret,tomato__Dambulla,tomato,Dambulla,87,117.09,158.35,82.74,58.54,62.07,629.64
+xgboost,12,logret,tomato__Meegoda,tomato,Meegoda,89,142.27,205.06,59.24,71.13,67.42,772.94
+xgboost,12,logret,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,123.7,172.86,90.22,61.85,65.82,654.43

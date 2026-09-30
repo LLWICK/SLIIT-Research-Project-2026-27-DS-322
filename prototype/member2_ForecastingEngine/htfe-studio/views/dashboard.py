@@ -4,7 +4,7 @@ from typing import Any
 
 import streamlit as st
 
-from lib.live_match import ANCHOR, handoff_packet, handoff_request, match_forecast
+from lib.live_match import handoff_packet, handoff_request, match_forecast
 from lib.load import lkr, title_case, write_forecast_packet
 from lib.nav import go_member
 from lib.style import fact, page_header, pick, range_bar, section_title, stage_row
@@ -24,13 +24,13 @@ def render(data: dict[str, Any]) -> None:
     page_header(
         "Cobweb decision support",
         "Price Forecast",
-        "Choose a crop and market, then set how much land is already committed this season. "
-        "The engine returns a likely price and a 90% range that the next stage uses for planting advice.",
+        "Choose a crop and market. The price is the trained LightGBM forecast. "
+        "A cultivation-progress control only changes that price when the model was trained with monthly achieved/target hectares.",
     )
     stage_row(STAGES)
 
     if "dash_intensity_pct" not in st.session_state:
-        st.session_state.dash_intensity_pct = int(ANCHOR * 100)
+        st.session_state.dash_intensity_pct = 85
 
     if "dash_crop" not in st.session_state:
         st.session_state.dash_crop = "carrot" if "carrot" in crops else crops[0]
@@ -48,18 +48,20 @@ def render(data: dict[str, Any]) -> None:
     st.markdown('<div id="dash-trio"></div>', unsafe_allow_html=True)
     inputs, forecast, inbox = st.columns(3, gap="medium", vertical_alignment="top")
     with inputs:
-        section_title("Inputs", "Market and planting pressure")
+        section_title("Inputs", "Market")
         crop = pick("Crop", crops, key="dash_crop", preferred="carrot", format_func=title_case)
         markets = sorted({row["market"] for row in live if row["crop"] == crop})
         market = pick("Market", markets, key="dash_market", preferred="colombo", format_func=title_case)
+        progress_in_model = bool(match and match.get("progress_in_model"))
         intensity_pct = st.slider(
-            "Land already committed this season",
+            "Cultivation progress" if progress_in_model else "Cultivation progress (not in this model)",
             min_value=25,
             max_value=150,
             step=5,
-            format="%d%% of benchmark",
+            format="%d%%",
             key="dash_intensity_pct",
-            help="Share of the seasonal demand benchmark already registered in supply districts.",
+            help="Achieved hectares divided by target hectares. Ignored unless that column was in the trained model.",
+            disabled=not progress_in_model,
         )
         intensity = intensity_pct / 100.0
         st.markdown('<div class="slider-ends"><span>Low</span><span>Crowded</span></div>', unsafe_allow_html=True)
@@ -95,13 +97,10 @@ def render(data: dict[str, Any]) -> None:
                 unsafe_allow_html=True,
             )
             range_bar(low, expected, high)
-            fact("Confidence target", "90%")
-            fact("Planting pressure used", f"{intensity_pct}%")
-            fact("Commitment source", title_case(str(match.get("commitment_source", "simulated"))))
-            st.markdown(
-                "<p class='mist'>More land already committed usually eases the expected price — extra supply arrives later.</p>",
-                unsafe_allow_html=True,
-            )
+            fact("Coverage target", "90%")
+            fact("Cultivation update applied", "Yes" if match.get("applied_cultivation_update") else "No")
+            fact("Progress source", str(match.get("commitment_source") or "not available"))
+            st.caption(match.get("note") or "")
 
     with inbox:
         section_title("Next stage", "Crop viability")

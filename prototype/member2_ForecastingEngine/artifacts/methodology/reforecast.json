@@ -1,0 +1,5 @@
+{
+  "status": "not_available",
+  "note": "The trained model has no cultivation_progress column, so a later monthly update cannot be passed in. No week 2/5/8/12 path was used, and no hectares were invented.",
+  "rows": []
+}

@@ -1,0 +1,15 @@
+{
+  "order": [
+    1,
+    1,
+    1
+  ],
+  "seasonal_order": [
+    1,
+    0,
+    0,
+    52
+  ],
+  "note": "statsforecast not installed; fixed SARIMAX order",
+  "smoke_series": "carrot__Dambulla"
+}

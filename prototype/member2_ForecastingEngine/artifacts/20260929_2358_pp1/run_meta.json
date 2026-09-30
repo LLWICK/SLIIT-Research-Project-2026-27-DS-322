@@ -1,0 +1,27 @@
+{
+  "version": "real-pp1-20260929_2358",
+  "seed": 42,
+  "elapsed_s": 370.6,
+  "sarima": {
+    "order": [
+      1,
+      1,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      52
+    ],
+    "note": "statsforecast not installed; fixed SARIMAX order",
+    "smoke_series": "carrot__Dambulla"
+  },
+  "python": "3.13.14",
+  "libraries": {
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1",
+    "statsmodels": "0.14.6",
+    "statsforecast": "not-installed"
+  }
+}

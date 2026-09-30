@@ -1,0 +1,26 @@
+crop:
+  CARROT: carrot
+  LEEKS: leeks
+  LEEK: leeks
+  TOMATOES: tomato
+  TOMATO: tomato
+market:
+  "N'Eliya": "Nuwara Eliya"
+  "Nuwara Eliya": "Nuwara Eliya"
+  "Meegoda(DEC)": Meegoda
+  Tabuttegama: Thambuttegama
+  Tabuththegama: Thambuttegama
+district:
+  Kaluthara: Kalutara
+  Mullativu: Mullaitivu
+  Hanbantota: Hambantota
+  "Nuwara Eliya": "Nuwara Eliya"
+weather_location:
+  nuwara_eliya: "Nuwara Eliya"
+  badulla: Badulla
+  bandarawela: Bandarawela
+  welimada: Welimada
+  dambulla: Dambulla
+  matale: Matale
+  kandy: Kandy
+  keppetipola: Keppetipola

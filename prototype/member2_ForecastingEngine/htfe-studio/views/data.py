@@ -40,9 +40,8 @@ def render(data: dict[str, Any]) -> None:
 
     if upstream.get("found"):
         st.info(
-            f"Member 1 extract detected: {upstream['wholesale_rows']:,} wholesale rows "
-            f"({upstream['scoped_rows']:,} in Carrot / Leek / Tomato at Colombo, Badulla, Nuwara Eliya). "
-            "Charts below use the frozen demo panel so scored metrics stay reproducible."
+            f"An older Member 1 extract is also on disk ({upstream['wholesale_rows']:,} wholesale rows). "
+            "The chart on this page uses the real HARTI panel scored for this run."
         )
 
     with st.container(border=True):

@@ -2,22 +2,28 @@
   "project": "J26-DS-322",
   "member": "Garusingarachchi Y.B \u00b7 IT23415836 \u00b7 Member 2",
   "engine": "Hybrid Temporal Forecasting Engine",
-  "version": "demo-1.0.0",
-  "generated_at": "2026-08-24T07:45:42.402644+00:00",
+  "version": "methodology-20260930_1316",
+  "generated_at": "2026-09-30T07:46:50.593294+00:00",
   "seed": 42,
   "confidence_level": 0.9,
-  "commitment_source": "simulated",
+  "commitment_source": "unavailable_no_district_monthly_series",
   "panel_grain": "crop \u00d7 market \u00d7 week",
-  "elapsed_s": 15.2,
-  "n_panel": 7442,
-  "n_scored_test": 1484,
+  "elapsed_s": 405.8,
+  "n_panel": 5761,
+  "n_scored_test": 5535,
+  "interval_note": "Time-ordered prices are not exchangeable, so this is an empirical calibration, not a universal 90% guarantee.",
   "backends": {
     "lightgbm": "lightgbm",
-    "xgboost": "xgboost"
+    "xgboost": "xgboost",
+    "sarima": "sarimax"
   },
   "libraries": {
     "lightgbm": "4.7.0",
     "xgboost": "3.4.1",
-    "sklearn": "1.9.0"
-  }
+    "optuna": "5.0.0",
+    "mapie": "1.5.0",
+    "shap": "0.52.0"
+  },
+  "feature_set": "B",
+  "progress_in_model": false
 }

@@ -1,0 +1,15 @@
+{
+  "method": "split_cqr_romano2019",
+  "mapie_version": "1.5.0",
+  "mapie_note": "MAPIE is installed, but ConformalizedQuantileRegressor refits an estimator and does not accept the three already-fit LightGBM quantile boosters. The conformity score MAPIE uses for CQR was applied to those boosters on the 2023 block.",
+  "alpha": 0.1,
+  "qhat_by_horizon": {
+    "1": 6.0156,
+    "2": 2.7084,
+    "4": 11.7757,
+    "8": 20.2185,
+    "12": 17.58
+  },
+  "qhat": 6.0156,
+  "limit": "Time-ordered prices are not exchangeable, so this is an empirical calibration, not a universal 90% guarantee."
+}

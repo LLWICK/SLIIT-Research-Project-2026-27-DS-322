@@ -1,0 +1,46 @@
+[
+  {
+    "commitment_week": 2,
+    "mean_intensity": 0.021,
+    "n_scored": 1484,
+    "mae": 49.64,
+    "rmse": 89.29,
+    "mape": 19.92,
+    "pinball": 15.44,
+    "picp": 89.49,
+    "interval_width": 200.77
+  },
+  {
+    "commitment_week": 5,
+    "mean_intensity": 0.086,
+    "n_scored": 1484,
+    "mae": 49.27,
+    "rmse": 88.34,
+    "mape": 20.09,
+    "pinball": 15.4,
+    "picp": 89.49,
+    "interval_width": 211.5
+  },
+  {
+    "commitment_week": 8,
+    "mean_intensity": 0.15,
+    "n_scored": 1484,
+    "mae": 49.15,
+    "rmse": 87.49,
+    "mape": 20.25,
+    "pinball": 15.4,
+    "picp": 89.76,
+    "interval_width": 215.18
+  },
+  {
+    "commitment_week": 12,
+    "mean_intensity": 0.197,
+    "n_scored": 1484,
+    "mae": 49.1,
+    "rmse": 87.24,
+    "mape": 20.32,
+    "pinball": 15.4,
+    "picp": 89.56,
+    "interval_width": 215.97
+  }
+]

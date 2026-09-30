@@ -16,6 +16,14 @@ LABELS = {
 }
 
 
+def _num(value: Any, suffix: str = "") -> str:
+    if value is None:
+        return "not run"
+    if isinstance(value, float):
+        return f"{value:.2f}{suffix}"
+    return f"{value}{suffix}"
+
+
 def render(data: dict[str, Any]) -> None:
     comparison = data["comparison"]
     split = data["split"]
@@ -24,9 +32,11 @@ def render(data: dict[str, Any]) -> None:
 
     page_header(
         "Model results",
-        "Four models, same weeks, same rules",
-        f"All four models scored on {split['test']['start']} to {split['test']['end']} — "
-        f"{split['test']['n']} observed test weeks. LightGBM is shipped because the 90% range holds.",
+        "Same weeks, same chronological test",
+        f"Scored on {split['test']['start']} to {split['test']['end']} — "
+        f"{split['test']['n']} panel rows in the test window. "
+        "MAPE is pooled across horizons on originally observed wholesale prices. "
+        "LSTM was not trained. Intervals are raw quantiles, not conformal yet.",
     )
 
     card_grid(
@@ -37,10 +47,10 @@ def render(data: dict[str, Any]) -> None:
                 "active": row["id"] == "lightgbm",
                 "note": "Used on the dashboard" if row["id"] == "lightgbm" else "",
                 "rows": [
-                    ("MAE", lkr(row["mae"])),
-                    ("MAPE", f"{row['mape']}%"),
-                    ("Coverage", f"{row['picp']}%"),
-                    ("Width", lkr(row["interval_width"])),
+                    ("MAE", _num(row["mae"]) if row["mae"] is None else lkr(row["mae"])),
+                    ("MAPE", _num(row["mape"], "%")),
+                    ("Coverage", _num(row["picp"], "%")),
+                    ("Width", _num(row["interval_width"]) if row["interval_width"] is None else lkr(row["interval_width"])),
                 ],
             }
             for row in comparison

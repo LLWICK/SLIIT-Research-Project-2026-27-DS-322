@@ -1,0 +1,44 @@
+{
+  "carrot": {
+    "colombo": [
+      "nuwara_eliya",
+      "badulla",
+      "matale"
+    ],
+    "badulla": [
+      "badulla",
+      "nuwara_eliya"
+    ],
+    "nuwara_eliya": [
+      "nuwara_eliya"
+    ]
+  },
+  "leek": {
+    "colombo": [
+      "nuwara_eliya",
+      "badulla"
+    ],
+    "badulla": [
+      "badulla",
+      "nuwara_eliya"
+    ],
+    "nuwara_eliya": [
+      "nuwara_eliya"
+    ]
+  },
+  "tomato": {
+    "colombo": [
+      "matale",
+      "badulla",
+      "nuwara_eliya"
+    ],
+    "badulla": [
+      "badulla",
+      "matale"
+    ],
+    "nuwara_eliya": [
+      "nuwara_eliya",
+      "matale"
+    ]
+  }
+}

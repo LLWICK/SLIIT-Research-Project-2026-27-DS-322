@@ -24,8 +24,8 @@ def render(data: dict[str, Any]) -> None:
     page_header(
         "Azure-style experiment console",
         "Watch the registry fill",
-        f"Replay of the real training run (seed {meta['seed']}, {meta['elapsed_s']}s wall time). "
-        "Metrics come from the frozen demo artifacts.",
+        f"Replay of the HARTI training run (seed {meta['seed']}, {meta['elapsed_s']}s wall time). "
+        "Metrics are the chronological 2024–2025 scores, not the synthetic demo.",
     )
 
     if st.button("Replay training", type="primary", key="train_replay"):

@@ -3,68 +3,56 @@ from __future__ import annotations
 from typing import Any
 
 import pandas as pd
-import plotly.graph_objects as go
 import streamlit as st
 
-from lib.style import AMBER, HARVEST, page_header, section_title, show_chart
+from lib.style import page_header, section_title
 
 
 def render(data: dict[str, Any]) -> None:
     ablation = data["ablation"]
-    weeks = data["weeks"]
-    importance = data["importance"]
-    intensity_rank = next((i + 1 for i, row in enumerate(importance) if row["feature"] == "cultivation_intensity"), "—")
+    weeks = data["weeks"] or []
+    if isinstance(ablation, dict) and ablation.get("status") == "not_run":
+        page_header("Later experiment", "Ablation is not in this run", ablation.get("note") or "Not run.")
+        st.info(ablation.get("note") or "Not run yet.")
+        return
 
     page_header(
-        "The two experiments that carry the mark",
-        "A/B/C ablation and mid-season re-forecast",
-        "Same LightGBM family, same hyperparameters, same chronological folds, same seed. "
-        "Only the column list changes. A rigorous near-tie is still a result — we do not hide it.",
+        "Same model, different columns",
+        "Feature sets A, B, and C",
+        "LightGBM only. Same hyperparameters, same weeks, same metrics. C is proposed only when cultivation progress is a real column.",
     )
+    if isinstance(ablation, dict) and ablation.get("note"):
+        st.info(ablation["note"])
+
+    arms = []
+    for arm in ("A", "B", "C"):
+        block = ablation.get(arm) if isinstance(ablation, dict) else None
+        metrics = (block or {}).get("metrics") if isinstance(block, dict) else None
+        arms.append(
+            {
+                "Arm": arm,
+                "Status": "trained" if metrics else "not trained",
+                "MAE": None if not metrics else metrics.get("mae"),
+                "RMSE": None if not metrics else metrics.get("rmse"),
+                "MAPE %": None if not metrics else metrics.get("mape"),
+                "Pinball": None if not metrics else metrics.get("pinball"),
+                "PICP %": None if not metrics else metrics.get("picp"),
+                "Width": None if not metrics else metrics.get("interval_width"),
+            }
+        )
+    with st.container(border=True):
+        section_title("Ablation", "A historical · B weather and macros · C plus cultivation progress")
+        st.dataframe(pd.DataFrame(arms), width="stretch", hide_index=True)
+        by_horizon = ablation.get("by_horizon") if isinstance(ablation, dict) else None
+        if by_horizon:
+            st.caption("Pooled test weeks. Horizon-level figures are in the run folder.")
 
     with st.container(border=True):
-        section_title("Ablation", "A historical · B multi-source · C + intensity")
-        table = pd.DataFrame(
-            [
-                {
-                    "Arm": arm,
-                    "MAE": ablation[arm]["metrics"]["mae"],
-                    "RMSE": ablation[arm]["metrics"]["rmse"],
-                    "MAPE %": ablation[arm]["metrics"]["mape"],
-                    "Pinball": ablation[arm]["metrics"]["pinball"],
-                    "PICP %": ablation[arm]["metrics"]["picp"],
-                    "Width": ablation[arm]["metrics"]["interval_width"],
-                }
-                for arm in ("A", "B", "C")
-            ]
-        )
-        st.dataframe(table, width="stretch", hide_index=True)
-        st.caption(
-            f"On this extract, B is slightly best on MAE. C stays within 0.2 LKR and keeps PICP near 90%. "
-            f"Intensity ranks #{intensity_rank} in permutation importance. The operational proof is the week experiment, "
-            "not a forced accuracy win."
-        )
-
-    left, right = st.columns(2)
-    week_df = pd.DataFrame(weeks)
-    with left:
-        with st.container(border=True):
-            section_title("Week 2 / 5 / 8 / 12", "Error falls as commitments accumulate")
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=week_df["commitment_week"], y=week_df["mae"], mode="lines+markers", line=dict(color=HARVEST, width=2), name="MAE"))
-            fig.add_trace(go.Scatter(x=week_df["commitment_week"], y=week_df["rmse"], mode="lines+markers", line=dict(color=AMBER, width=2), name="RMSE"))
-            fig.update_layout(xaxis_title="Commitment week", yaxis_title="Error")
-            show_chart(fig, 320)
-            st.caption(
-                f"MAE {week_df.iloc[0]['mae']} at week 2 → {week_df.iloc[-1]['mae']} at week 12. "
-                "The forecast is updated from new supply information, not from later prices."
+        section_title("Monthly re-forecast", "Update cultivation progress, do not retrain")
+        if not weeks:
+            st.warning(
+                "No re-forecast rows. The model was not given a monthly achieved/target series, "
+                "so a later cultivation report cannot be passed in. Week 2 / 5 / 8 / 12 is not this experiment."
             )
-
-    with right:
-        with st.container(border=True):
-            section_title("Information states", "What the farmer would have known")
-            for row in weeks:
-                st.markdown(
-                    f"**Week {row['commitment_week']}** · mean intensity {row['mean_intensity']}  \n"
-                    f"MAE {row['mae']} · PICP {row['picp']}%"
-                )
+        else:
+            st.dataframe(pd.DataFrame(weeks), width="stretch", hide_index=True)

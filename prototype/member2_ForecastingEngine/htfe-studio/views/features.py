@@ -37,22 +37,22 @@ def render(data: dict[str, Any]) -> None:
     formula, bars = st.columns(2)
     with formula:
         with st.container(border=True):
-            section_title("Novelty feature", "Cultivation intensity")
+            section_title("Novelty feature", "Cultivation progress")
             st.code(
-                "intensity(market, crop, week) =\n"
-                "  cumulative hectares in supply districts\n"
-                "  registered by this week\n"
-                "  ÷ demand benchmark for that season",
+                "progress(market, crop, week) =\n"
+                "  sum of achieved hectares in supply districts\n"
+                "  already known by this week\n"
+                "  ÷ sum of target hectares in those districts",
                 language="text",
             )
             st.caption(
-                "Source in this prototype: historically grounded simulation of seasonal extent "
-                "(commitment_source = simulated). Same function signature as a future HARTI feed."
+                "That monthly district table was not in the data folder, so this run does not treat "
+                "seasonal Census extent as cultivation progress."
             )
 
     with bars:
         with st.container(border=True):
-            section_title("Permutation importance", "What Model C actually uses")
+            section_title("Model columns", "What this LightGBM run uses")
             top = importance[:6]
             peak = top[0]["importance"] or 1
             fig = go.Figure(
