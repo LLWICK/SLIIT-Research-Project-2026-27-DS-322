@@ -1,0 +1,31 @@
+{
+  "status": "loader_ok_not_a_result",
+  "observed_cultivation_data_available": false,
+  "note": "FIXTURE_NOT_OBSERVED. These hectares were typed to test the loader. They are not Census or Department of Agriculture records.",
+  "rows": [
+    {
+      "week_start": "2024-04-01",
+      "cultivation_progress": null,
+      "cultivation_target_exceeded": null,
+      "cultivation_asof_date": null
+    },
+    {
+      "week_start": "2024-05-06",
+      "cultivation_progress": 0.43333333333333335,
+      "cultivation_target_exceeded": false,
+      "cultivation_asof_date": "2024-04-30"
+    },
+    {
+      "week_start": "2024-06-03",
+      "cultivation_progress": 0.8,
+      "cultivation_target_exceeded": false,
+      "cultivation_asof_date": "2024-05-31"
+    },
+    {
+      "week_start": "2024-07-08",
+      "cultivation_progress": 1.4,
+      "cultivation_target_exceeded": true,
+      "cultivation_asof_date": "2024-06-30"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "progress_in_model": false,
+  "model_dir": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_b\\models",
+  "feature_set": "B",
+  "note": "Experiment B LightGBM. Observed monthly cultivation progress is not a column in this model, so a cultivation update is not applied. No hectares were invented.",
+  "model_version": "experiment_b"
+}

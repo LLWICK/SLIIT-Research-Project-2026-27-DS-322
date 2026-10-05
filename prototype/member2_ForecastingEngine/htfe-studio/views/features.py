@@ -69,8 +69,8 @@ def render(data: dict[str, Any]) -> None:
             for row in top:
                 st.caption(f"{row['feature']}  ·  {row['importance']:.2f}  ({100 * row['importance'] / peak:.0f}% of lag-1)")
             st.caption(
-                "Lag-1 dominates, as expected on weekly prices. Cultivation intensity ranks in the top "
-                "features — the first supporting evidence for the novelty, not the whole proof."
+                "These are SHAP values for the Experiment B 4-week median model. "
+                "Cultivation progress is not in this model, so a high rank here is not evidence for that novelty."
             )
 
     with st.container(border=True):

@@ -87,7 +87,7 @@ else:
         st.title("Price Forecast")
         st.caption("Weekly vegetable prices with a confidence range")
         st.radio("Navigate", names, key="nav", on_change=_sync_page, label_visibility="collapsed")
-        st.caption("No backend in this demo. Every number is scored on observed wholesale prices after a chronological split.")
+        st.caption("Scores are the 2024–2025 test. The split is chronological. Experiment C was not trained.")
     try:
         studio = load_studio()
     except FileNotFoundError as exc:

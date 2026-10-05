@@ -1,0 +1,153 @@
+{
+  "method": "split_cqr_romano2019",
+  "alpha": 0.1,
+  "calibration": "2023 issue weeks only",
+  "test": "2024-2025 issue weeks, intervals adjusted, point forecasts unchanged",
+  "models": [
+    "lightgbm",
+    "xgboost"
+  ],
+  "sarimax": "interval columns stay blank; CQR was not applied",
+  "predictions_file_unchanged": true,
+  "mapie_version": "1.5.0",
+  "mapie_note": "MAPIE is installed, but ConformalizedQuantileRegressor refits an estimator and does not accept the three already-fit quantile boosters. The conformity score was applied directly to the saved 0.05 and 0.95 forecasts. qhat uses the 2023 calibration block only.",
+  "qhat_by_model": {
+    "lightgbm": {
+      "1": 6.4429,
+      "2": 8.8782,
+      "4": 10.2453,
+      "8": 35.7475,
+      "12": 31.1612
+    },
+    "xgboost": {
+      "1": 6.7296,
+      "2": 8.7278,
+      "4": 16.7754,
+      "8": 24.7606,
+      "12": 57.0641
+    }
+  },
+  "by_model_horizon": [
+    {
+      "model": "lightgbm",
+      "horizon": 1,
+      "n_calibration": 603,
+      "n_test": 1200,
+      "qhat": 6.4429,
+      "pinball": 39.71,
+      "picp_raw": 82.92,
+      "interval_width_raw": 280.68,
+      "picp_cqr": 85.83,
+      "interval_width_cqr": 293.57
+    },
+    {
+      "model": "lightgbm",
+      "horizon": 2,
+      "n_calibration": 591,
+      "n_test": 1188,
+      "qhat": 8.8782,
+      "pinball": 50.01,
+      "picp_raw": 82.41,
+      "interval_width_raw": 341.72,
+      "picp_cqr": 84.6,
+      "interval_width_cqr": 359.47
+    },
+    {
+      "model": "lightgbm",
+      "horizon": 4,
+      "n_calibration": 567,
+      "n_test": 1164,
+      "qhat": 10.2453,
+      "pinball": 58.95,
+      "picp_raw": 75.52,
+      "interval_width_raw": 416.5,
+      "picp_cqr": 78.61,
+      "interval_width_cqr": 436.99
+    },
+    {
+      "model": "lightgbm",
+      "horizon": 8,
+      "n_calibration": 519,
+      "n_test": 1116,
+      "qhat": 35.7475,
+      "pinball": 64.46,
+      "picp_raw": 71.77,
+      "interval_width_raw": 405.95,
+      "picp_cqr": 81.18,
+      "interval_width_cqr": 477.45
+    },
+    {
+      "model": "lightgbm",
+      "horizon": 12,
+      "n_calibration": 471,
+      "n_test": 1071,
+      "qhat": 31.1612,
+      "pinball": 64.96,
+      "picp_raw": 73.95,
+      "interval_width_raw": 637.11,
+      "picp_cqr": 81.51,
+      "interval_width_cqr": 699.43
+    },
+    {
+      "model": "xgboost",
+      "horizon": 1,
+      "n_calibration": 603,
+      "n_test": 1200,
+      "qhat": 6.7296,
+      "pinball": 39.2,
+      "picp_raw": 81.17,
+      "interval_width_raw": 248.27,
+      "picp_cqr": 83.92,
+      "interval_width_cqr": 261.73
+    },
+    {
+      "model": "xgboost",
+      "horizon": 2,
+      "n_calibration": 591,
+      "n_test": 1188,
+      "qhat": 8.7278,
+      "pinball": 45.61,
+      "picp_raw": 78.45,
+      "interval_width_raw": 269.23,
+      "picp_cqr": 81.06,
+      "interval_width_cqr": 286.68
+    },
+    {
+      "model": "xgboost",
+      "horizon": 4,
+      "n_calibration": 567,
+      "n_test": 1164,
+      "qhat": 16.7754,
+      "pinball": 55.81,
+      "picp_raw": 74.23,
+      "interval_width_raw": 310.92,
+      "picp_cqr": 78.52,
+      "interval_width_cqr": 344.47
+    },
+    {
+      "model": "xgboost",
+      "horizon": 8,
+      "n_calibration": 519,
+      "n_test": 1116,
+      "qhat": 24.7606,
+      "pinball": 61.82,
+      "picp_raw": 71.51,
+      "interval_width_raw": 344.58,
+      "picp_cqr": 78.14,
+      "interval_width_cqr": 394.1
+    },
+    {
+      "model": "xgboost",
+      "horizon": 12,
+      "n_calibration": 471,
+      "n_test": 1071,
+      "qhat": 57.0641,
+      "pinball": 63.28,
+      "picp_raw": 65.64,
+      "interval_width_raw": 308.95,
+      "picp_cqr": 80.02,
+      "interval_width_cqr": 423.08
+    }
+  ],
+  "limit": "Time-ordered prices are not exchangeable, so this is an empirical calibration, not a universal 90% guarantee."
+}

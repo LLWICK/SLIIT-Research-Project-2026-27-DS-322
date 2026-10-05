@@ -25,8 +25,8 @@ def render(data: dict[str, Any]) -> None:
         if qhat is None
         else (
             "We do not claim an i.i.d. mathematical guarantee on agricultural prices. "
-            f"We conformalize the 5th/95th LightGBM quantiles on a contiguous calibration block "
-            f"(q̂ = {qhat}) and then measure PICP on the later test weeks."
+            f"The 5th and 95th LightGBM quantiles are conformalized on 2023 only "
+            f"(1-week q̂ = {qhat}). The PICP shown here is the calibrated 4-week test, and it is below 90%."
         ),
     )
 

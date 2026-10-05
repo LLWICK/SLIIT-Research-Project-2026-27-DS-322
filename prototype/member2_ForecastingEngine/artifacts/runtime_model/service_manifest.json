@@ -1,0 +1,10 @@
+{
+  "progress_in_model": true,
+  "model_dir": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\runtime_model\\models",
+  "feature_set": "runtime",
+  "model_version": "runtime_synthetic_progress",
+  "note": "Runtime model. cultivation_progress was trained on the labelled synthetic calendar curve so a new achieved/target record can be scored without retraining. This is the update mechanism, not the Experiment A/B accuracy result, and it is not Experiment C.",
+  "cultivation_source": "synthetic_calendar",
+  "cultivation_is_synthetic": true,
+  "not_experiment_c": true
+}

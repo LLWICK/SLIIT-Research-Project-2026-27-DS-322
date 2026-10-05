@@ -1,0 +1,27 @@
+{
+  "A": {
+    "status": "trained",
+    "reason": "Experiment A trained on price lags and seasonal features."
+  },
+  "B": {
+    "status": "not_trained",
+    "reason": "Diesel, USD/LKR, and inflation each have non-null as-of values. This task trains Experiment A only."
+  },
+  "C": {
+    "status": "unavailable",
+    "reason": "observed cultivation data unavailable"
+  },
+  "S": {
+    "status": "not_run",
+    "reason": "S is the synthetic calendar curve and was not trained. It is not Experiment C, and its scores are not in the A/B/C accuracy table."
+  },
+  "sarimax": "reused 8244 SARIMAX rows from artifacts/latest/predictions.csv; same price target and horizons",
+  "artifacts": {
+    "predictions": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_a\\predictions.csv",
+    "metrics": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_a\\metrics_by_model_horizon.csv",
+    "manifest": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_a\\manifest.json",
+    "coverage_md": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\docs\\Feature-Coverage-Audit-IT23415836.md",
+    "coverage_csv": "D:\\SLIIT\\4th Year\\Reaserch\\data sets\\processed\\latest\\feature_coverage.csv",
+    "weather_csv": "D:\\SLIIT\\4th Year\\Reaserch\\data sets\\processed\\latest\\weather_origin_audit.csv"
+  }
+}

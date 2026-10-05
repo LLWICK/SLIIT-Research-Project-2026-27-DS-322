@@ -1,0 +1,109 @@
+{
+  "experiment": "B",
+  "description": "Price lags, seasonal features, origin-aligned historical weather, real as-of diesel, USD/LKR, and CCPI inflation, plus lagged finished-season extent. No current cultivation progress and no synthetic calendar.",
+  "features": [
+    "price_lag_1w",
+    "price_lag_2w",
+    "price_lag_4w",
+    "price_lag_8w",
+    "price_lag_52w",
+    "price_mean_4w",
+    "price_mean_8w",
+    "price_change_4w_pct",
+    "season",
+    "season_transition",
+    "forecast_week_of_year",
+    "week_within_season",
+    "origin_rainfall_1w_mm",
+    "origin_rainfall_sum_4w_mm",
+    "origin_rainfall_sum_8w_mm",
+    "origin_mean_temp_4w_c",
+    "origin_rainfall_anomaly_4w_mm",
+    "diesel_price_lkr_litre",
+    "usd_lkr_rate",
+    "inflation_rate_pct",
+    "previous_season_extent",
+    "same_season_previous_year_extent",
+    "historical_mean_season_extent",
+    "extent_change_vs_previous_season"
+  ],
+  "excluded": [
+    "cultivation_progress_ratio",
+    "synthetic calendar columns"
+  ],
+  "identity_codes": [
+    "crop_id",
+    "market_id"
+  ],
+  "season_code": "season",
+  "label": "target_price_lkr_kg at target_week",
+  "model_target": "log(target_price / last_observed_price), inverted back to LKR/kg",
+  "quantiles": [
+    0.05,
+    0.5,
+    0.95
+  ],
+  "random_state": 42,
+  "split": {
+    "train_issue_through": "2022-12-31",
+    "calibrate": "2023",
+    "test": "2024-2025",
+    "shuffle": false,
+    "calibrate_end": "2023-12-31"
+  },
+  "score_markets": [
+    "Dambulla",
+    "Colombo",
+    "Meegoda",
+    "Nuwara Eliya"
+  ],
+  "train_pool_markets": [
+    "Kandy",
+    "Keppetipola",
+    "Thambuttegama"
+  ],
+  "score_rule": "last observed price and target price both originally observed",
+  "macro_nulls_on_training_rows": {
+    "diesel_price_lkr_litre": 0,
+    "usd_lkr_rate": 0,
+    "inflation_rate_pct": 0
+  },
+  "macro_imputed": false,
+  "extent_rows_dropped": false,
+  "optuna": {
+    "lightgbm": {
+      "num_leaves": 17,
+      "learning_rate": 0.09330606024425668,
+      "min_child_samples": 44,
+      "subsample": 0.6849356442713105,
+      "colsample_bytree": 0.6727299868828402
+    },
+    "xgboost": {
+      "max_depth": 3,
+      "learning_rate": 0.09330606024425668,
+      "min_child_weight": 16.816410175208013,
+      "subsample": 0.6849356442713105,
+      "colsample_bytree": 0.6727299868828402
+    },
+    "lightgbm_best_pinball": 32.76419816067886,
+    "xgboost_best_pinball": 32.21638588773216,
+    "lightgbm_trials": 15,
+    "xgboost_trials": 8,
+    "tuned_on": "horizon 4, q50 pinball on price, calibration issue weeks in 2023"
+  },
+  "sarimax": "reused 8244 SARIMAX rows from artifacts/latest/predictions.csv; same price target and horizons Added 246 refit gap rows from artifacts/experiment_a/sarimax_gap_predictions.csv. Matching rows stayed reused. artifacts/latest was not rewritten.",
+  "ccpi_caveat": "Base 2013=100 through January 2023 and base 2021=100 from February 2023. The index was not rescaled. This is a published-series break, not a model failure.",
+  "inflation_available_date_rule": "reference_month_end_plus_21_days",
+  "date_boundaries": {
+    "train_issue_min": "2016-01-04",
+    "train_issue_max": "2022-12-26",
+    "calibrate_issue_min": "2023-01-02",
+    "calibrate_issue_max": "2023-12-25",
+    "test_issue_min": "2024-01-01",
+    "test_issue_max": "2025-12-22"
+  },
+  "rows": 54243,
+  "training_rows_used": 32307,
+  "test_row_count": 5739,
+  "test_row_sha256": "3e7eb03e8b9933fefb621a647b1a32c5b7b3982ebd441815dfc5ff35729ab6ea"
+}

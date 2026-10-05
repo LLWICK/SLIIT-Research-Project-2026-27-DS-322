@@ -1,0 +1,122 @@
+{
+  "experiment": "A",
+  "description": "Price lags and seasonal features only. No weather, macros, cultivation progress, or lagged extent.",
+  "features": [
+    "price_lag_1w",
+    "price_lag_2w",
+    "price_lag_4w",
+    "price_lag_8w",
+    "price_lag_52w",
+    "price_mean_4w",
+    "price_mean_8w",
+    "price_change_4w_pct",
+    "season",
+    "season_transition",
+    "forecast_week_of_year",
+    "week_within_season"
+  ],
+  "identity_codes": [
+    "crop_id",
+    "market_id"
+  ],
+  "season_code": "season",
+  "label": "target_price_lkr_kg at target_week",
+  "model_target": "log(target_price / last_observed_price), inverted back to LKR/kg",
+  "quantiles": [
+    0.05,
+    0.5,
+    0.95
+  ],
+  "random_state": 42,
+  "split": {
+    "train_issue_through": "2022-12-31",
+    "calibrate": "2023",
+    "test": "2024-2025",
+    "shuffle": false
+  },
+  "score_markets": [
+    "Dambulla",
+    "Colombo",
+    "Meegoda",
+    "Nuwara Eliya"
+  ],
+  "train_pool_markets": [
+    "Kandy",
+    "Keppetipola",
+    "Thambuttegama"
+  ],
+  "score_rule": "last observed price and target price both originally observed",
+  "optuna": {
+    "lightgbm": {
+      "num_leaves": 17,
+      "learning_rate": 0.09330606024425668,
+      "min_child_samples": 44,
+      "subsample": 0.6849356442713105,
+      "colsample_bytree": 0.6727299868828402
+    },
+    "xgboost": {
+      "max_depth": 3,
+      "learning_rate": 0.09330606024425668,
+      "min_child_weight": 16.816410175208013,
+      "subsample": 0.6849356442713105,
+      "colsample_bytree": 0.6727299868828402
+    },
+    "lightgbm_best_pinball": 35.48390467398658,
+    "xgboost_best_pinball": 34.32155428873934,
+    "lightgbm_trials": 15,
+    "xgboost_trials": 8,
+    "tuned_on": "horizon 4, q50 pinball on price, calibration issue weeks in 2023"
+  },
+  "sarimax": "reused 8244 SARIMAX rows from artifacts/latest/predictions.csv; same price target and horizons",
+  "feature_sets": {
+    "A": [
+      "price_lag_1w",
+      "price_lag_2w",
+      "price_lag_4w",
+      "price_lag_8w",
+      "price_lag_52w",
+      "price_mean_4w",
+      "price_mean_8w",
+      "price_change_4w_pct",
+      "season",
+      "season_transition",
+      "forecast_week_of_year",
+      "week_within_season"
+    ],
+    "B": [
+      "price_lag_1w",
+      "price_lag_2w",
+      "price_lag_4w",
+      "price_lag_8w",
+      "price_lag_52w",
+      "price_mean_4w",
+      "price_mean_8w",
+      "price_change_4w_pct",
+      "season",
+      "season_transition",
+      "forecast_week_of_year",
+      "week_within_season",
+      "origin_rainfall_1w_mm",
+      "origin_rainfall_sum_4w_mm",
+      "origin_rainfall_sum_8w_mm",
+      "origin_mean_temp_4w_c",
+      "origin_rainfall_anomaly_4w_mm",
+      "diesel_price_lkr_litre",
+      "usd_lkr_rate",
+      "inflation_rate_pct",
+      "previous_season_extent",
+      "same_season_previous_year_extent",
+      "historical_mean_season_extent",
+      "extent_change_vs_previous_season"
+    ],
+    "C": null
+  },
+  "coverage": {
+    "coverage_csv": "D:\\SLIIT\\4th Year\\Reaserch\\data sets\\processed\\latest\\feature_coverage.csv",
+    "weather_csv": "D:\\SLIIT\\4th Year\\Reaserch\\data sets\\processed\\latest\\weather_origin_audit.csv",
+    "coverage_md": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\docs\\Feature-Coverage-Audit-IT23415836.md",
+    "macro_note": "Diesel, USD/LKR, and inflation are joined as-of from `processed/macros_published.csv`. Annual World Bank series were not used.",
+    "cultivation_note": "Observed cultivation data unavailable. `cultivation_progress_ratio` is null. Experiment C is not trained."
+  },
+  "rows": 54243
+}

@@ -28,6 +28,7 @@ STUDIO_FILES = (
     "importance",
     "live_forecast",
     "models",
+    "evaluation",
 )
 
 

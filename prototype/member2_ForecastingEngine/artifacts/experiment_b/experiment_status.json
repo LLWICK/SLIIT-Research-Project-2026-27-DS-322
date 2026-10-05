@@ -1,0 +1,70 @@
+{
+  "observed_cultivation_data_available": false,
+  "inflation_available_date_rule": "reference_month_end_plus_21_days",
+  "A": {
+    "status": "already_trained",
+    "reason": "Not retrained. Quantile and CQR files were added beside the saved predictions."
+  },
+  "B": {
+    "status": "trained",
+    "reason": "Experiment B trained on price lags, season, origin weather, real as-of macros, and lagged finished-season extent after the inflation publication lag."
+  },
+  "C": {
+    "status": "unavailable",
+    "reason": "observed_cultivation_data_available=false. dcs_highland_seasonal.csv and synthetic_proxy were not used as current progress."
+  },
+  "S": {
+    "status": "not_run",
+    "reason": "S was not run."
+  },
+  "features": [
+    "price_lag_1w",
+    "price_lag_2w",
+    "price_lag_4w",
+    "price_lag_8w",
+    "price_lag_52w",
+    "price_mean_4w",
+    "price_mean_8w",
+    "price_change_4w_pct",
+    "season",
+    "season_transition",
+    "forecast_week_of_year",
+    "week_within_season",
+    "origin_rainfall_1w_mm",
+    "origin_rainfall_sum_4w_mm",
+    "origin_rainfall_sum_8w_mm",
+    "origin_mean_temp_4w_c",
+    "origin_rainfall_anomaly_4w_mm",
+    "diesel_price_lkr_litre",
+    "usd_lkr_rate",
+    "inflation_rate_pct",
+    "previous_season_extent",
+    "same_season_previous_year_extent",
+    "historical_mean_season_extent",
+    "extent_change_vs_previous_season"
+  ],
+  "date_boundaries": {
+    "train_issue_min": "2016-01-04",
+    "train_issue_max": "2022-12-26",
+    "calibrate_issue_min": "2023-01-02",
+    "calibrate_issue_max": "2023-12-25",
+    "test_issue_min": "2024-01-01",
+    "test_issue_max": "2025-12-22"
+  },
+  "test_row_count": 5739,
+  "test_row_sha256": "3e7eb03e8b9933fefb621a647b1a32c5b7b3982ebd441815dfc5ff35729ab6ea",
+  "sarimax": "reused 8244 SARIMAX rows from artifacts/latest/predictions.csv; same price target and horizons Added 246 refit gap rows from artifacts/experiment_a/sarimax_gap_predictions.csv. Matching rows stayed reused. artifacts/latest was not rewritten.",
+  "sarimax_exact_match_before_gap_fill": false,
+  "sarimax_exact_match_after_gap_fill": true,
+  "four_week_mae": [
+    "B improves 4-week MAE for LightGBM: B is 105.98 and A is 117.91 (-10.12% MAE).",
+    "B improves 4-week MAE for XGBoost: B is 106.80 and A is 111.63 (-4.33% MAE)."
+  ],
+  "artifacts": {
+    "predictions": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_b\\predictions.csv",
+    "metrics": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_b\\metrics_by_model_horizon.csv",
+    "manifest": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_b\\manifest.json",
+    "comparison_csv": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_b\\ab_comparison.csv",
+    "comparison_md": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\docs\\Experiment-AB-Comparison-IT23415836.md"
+  }
+}

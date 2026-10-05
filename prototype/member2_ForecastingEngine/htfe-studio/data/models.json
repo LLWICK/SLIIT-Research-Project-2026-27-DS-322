@@ -1,15 +1,15 @@
 {
   "lightgbm": {
     "backend": "lightgbm",
-    "qhat": 6.0156,
+    "qhat": 8.3952,
     "qhat_by_horizon": {
-      "1": 6.0156,
-      "2": 2.7084,
-      "4": 11.7757,
-      "8": 20.2185,
-      "12": 17.58
+      "1": 8.3952,
+      "2": 16.5905,
+      "4": 19.8185,
+      "8": 31.286,
+      "12": 61.341
     },
-    "note": "Time-ordered prices are not exchangeable, so this is an empirical calibration, not a universal 90% guarantee.",
+    "note": "Intervals are split-conformal on 2023 only. Test coverage is below the nominal 90%.",
     "metrics": {
       "overall": {
         "n_scored": 5535,

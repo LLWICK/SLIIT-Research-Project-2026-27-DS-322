@@ -1,51 +1,110 @@
-"""Feature configurations A, B, and C from Methodology.docx section 3.13."""
+"""Feature configurations A, B, and C.
+
+A is price history and season only.
+B adds origin weather, real macros, and lagged finished-season extent.
+C adds observed within-season cultivation progress.
+B is omitted when diesel, USD/LKR, and inflation are not all non-null.
+C is omitted when that progress column has no observed values.
+The synthetic calendar is not a feature set here.
+"""
 from __future__ import annotations
 
 import pandas as pd
 
-from training.config import PRICE_LAGS, WEATHER_LAGS, WEATHER_LEVELS
+PRICE_HISTORY = (
+    "price_lag_1w",
+    "price_lag_2w",
+    "price_lag_4w",
+    "price_lag_8w",
+    "price_lag_52w",
+    "price_mean_4w",
+    "price_mean_8w",
+    "price_change_4w_pct",
+)
+SEASON_FEATURES = (
+    "season",
+    "season_transition",
+    "forecast_week_of_year",
+    "week_within_season",
+)
+WEATHER_FEATURES = (
+    "origin_rainfall_1w_mm",
+    "origin_rainfall_sum_4w_mm",
+    "origin_rainfall_sum_8w_mm",
+    "origin_mean_temp_4w_c",
+    "origin_rainfall_anomaly_4w_mm",
+)
+MACRO_FEATURES = (
+    "diesel_price_lkr_litre",
+    "usd_lkr_rate",
+    "inflation_rate_pct",
+)
+EXTENT_FEATURES = (
+    "previous_season_extent",
+    "same_season_previous_year_extent",
+    "historical_mean_season_extent",
+    "extent_change_vs_previous_season",
+)
+PROGRESS_FEATURE = "cultivation_progress_ratio"
 
-MACRO_COLUMNS = ("diesel_lkr_per_litre", "usd_lkr", "inflation_yoy")
 
-
-def _present(frame: pd.DataFrame, names: list[str]) -> list[str]:
+def _present(frame: pd.DataFrame, names: tuple[str, ...] | list[str]) -> list[str]:
     return [name for name in names if name in frame.columns]
 
 
 def historical_columns(frame: pd.DataFrame) -> list[str]:
-    names = [f"price_lag_{lag}" for lag in PRICE_LAGS]
-    names += ["roll_mean_4", "roll_std_4", "roll_mean_12", "roll_std_12", "log_price", "log_return_1"]
-    names += ["week", "month", "is_yala", "is_maha", "week_within_season", "is_transition"]
-    return _present(frame, names)
+    """Price lags and seasonal features. No weather, macros, progress, or lagged extent."""
+    return _present(frame, list(PRICE_HISTORY) + list(SEASON_FEATURES))
 
 
 def weather_columns(frame: pd.DataFrame) -> list[str]:
-    names = [column for column in WEATHER_LEVELS if column in frame.columns]
-    names += [f"{column}_lag_{lag}" for column in WEATHER_LEVELS if column in frame.columns for lag in WEATHER_LAGS]
-    return names
+    return _present(frame, WEATHER_FEATURES)
 
 
 def macro_columns(frame: pd.DataFrame) -> list[str]:
-    kept = []
-    for name in MACRO_COLUMNS:
-        if name in frame.columns and frame[name].notna().any():
-            kept.append(name)
-    return kept
+    """Names that exist. Does not drop a series from B; macros_ready decides that."""
+    return _present(frame, MACRO_FEATURES)
+
+
+def macros_ready(frame: pd.DataFrame) -> tuple[bool, str]:
+    missing = []
+    for name in MACRO_FEATURES:
+        if name not in frame.columns or not bool(frame[name].notna().any()):
+            missing.append(name)
+    if missing:
+        return False, (
+            "Experiment B is unavailable: diesel, USD/LKR, and inflation are not all non-null "
+            f"from a real as-of series. Missing or all-null: {', '.join(missing)}."
+        )
+    return True, "Diesel, USD/LKR, and inflation each have non-null as-of values."
 
 
 def progress_available(frame: pd.DataFrame) -> bool:
-    return "cultivation_progress" in frame.columns and bool(frame["cultivation_progress"].notna().any())
+    if PROGRESS_FEATURE not in frame.columns:
+        return False
+    return bool(frame[PROGRESS_FEATURE].notna().any())
 
 
 def feature_sets(frame: pd.DataFrame) -> dict[str, list[str] | None]:
-    """A historical, B multi-source, C proposed. C is None when progress has no real values."""
+    """A historical prices and season. B adds weather, macros, and lagged extent. C adds observed progress."""
     historical = historical_columns(frame)
-    multi = historical + weather_columns(frame) + macro_columns(frame)
-    proposed = multi + ["cultivation_progress"] if progress_available(frame) else None
+    ready, _reason = macros_ready(frame)
+    extent = _present(frame, EXTENT_FEATURES)
+    weather = weather_columns(frame)
+    if ready and len(extent) == len(EXTENT_FEATURES) and len(weather) == len(WEATHER_FEATURES):
+        multi: list[str] | None = historical + weather + list(MACRO_FEATURES) + extent
+    else:
+        multi = None
+    if multi and progress_available(frame):
+        proposed: list[str] | None = multi + [PROGRESS_FEATURE]
+    else:
+        proposed = None
     return {"A": historical, "B": multi, "C": proposed}
 
 
 def fullest(sets: dict[str, list[str] | None]) -> tuple[str, list[str]]:
-    if sets["C"]:
+    if sets.get("C"):
         return "C", list(sets["C"])
-    return "B", list(sets["B"] or [])
+    if sets.get("B"):
+        return "B", list(sets["B"])
+    return "A", list(sets.get("A") or [])

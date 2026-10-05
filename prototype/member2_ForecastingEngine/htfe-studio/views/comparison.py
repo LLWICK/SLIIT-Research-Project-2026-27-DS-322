@@ -6,26 +6,24 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from lib.load import lkr, title_case
+from lib.load import title_case
 from lib.style import AMBER, HARVEST, SKY, page_header, section_title, show_chart
 
 
 def render(data: dict[str, Any]) -> None:
     comparison = data["comparison"]
     models = data["models"]
-    baseline = comparison[0]
-    lgb_row = next(row for row in comparison if row["id"] == "lightgbm")
     lgb = models["lightgbm"]
 
     page_header(
-        "Same folds · same seed · observed only",
-        "Did we beat the baseline?",
-        f"Yes. LightGBM quantile + CQR cuts MAE from {lkr(baseline['mae'])} to {lkr(lgb_row['mae'])} "
-        f"and lifts PICP from {baseline['picp']}% to {lgb_row['picp']}%.",
+        "Same test weeks · observed prices only",
+        "Horizon changes which model is ahead",
+        "At 1 week, SARIMAX has the lower error. From 4 weeks, Experiment B LightGBM is ahead of SARIMAX. "
+        "Calibrated interval coverage is still below the nominal 90%.",
     )
 
     with st.container(border=True):
-        section_title("PP2 table", "Headline comparison")
+        section_title("4-week test", "Experiment B. Naive rows are an earlier pooled run and are not the same row set.")
         table = pd.DataFrame(
             [
                 {

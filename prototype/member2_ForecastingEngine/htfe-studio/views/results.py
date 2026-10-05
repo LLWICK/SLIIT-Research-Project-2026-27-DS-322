@@ -5,97 +5,67 @@ from typing import Any
 import pandas as pd
 import streamlit as st
 
-from lib.load import lkr
-from lib.style import card_grid, page_header, section_title
-
-LABELS = {
-    "sarima": ("Seasonal baseline", "SARIMA-family reference"),
-    "lightgbm": ("LightGBM", "Primary engine"),
-    "xgboost": ("XGBoost", "Boosting comparison"),
-    "lstm": ("Sequential network", "Optional deep comparison"),
-}
-
-
-def _num(value: Any, suffix: str = "") -> str:
-    if value is None:
-        return "not run"
-    if isinstance(value, float):
-        return f"{value:.2f}{suffix}"
-    return f"{value}{suffix}"
+from lib.style import page_header, section_title
 
 
 def render(data: dict[str, Any]) -> None:
-    comparison = data["comparison"]
-    split = data["split"]
-    lgb = next((row for row in comparison if row["id"] == "lightgbm"), None)
-    lstm = next((row for row in comparison if row["id"] == "lstm"), None)
-
+    evaluation = data["evaluation"]
+    rows = pd.DataFrame(evaluation["rows"])
+    test_b = rows[rows["experiment"].eq("B")].copy()
     page_header(
-        "Model results",
-        "Same weeks, same chronological test",
-        f"Scored on {split['test']['start']} to {split['test']['end']} — "
-        f"{split['test']['n']} panel rows in the test window. "
-        "MAPE is pooled across horizons on originally observed wholesale prices. "
-        "LSTM was not trained. Intervals are raw quantiles, not conformal yet.",
+        "Test scores",
+        "2024–2025, observed prices only",
+        "MAE and RMSE are LKR per kg. MAPE is a percent. Coverage is the share of true prices inside the interval. "
+        "The nominal interval is 90%, and the calibrated coverage is below that.",
     )
 
-    card_grid(
-        [
-            {
-                "role": LABELS.get(row["id"], (row["model"], row["backend"]))[1],
-                "title": LABELS.get(row["id"], (row["model"], row["backend"]))[0],
-                "active": row["id"] == "lightgbm",
-                "note": "Used on the dashboard" if row["id"] == "lightgbm" else "",
-                "rows": [
-                    ("MAE", _num(row["mae"]) if row["mae"] is None else lkr(row["mae"])),
-                    ("MAPE", _num(row["mape"], "%")),
-                    ("Coverage", _num(row["picp"], "%")),
-                    ("Width", _num(row["interval_width"]) if row["interval_width"] is None else lkr(row["interval_width"])),
-                ],
-            }
-            for row in comparison
-        ]
+    show = test_b.rename(
+        columns={
+            "model": "Model",
+            "horizon": "Horizon",
+            "n_scored": "Rows",
+            "mae": "MAE",
+            "rmse": "RMSE",
+            "mape": "MAPE %",
+            "pinball": "Pinball",
+            "picp": "PICP raw %",
+            "picp_cqr": "PICP calibrated %",
+            "interval_width_cqr": "Width calibrated",
+        }
     )
-
     with st.container(border=True):
-        section_title("Same test set", "Side by side")
-        table = pd.DataFrame(
-            [
-                {
-                    "Model": LABELS.get(row["id"], (row["model"],))[0],
-                    "MAE": row["mae"],
-                    "RMSE": row["rmse"],
-                    "MAPE %": row["mape"],
-                    "Coverage %": row["picp"],
-                    "Width": row["interval_width"],
-                }
-                for row in comparison
-            ]
+        section_title("Experiment B", "Price, season, origin weather, macros, and lagged extent")
+        st.dataframe(
+            show[
+                [
+                    "Model",
+                    "Horizon",
+                    "Rows",
+                    "MAE",
+                    "RMSE",
+                    "MAPE %",
+                    "Pinball",
+                    "PICP raw %",
+                    "PICP calibrated %",
+                    "Width calibrated",
+                ]
+            ],
+            width="stretch",
+            hide_index=True,
         )
-        st.dataframe(table, width="stretch", hide_index=True)
-        if lgb and lstm:
-            st.caption(
-                f"The sequential network can look better on MAE, but coverage drops to {lstm['picp']}% "
-                f"with a tight band. LightGBM stays near the 90% target ({lgb['picp']}%) "
-                f"with a width of about {lkr(lgb['interval_width'])}."
-            )
 
-    note, eval_col = st.columns(2)
-    with note:
-        with st.container(border=True):
-            section_title("Data notes", "What this extract covers")
-            st.caption(
-                "Commitments are a labelled historical simulation, not live HARTI registrations. "
-                "Colombo is the consumer-market series; Badulla and Nuwara Eliya are origin-adjacent."
-            )
-    with eval_col:
-        with st.container(border=True):
-            section_title("Evaluation", "How the numbers were scored")
-            st.markdown(
-                """
-- Time order only — train, then calibration, then test.
-- Only originally observed wholesale prices.
-- 2020–2021 kept as a disruption slice.
-- Coverage and width reported together.
-                """
-            )
+    a = rows[rows["experiment"].eq("A") & rows["model"].isin(["lightgbm", "xgboost"])][
+        ["model", "horizon", "mae", "rmse", "mape"]
+    ].rename(columns={"mae": "MAE A", "rmse": "RMSE A", "mape": "MAPE A"})
+    b = test_b[test_b["model"].isin(["lightgbm", "xgboost"])][["model", "horizon", "mae", "rmse", "mape"]].rename(
+        columns={"mae": "MAE B", "rmse": "RMSE B", "mape": "MAPE B"}
+    )
+    compared = a.merge(b, on=["model", "horizon"])
+    compared["MAE change %"] = ((compared["MAE B"] - compared["MAE A"]) / compared["MAE A"] * 100).round(2)
+    with st.container(border=True):
+        section_title("Evaluation", "A against B, same test rows")
+        st.dataframe(compared, width="stretch", hide_index=True)
+        st.caption(
+            "A negative MAE change means B is more accurate. Experiment C is absent because the monthly "
+            "target and achieved file was not available. SARIMAX is not in this comparison because it does not use the extra columns."
+        )

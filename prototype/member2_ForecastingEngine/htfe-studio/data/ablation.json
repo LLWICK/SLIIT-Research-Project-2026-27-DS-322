@@ -1,135 +1,144 @@
 {
   "status": "partial",
-  "note": "A and B were trained. C was not, because no district-month target/achieved table was found. The seasonal extent ratio was not renamed to cultivation progress.",
+  "note": "A and B are the reported experiments. C was not trained because no district-month target and achieved file was found. The source split of B is in Experiment-B-Attribution.",
   "by_horizon": {
     "A": [
       {
         "horizon": 1,
-        "n_scored": 1158,
-        "mae": 60.37,
-        "rmse": 105.66,
-        "mape": 22.78,
-        "pinball": 30.18,
-        "picp": 82.82,
-        "interval_width": 215.55
+        "n_scored": 1200,
+        "mae": 79.42,
+        "rmse": 133.48,
+        "mape": 30.5,
+        "pinball": 39.71,
+        "picp": 82.92,
+        "interval_width": 280.68
       },
       {
         "horizon": 2,
-        "n_scored": 1146,
-        "mae": 77.25,
-        "rmse": 129.68,
-        "mape": 31.16,
-        "pinball": 38.62,
-        "picp": 83.94,
-        "interval_width": 309.81
+        "n_scored": 1188,
+        "mae": 100.03,
+        "rmse": 167.28,
+        "mape": 38.72,
+        "pinball": 50.01,
+        "picp": 82.41,
+        "interval_width": 341.72
       },
       {
         "horizon": 4,
-        "n_scored": 1119,
-        "mae": 99.04,
-        "rmse": 154.91,
-        "mape": 40.37,
-        "pinball": 49.52,
-        "picp": 81.59,
-        "interval_width": 399.47
+        "n_scored": 1164,
+        "mae": 117.91,
+        "rmse": 175.39,
+        "mape": 51.45,
+        "pinball": 58.95,
+        "picp": 75.52,
+        "interval_width": 416.5
       },
       {
         "horizon": 8,
-        "n_scored": 1074,
-        "mae": 125.32,
-        "rmse": 167.67,
-        "mape": 69.5,
-        "pinball": 62.66,
-        "picp": 68.72,
-        "interval_width": 355.86
+        "n_scored": 1116,
+        "mae": 128.92,
+        "rmse": 176.23,
+        "mape": 70.37,
+        "pinball": 64.46,
+        "picp": 71.77,
+        "interval_width": 405.95
       },
       {
         "horizon": 12,
-        "n_scored": 1038,
-        "mae": 128.62,
-        "rmse": 175.67,
-        "mape": 71.33,
-        "pinball": 64.31,
-        "picp": 73.7,
-        "interval_width": 818.76
+        "n_scored": 1071,
+        "mae": 129.93,
+        "rmse": 181.73,
+        "mape": 70.29,
+        "pinball": 64.96,
+        "picp": 73.95,
+        "interval_width": 637.11
       }
     ],
     "B": [
       {
         "horizon": 1,
-        "n_scored": 1158,
-        "mae": 57.94,
-        "rmse": 103.72,
-        "mape": 21.55,
-        "pinball": 28.97,
-        "picp": 82.73,
-        "interval_width": 216.16
+        "n_scored": 1200,
+        "mae": 75.0,
+        "rmse": 128.69,
+        "mape": 27.54,
+        "pinball": 37.5,
+        "picp": 80.67,
+        "interval_width": 230.19
       },
       {
         "horizon": 2,
-        "n_scored": 1146,
-        "mae": 72.38,
-        "rmse": 122.83,
-        "mape": 28.53,
-        "pinball": 36.19,
-        "picp": 82.46,
-        "interval_width": 291.56
+        "n_scored": 1188,
+        "mae": 90.86,
+        "rmse": 159.07,
+        "mape": 32.83,
+        "pinball": 45.43,
+        "picp": 78.96,
+        "interval_width": 255.26
       },
       {
         "horizon": 4,
-        "n_scored": 1119,
-        "mae": 94.75,
-        "rmse": 155.97,
-        "mape": 38.64,
-        "pinball": 47.37,
-        "picp": 82.22,
-        "interval_width": 388.01
+        "n_scored": 1164,
+        "mae": 105.98,
+        "rmse": 168.12,
+        "mape": 41.53,
+        "pinball": 52.99,
+        "picp": 76.89,
+        "interval_width": 340.34
       },
       {
         "horizon": 8,
-        "n_scored": 1074,
-        "mae": 119.54,
-        "rmse": 166.79,
-        "mape": 62.37,
-        "pinball": 59.77,
-        "picp": 72.44,
-        "interval_width": 391.66
+        "n_scored": 1116,
+        "mae": 116.04,
+        "rmse": 171.68,
+        "mape": 55.67,
+        "pinball": 58.02,
+        "picp": 74.01,
+        "interval_width": 367.18
       },
       {
         "horizon": 12,
-        "n_scored": 1038,
-        "mae": 126.58,
-        "rmse": 178.53,
-        "mape": 65.56,
-        "pinball": 63.29,
-        "picp": 76.2,
-        "interval_width": 807.81
+        "n_scored": 1071,
+        "mae": 106.66,
+        "rmse": 158.29,
+        "mape": 50.72,
+        "pinball": 53.33,
+        "picp": 69.65,
+        "interval_width": 319.01
       }
     ]
   },
   "A": {
     "metrics": {
-      "n_scored": 5535,
-      "mae": 97.08,
-      "rmse": 148.03,
-      "mape": 46.24,
-      "pinball": 48.54,
-      "picp": 78.36,
-      "interval_width": 412.6
+      "horizon": 4,
+      "n_scored": 1164,
+      "mae": 117.91,
+      "rmse": 175.39,
+      "mape": 51.45,
+      "pinball": 58.95,
+      "picp": 75.52,
+      "interval_width": 416.5
     },
     "feature_set": "A"
   },
   "B": {
     "metrics": {
-      "n_scored": 5535,
-      "mae": 93.2,
-      "rmse": 147.2,
-      "mape": 42.62,
-      "pinball": 46.6,
-      "picp": 79.35,
-      "interval_width": 411.52
+      "horizon": 4,
+      "n_scored": 1164,
+      "mae": 105.98,
+      "rmse": 168.12,
+      "mape": 41.53,
+      "pinball": 52.99,
+      "picp": 76.89,
+      "interval_width": 340.34
     },
     "feature_set": "B"
   },
-  "C": null
+  "C": null,
+  "official_b_mae_by_horizon": {
+    "1": 75.0,
+    "2": 90.86,
+    "4": 105.98,
+    "8": 116.04,
+    "12": 106.66
+  }
 }

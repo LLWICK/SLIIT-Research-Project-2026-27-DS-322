@@ -24,8 +24,9 @@ def render(data: dict[str, Any]) -> None:
     page_header(
         "Cobweb decision support",
         "Price Forecast",
-        "Choose a crop and market. The price is the trained LightGBM forecast. "
-        "A cultivation-progress control only changes that price when the model was trained with monthly achieved/target hectares.",
+        "Choose a crop and market. The interval comes from the saved model. "
+        "The cultivation control writes achieved hectares over target hectares and scores that model again. "
+        "The progress column was trained on the labelled synthetic curve, so this is the update mechanism, not the A/B accuracy result.",
     )
     stage_row(STAGES)
 

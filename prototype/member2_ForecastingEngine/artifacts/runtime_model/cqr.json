@@ -1,0 +1,36 @@
+{
+  "method": "split_cqr_romano2019",
+  "alpha": 0.1,
+  "calibration": "2023 issue weeks only",
+  "test": "2024-2025 issue weeks, intervals adjusted, point forecasts unchanged",
+  "models": [
+    "lightgbm",
+    "xgboost"
+  ],
+  "sarimax": "interval columns stay blank; CQR was not applied",
+  "predictions_file_unchanged": false,
+  "mapie_version": "1.5.0",
+  "mapie_note": "MAPIE is installed, but ConformalizedQuantileRegressor refits an estimator and does not accept the three already-fit quantile boosters. The conformity score was applied directly to the saved 0.05 and 0.95 forecasts. qhat uses the 2023 calibration block only.",
+  "qhat_by_model": {
+    "lightgbm": {
+      "1": 6.5875,
+      "2": 8.9917,
+      "4": 17.1175,
+      "8": 26.7129,
+      "12": 22.8679
+    },
+    "xgboost": {}
+  },
+  "by_model_horizon": [],
+  "limit": "Time-ordered prices are not exchangeable, so this is an empirical calibration, not a universal 90% guarantee.",
+  "qhat_by_horizon": {
+    "1": 6.5875,
+    "2": 8.9917,
+    "4": 17.1175,
+    "8": 26.7129,
+    "12": 22.8679
+  },
+  "model": "runtime_lightgbm",
+  "not_an_accuracy_result": true,
+  "note": "Runtime model. cultivation_progress was trained on the labelled synthetic calendar curve so a new achieved/target record can be scored without retraining. This is the update mechanism, not the Experiment A/B accuracy result, and it is not Experiment C. qhat is this model's own 2023 adjustment. Do not quote these rows as Experiment A, B, or C accuracy."
+}

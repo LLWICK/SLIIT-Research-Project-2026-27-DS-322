@@ -8,7 +8,10 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 STUDIO = Path(__file__).resolve().parents[1] / "htfe-studio" / "data"
-MANIFEST = Path(__file__).resolve().parents[1] / "artifacts" / "methodology" / "manifest.json"
+_ENGINE = Path(__file__).resolve().parents[1]
+_EXPERIMENT_B = _ENGINE / "artifacts" / "experiment_b" / "service_manifest.json"
+_RUNTIME = _ENGINE / "artifacts" / "runtime_model" / "service_manifest.json"
+_METHODOLOGY = _ENGINE / "artifacts" / "methodology" / "manifest.json"
 
 app = FastAPI(title="HTFE forecast", version="methodology")
 
@@ -17,6 +20,7 @@ class CultivationUpdate(BaseModel):
     achieved_ha: float | None = None
     target_ha: float | None = None
     cultivation_progress: float | None = None
+    report_date: str | None = None
 
 
 class ForecastRequest(BaseModel):
@@ -47,10 +51,19 @@ def _live() -> list[dict]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _manifest_path() -> Path:
+    if _RUNTIME.exists():
+        return _RUNTIME
+    if _EXPERIMENT_B.exists():
+        return _EXPERIMENT_B
+    return _METHODOLOGY
+
+
 def _manifest() -> dict:
-    if not MANIFEST.exists():
+    path = _manifest_path()
+    if not path.exists():
         return {"progress_in_model": False, "note": "Methodology manifest is missing."}
-    return json.loads(MANIFEST.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _progress_from(info: CultivationUpdate | None) -> float | None:
@@ -64,7 +77,7 @@ def _progress_from(info: CultivationUpdate | None) -> float | None:
 
 
 def _vectors() -> list[dict]:
-    path = MANIFEST.parent / "live_vectors.json"
+    path = _manifest_path().parent / "live_vectors.json"
     if not path.exists():
         return []
     return json.loads(path.read_text(encoding="utf-8"))
@@ -102,20 +115,60 @@ def _from_model(match: dict, requested: float | None, manifest: dict) -> tuple[d
         raw = float(bundle["model"].predict(row)[0])
         prices[key] = origin * math.exp(raw)
     qhat = 0.0
-    cqr_path = MANIFEST.parent / "cqr.json"
+    cqr_path = _manifest_path().parent / "cqr.json"
     if cqr_path.exists():
         cqr = json.loads(cqr_path.read_text(encoding="utf-8"))
-        qhat = float((cqr.get("qhat_by_horizon") or {}).get("1") or 0.0)
+        by_horizon = cqr.get("qhat_by_horizon") or {}
+        by_model = (cqr.get("qhat_by_model") or {}).get("lightgbm") or {}
+        qhat = float(by_horizon.get("1") or by_model.get("1") or 0.0)
     prices["lower_price"] = max(0.01, prices["lower_price"] - qhat)
     prices["upper_price"] = prices["upper_price"] + qhat
     prices["cultivation_progress"] = vector.get("cultivation_progress")
     return prices, applied, note
 
 
+def _runtime_response(request: ForecastRequest, crop: str, market: str) -> ForecastResponse:
+    from service.runtime import score_progress
+
+    info = request.latest_cultivation_information
+    scored = score_progress(
+        crop,
+        market,
+        achieved_ha=None if info is None else info.achieved_ha,
+        target_ha=None if info is None else info.target_ha,
+        report_date=None if info is None else info.report_date,
+        progress=None if info is None else info.cultivation_progress,
+        source="api",
+    )
+    return ForecastResponse(
+        crop=crop,
+        market=market,
+        forecast_week=str(scored["forecast_week"] or request.forecast_week),
+        predicted_price=scored["predicted_price"],
+        lower_price=scored["lower_price"],
+        upper_price=scored["upper_price"],
+        coverage_level=0.9,
+        cultivation_progress=scored["cultivation_progress"],
+        model_version=scored["model_version"],
+        applied_cultivation_update=bool(scored["applied_cultivation_update"]),
+        note=str(scored["note"]),
+    )
+
+
 def forecast_one(request: ForecastRequest) -> ForecastResponse:
     manifest = _manifest()
     crop = request.crop.strip().lower()
     market = request.market.strip().lower().replace(" ", "_")
+    if manifest.get("feature_set") == "runtime" and manifest.get("progress_in_model"):
+        try:
+            return _runtime_response(request, crop, market)
+        except Exception as exc:
+            return ForecastResponse(
+                crop=crop,
+                market=market,
+                forecast_week=request.forecast_week,
+                note=f"Saved runtime model could not be scored ({exc}).",
+            )
     requested = _progress_from(request.latest_cultivation_information)
     vector_row = next(
         (row for row in _vectors() if str(row["crop"]).lower() == crop and str(row["market"]).lower() == market),

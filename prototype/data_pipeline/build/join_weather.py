@@ -8,6 +8,10 @@ from data_pipeline.build.scope import WEATHER_KEEP
 
 # Several weather points sit in one DCS district. Split that district's extent
 # across them so Badulla is not triple-counted.
+# Weather locations come from origin_map[crop][market]["weather"], not from the
+# market town. Weights use the lagged finished season's extent when it exists,
+# and equal weights only when that extent is missing. They are not trade shares.
+ORIGIN_WEIGHT_METHOD = "extent_weighted_weather"
 WEATHER_DISTRICT = {
     "nuwara_eliya": "Nuwara Eliya",
     "badulla": "Badulla",
@@ -43,6 +47,7 @@ def collapse_weather(
         panel["supply_season_name"],
         panel["supply_season_year"],
     ):
+        # Origin-map weather points only. The market name is not a location key.
         points = origin_map.get(crop, {}).get(market, {}).get("weather") or []
         weights = _weights(points, crop, season_name, int(season_year), extent)
         totals = {column: 0.0 for column in keep}
@@ -99,3 +104,16 @@ def _weights(points: list[str], crop: str, season: str, year: int, extent: pd.Se
     if not any(np.isfinite(weight) and weight > 0 for _, weight in raw):
         return [(point, 1.0) for point, _ in raw]
     return [(point, weight if np.isfinite(weight) and weight > 0 else 0.0) for point, weight in raw]
+
+
+def confirm_weather_uses_origin_map(origin_map: dict) -> None:
+    """Consumer markets must not be joined to a weather point named after the town."""
+    for crop, markets in origin_map.items():
+        for market, spec in markets.items():
+            points = spec.get("weather") or []
+            if not points:
+                raise AssertionError(f"{crop}/{market} has no origin weather points")
+            slug = str(market).strip().lower().replace(" ", "_")
+            names = {str(point).strip().lower() for point in points}
+            if slug in {"colombo", "meegoda"} and slug in names:
+                raise AssertionError(f"{crop}/{market} weather includes the market town")

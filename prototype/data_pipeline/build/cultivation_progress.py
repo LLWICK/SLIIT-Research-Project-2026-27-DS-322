@@ -3,6 +3,10 @@
 The methodology requires a real district-month table. This module never invents
 hectares. If that table is absent, the panel column is left missing and the
 gap is written to the audit folder.
+
+The ratio is raw achieved/target. It is not clipped at 1. A later month is
+never interpolated into an earlier week: merge_asof keeps only a report whose
+available date is on or before the forecast Monday.
 """
 from __future__ import annotations
 
@@ -165,17 +169,26 @@ def _supply_links(origin_map: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def _blank_progress(out: pd.DataFrame) -> pd.DataFrame:
+    out["cultivation_progress"] = pd.NA
+    out["cultivation_target_ha"] = pd.NA
+    out["cultivation_achieved_ha"] = pd.NA
+    out["cultivation_asof_date"] = pd.NaT
+    out["cultivation_target_exceeded"] = pd.Series(pd.NA, index=out.index, dtype="boolean")
+    out["cultivation_progress_source"] = SOURCE_MISSING
+    return out
+
+
 def attach_progress(panel: pd.DataFrame, monthly: pd.DataFrame | None, origin_map: dict) -> pd.DataFrame:
-    """As-of join. Sum achieved and sum target across supply districts, then divide."""
+    """As-of join. Sum achieved and sum target across supply districts, then divide.
+
+    Progress is left above 1 when achieved hectares exceed the target. Future
+    months are not interpolated.
+    """
     out = panel.copy()
     out["week_start"] = pd.to_datetime(out["week_start"])
     if monthly is None or monthly.empty:
-        out["cultivation_progress"] = pd.NA
-        out["cultivation_target_ha"] = pd.NA
-        out["cultivation_achieved_ha"] = pd.NA
-        out["cultivation_asof_date"] = pd.NaT
-        out["cultivation_progress_source"] = SOURCE_MISSING
-        return out
+        return _blank_progress(out)
 
     links = _supply_links(origin_map)
     base = out[["crop", "market", "week_start"]].copy()
@@ -198,12 +211,7 @@ def attach_progress(panel: pd.DataFrame, monthly: pd.DataFrame | None, origin_ma
         )
         pieces.append(merged)
     if not pieces:
-        out["cultivation_progress"] = pd.NA
-        out["cultivation_target_ha"] = pd.NA
-        out["cultivation_achieved_ha"] = pd.NA
-        out["cultivation_asof_date"] = pd.NaT
-        out["cultivation_progress_source"] = SOURCE_MISSING
-        return out
+        return _blank_progress(out)
     long = pd.concat(pieces, ignore_index=True)
     grouped = long.groupby(["crop", "market", "week_start"], as_index=False).agg(
         cultivation_target_ha=("target_ha", lambda series: series.sum(min_count=1)),
@@ -211,6 +219,9 @@ def attach_progress(panel: pd.DataFrame, monthly: pd.DataFrame | None, origin_ma
         cultivation_asof_date=("available_date", "max"),
     )
     grouped["cultivation_progress"] = grouped["cultivation_achieved_ha"] / grouped["cultivation_target_ha"].replace(0, pd.NA)
+    known = grouped["cultivation_progress"].notna()
+    grouped["cultivation_target_exceeded"] = pd.Series(pd.NA, index=grouped.index, dtype="boolean")
+    grouped.loc[known, "cultivation_target_exceeded"] = grouped.loc[known, "cultivation_progress"].astype(float).gt(1)
     merged_panel = out.merge(grouped, on=["crop", "market", "week_start"], how="left")
     merged_panel["cultivation_progress_source"] = SOURCE_FOUND
     merged_panel.loc[merged_panel["cultivation_progress"].isna(), "cultivation_progress_source"] = SOURCE_MISSING
@@ -225,6 +236,8 @@ def assert_formula() -> None:
             {"year": 2024, "month": 4, "crop": "carrot", "district": "Badulla", "target_ha": 50, "achieved_ha": 25, "available_date": "2024-04-30"},
             {"year": 2024, "month": 5, "crop": "carrot", "district": "Nuwara Eliya", "target_ha": 100, "achieved_ha": 80, "available_date": "2024-05-31"},
             {"year": 2024, "month": 5, "crop": "carrot", "district": "Badulla", "target_ha": 50, "achieved_ha": 40, "available_date": "2024-05-31"},
+            {"year": 2024, "month": 6, "crop": "carrot", "district": "Nuwara Eliya", "target_ha": 100, "achieved_ha": 140, "available_date": "2024-06-30"},
+            {"year": 2024, "month": 6, "crop": "carrot", "district": "Badulla", "target_ha": 50, "achieved_ha": 70, "available_date": "2024-06-30"},
         ]
     )
     monthly = _normalise_columns(monthly)
@@ -233,15 +246,28 @@ def assert_formula() -> None:
     monthly["available_date"] = pd.to_datetime(monthly["available_date"])
     panel = pd.DataFrame(
         [
+            {"crop": "carrot", "market": "Dambulla", "week_start": "2024-04-01"},
             {"crop": "carrot", "market": "Dambulla", "week_start": "2024-05-06"},
             {"crop": "carrot", "market": "Dambulla", "week_start": "2024-06-03"},
+            {"crop": "carrot", "market": "Dambulla", "week_start": "2024-07-08"},
         ]
     )
     origin = {"carrot": {"Dambulla": {"supply_districts": ["Nuwara Eliya", "Badulla"]}}}
-    checked = attach_progress(panel, monthly, origin)
+    checked = attach_progress(panel, monthly, origin).set_index("week_start")
     april = 65 / 150
     may = 120 / 150
-    if abs(float(checked.iloc[0]["cultivation_progress"]) - april) > 1e-9:
-        raise AssertionError(checked.iloc[0]["cultivation_progress"])
-    if abs(float(checked.iloc[1]["cultivation_progress"]) - may) > 1e-9:
-        raise AssertionError(checked.iloc[1]["cultivation_progress"])
+    june = 210 / 150
+    early = checked.loc[pd.Timestamp("2024-04-01"), "cultivation_progress"]
+    if pd.notna(early):
+        raise AssertionError(early)
+    if abs(float(checked.loc[pd.Timestamp("2024-05-06"), "cultivation_progress"]) - april) > 1e-9:
+        raise AssertionError(checked.loc[pd.Timestamp("2024-05-06"), "cultivation_progress"])
+    if abs(float(checked.loc[pd.Timestamp("2024-06-03"), "cultivation_progress"]) - may) > 1e-9:
+        raise AssertionError(checked.loc[pd.Timestamp("2024-06-03"), "cultivation_progress"])
+    raw = float(checked.loc[pd.Timestamp("2024-07-08"), "cultivation_progress"])
+    if abs(raw - june) > 1e-9 or raw <= 1:
+        raise AssertionError(raw)
+    if not bool(checked.loc[pd.Timestamp("2024-07-08"), "cultivation_target_exceeded"]):
+        raise AssertionError("ratio above 1 was clipped or not flagged")
+    if bool(checked.loc[pd.Timestamp("2024-05-06"), "cultivation_target_exceeded"]):
+        raise AssertionError("April ratio was flagged as exceeded")

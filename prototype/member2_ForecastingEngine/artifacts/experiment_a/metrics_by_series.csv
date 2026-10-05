@@ -1,0 +1,181 @@
+model,horizon,target_form,unique_id,crop,market,n_scored,mae,rmse,mape,pinball,picp,interval_width
+lightgbm,1,price,carrot__Colombo,carrot,Colombo,103,92.74,148.21,30.37,46.37,79.61,316.75
+lightgbm,1,price,carrot__Dambulla,carrot,Dambulla,101,96.59,177.38,29.06,48.3,79.21,325.93
+lightgbm,1,price,carrot__Meegoda,carrot,Meegoda,102,112.5,203.35,27.57,56.25,82.35,363.3
+lightgbm,1,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,94,107.53,187.47,29.6,53.77,84.04,351.87
+lightgbm,1,price,leeks__Colombo,leeks,Colombo,103,44.34,62.01,20.86,22.17,89.32,186.97
+lightgbm,1,price,leeks__Dambulla,leeks,Dambulla,101,47.04,67.55,21.9,23.52,85.15,193.87
+lightgbm,1,price,leeks__Meegoda,leeks,Meegoda,102,47.03,65.93,18.75,23.51,92.16,216.25
+lightgbm,1,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,94,43.3,62.15,19.82,21.65,89.36,195.59
+lightgbm,1,price,tomato__Colombo,tomato,Colombo,103,86.4,124.24,35.93,43.2,84.47,326.32
+lightgbm,1,price,tomato__Dambulla,tomato,Dambulla,101,86.94,123.98,46.41,43.47,75.25,270.3
+lightgbm,1,price,tomato__Meegoda,tomato,Meegoda,102,94.46,132.8,37.56,47.23,83.33,337.51
+lightgbm,1,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,94,94.72,138.95,48.74,47.36,70.21,282.2
+lightgbm,2,price,carrot__Colombo,carrot,Colombo,102,120.98,195.61,37.55,60.49,82.35,389.11
+lightgbm,2,price,carrot__Dambulla,carrot,Dambulla,100,127.77,222.99,37.51,63.88,78.0,399.33
+lightgbm,2,price,carrot__Meegoda,carrot,Meegoda,101,143.52,260.61,35.69,71.76,82.18,442.48
+lightgbm,2,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,93,141.33,241.05,38.86,70.66,78.49,422.71
+lightgbm,2,price,leeks__Colombo,leeks,Colombo,102,51.99,71.35,24.29,25.99,87.25,233.36
+lightgbm,2,price,leeks__Dambulla,leeks,Dambulla,100,55.28,78.31,25.47,27.64,87.0,241.11
+lightgbm,2,price,leeks__Meegoda,leeks,Meegoda,101,57.85,83.33,23.2,28.92,91.09,264.55
+lightgbm,2,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,93,54.08,76.05,24.32,27.04,90.32,239.12
+lightgbm,2,price,tomato__Colombo,tomato,Colombo,102,110.23,154.36,47.96,55.12,82.35,392.28
+lightgbm,2,price,tomato__Dambulla,tomato,Dambulla,100,106.51,146.68,59.01,53.26,77.0,325.58
+lightgbm,2,price,tomato__Meegoda,tomato,Meegoda,101,117.28,159.24,47.19,58.64,78.22,406.06
+lightgbm,2,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,93,114.33,166.87,64.62,57.16,74.19,342.78
+lightgbm,4,price,carrot__Colombo,carrot,Colombo,100,141.91,200.28,54.35,70.95,71.0,489.06
+lightgbm,4,price,carrot__Dambulla,carrot,Dambulla,98,152.24,217.04,56.13,76.12,70.41,512.32
+lightgbm,4,price,carrot__Meegoda,carrot,Meegoda,99,160.27,229.21,49.85,80.13,68.69,552.02
+lightgbm,4,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,91,161.07,220.26,57.53,80.54,69.23,531.77
+lightgbm,4,price,leeks__Colombo,leeks,Colombo,100,63.55,89.34,29.88,31.78,85.0,294.56
+lightgbm,4,price,leeks__Dambulla,leeks,Dambulla,98,59.62,86.0,27.67,29.81,90.82,307.99
+lightgbm,4,price,leeks__Meegoda,leeks,Meegoda,99,68.98,92.84,28.9,34.49,89.9,330.82
+lightgbm,4,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,91,66.32,89.39,31.2,33.16,84.62,304.67
+lightgbm,4,price,tomato__Colombo,tomato,Colombo,100,139.22,200.1,62.06,69.61,70.0,439.86
+lightgbm,4,price,tomato__Dambulla,tomato,Dambulla,98,129.13,180.1,78.96,64.56,68.37,372.34
+lightgbm,4,price,tomato__Meegoda,tomato,Meegoda,99,137.75,200.17,55.68,68.87,70.71,454.76
+lightgbm,4,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,91,135.5,190.69,87.02,67.75,67.03,407.05
+lightgbm,8,price,carrot__Colombo,carrot,Colombo,96,155.5,201.85,75.04,77.75,63.54,472.06
+lightgbm,8,price,carrot__Dambulla,carrot,Dambulla,94,165.31,214.32,77.21,82.66,64.89,499.1
+lightgbm,8,price,carrot__Meegoda,carrot,Meegoda,95,167.1,217.93,65.24,83.55,67.37,537.62
+lightgbm,8,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,87,175.12,226.79,78.23,87.56,60.92,514.91
+lightgbm,8,price,leeks__Colombo,leeks,Colombo,96,74.46,93.96,41.65,37.23,84.38,293.47
+lightgbm,8,price,leeks__Dambulla,leeks,Dambulla,94,73.46,93.16,40.65,36.73,87.23,307.67
+lightgbm,8,price,leeks__Meegoda,leeks,Meegoda,95,80.24,98.81,39.19,40.12,88.42,325.68
+lightgbm,8,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,87,73.34,96.61,39.69,36.67,87.36,303.83
+lightgbm,8,price,tomato__Colombo,tomato,Colombo,96,162.64,213.33,89.12,81.32,62.5,419.35
+lightgbm,8,price,tomato__Dambulla,tomato,Dambulla,94,134.39,176.06,105.42,67.2,62.77,368.38
+lightgbm,8,price,tomato__Meegoda,tomato,Meegoda,95,154.12,206.82,77.34,77.06,65.26,433.01
+lightgbm,8,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,87,130.53,175.99,117.95,65.27,66.67,396.0
+lightgbm,12,price,carrot__Colombo,carrot,Colombo,92,165.27,216.56,82.01,82.63,65.22,761.79
+lightgbm,12,price,carrot__Dambulla,carrot,Dambulla,90,170.84,225.11,80.12,85.42,61.11,789.73
+lightgbm,12,price,carrot__Meegoda,carrot,Meegoda,91,179.12,236.13,71.05,89.56,68.13,887.04
+lightgbm,12,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,84,184.42,237.11,85.33,92.21,63.1,818.46
+lightgbm,12,price,leeks__Colombo,leeks,Colombo,92,72.83,94.48,40.91,36.41,90.22,473.58
+lightgbm,12,price,leeks__Dambulla,leeks,Dambulla,90,75.77,96.48,43.08,37.89,90.0,493.77
+lightgbm,12,price,leeks__Meegoda,leeks,Meegoda,91,82.54,104.76,39.69,41.27,95.6,540.04
+lightgbm,12,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,84,71.63,93.93,40.19,35.82,95.24,488.69
+lightgbm,12,price,tomato__Colombo,tomato,Colombo,92,151.66,206.21,86.75,75.83,64.13,635.23
+lightgbm,12,price,tomato__Dambulla,tomato,Dambulla,90,122.31,163.08,94.87,61.15,64.44,541.81
+lightgbm,12,price,tomato__Meegoda,tomato,Meegoda,91,152.27,206.22,76.58,76.14,64.84,655.2
+lightgbm,12,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,84,129.97,192.88,104.46,64.99,65.48,555.76
+sarimax,1,price,carrot__Colombo,carrot,Colombo,102,75.89,131.23,23.08,,,
+sarimax,1,price,carrot__Dambulla,carrot,Dambulla,98,88.06,165.53,24.21,,,
+sarimax,1,price,carrot__Meegoda,carrot,Meegoda,100,81.21,153.91,19.4,,,
+sarimax,1,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,86,86.25,162.38,22.66,,,
+sarimax,1,price,leeks__Colombo,leeks,Colombo,102,38.02,53.07,18.91,,,
+sarimax,1,price,leeks__Dambulla,leeks,Dambulla,98,36.73,57.87,17.09,,,
+sarimax,1,price,leeks__Meegoda,leeks,Meegoda,100,34.26,50.33,14.15,,,
+sarimax,1,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,86,30.14,46.01,13.79,,,
+sarimax,1,price,tomato__Colombo,tomato,Colombo,102,62.78,90.4,25.94,,,
+sarimax,1,price,tomato__Dambulla,tomato,Dambulla,98,69.33,99.92,36.44,,,
+sarimax,1,price,tomato__Meegoda,tomato,Meegoda,100,69.99,99.87,29.47,,,
+sarimax,1,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,86,68.17,100.14,33.68,,,
+sarimax,2,price,carrot__Colombo,carrot,Colombo,101,97.97,157.77,31.76,,,
+sarimax,2,price,carrot__Dambulla,carrot,Dambulla,97,103.56,189.33,31.49,,,
+sarimax,2,price,carrot__Meegoda,carrot,Meegoda,99,119.39,213.98,29.67,,,
+sarimax,2,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,85,120.34,206.68,32.41,,,
+sarimax,2,price,leeks__Colombo,leeks,Colombo,101,50.8,67.17,23.76,,,
+sarimax,2,price,leeks__Dambulla,leeks,Dambulla,97,51.51,73.52,23.79,,,
+sarimax,2,price,leeks__Meegoda,leeks,Meegoda,99,50.36,69.32,20.11,,,
+sarimax,2,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,85,49.3,68.81,21.3,,,
+sarimax,2,price,tomato__Colombo,tomato,Colombo,101,90.71,129.84,37.07,,,
+sarimax,2,price,tomato__Dambulla,tomato,Dambulla,97,88.29,129.11,49.19,,,
+sarimax,2,price,tomato__Meegoda,tomato,Meegoda,99,93.69,130.82,41.16,,,
+sarimax,2,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,85,93.66,137.19,51.73,,,
+sarimax,4,price,carrot__Colombo,carrot,Colombo,99,146.82,225.36,49.37,,,
+sarimax,4,price,carrot__Dambulla,carrot,Dambulla,95,156.52,251.14,50.3,,,
+sarimax,4,price,carrot__Meegoda,carrot,Meegoda,97,165.65,278.31,47.69,,,
+sarimax,4,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,82,157.32,246.85,53.45,,,
+sarimax,4,price,leeks__Colombo,leeks,Colombo,99,69.16,93.95,32.67,,,
+sarimax,4,price,leeks__Dambulla,leeks,Dambulla,95,70.96,99.77,32.52,,,
+sarimax,4,price,leeks__Meegoda,leeks,Meegoda,97,74.04,98.26,30.7,,,
+sarimax,4,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,82,77.34,102.52,34.37,,,
+sarimax,4,price,tomato__Colombo,tomato,Colombo,99,142.07,195.45,66.51,,,
+sarimax,4,price,tomato__Dambulla,tomato,Dambulla,95,132.02,179.71,77.24,,,
+sarimax,4,price,tomato__Meegoda,tomato,Meegoda,97,131.7,174.77,64.06,,,
+sarimax,4,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,82,134.64,189.61,83.07,,,
+sarimax,8,price,carrot__Colombo,carrot,Colombo,95,201.64,278.51,83.67,,,
+sarimax,8,price,carrot__Dambulla,carrot,Dambulla,91,203.44,295.1,85.28,,,
+sarimax,8,price,carrot__Meegoda,carrot,Meegoda,93,225.76,337.96,80.96,,,
+sarimax,8,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,226.79,320.79,93.37,,,
+sarimax,8,price,leeks__Colombo,leeks,Colombo,95,103.2,131.82,54.17,,,
+sarimax,8,price,leeks__Dambulla,leeks,Dambulla,91,101.93,134.14,51.25,,,
+sarimax,8,price,leeks__Meegoda,leeks,Meegoda,93,94.74,124.16,43.69,,,
+sarimax,8,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,108.43,143.34,54.39,,,
+sarimax,8,price,tomato__Colombo,tomato,Colombo,95,201.92,280.28,131.1,,,
+sarimax,8,price,tomato__Dambulla,tomato,Dambulla,91,178.96,243.05,161.29,,,
+sarimax,8,price,tomato__Meegoda,tomato,Meegoda,93,152.2,199.23,88.64,,,
+sarimax,8,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,178.39,249.11,180.66,,,
+sarimax,12,price,carrot__Colombo,carrot,Colombo,91,215.07,307.3,105.62,,,
+sarimax,12,price,carrot__Dambulla,carrot,Dambulla,87,225.18,320.51,108.6,,,
+sarimax,12,price,carrot__Meegoda,carrot,Meegoda,89,240.8,363.25,101.01,,,
+sarimax,12,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,79,237.23,342.59,115.56,,,
+sarimax,12,price,leeks__Colombo,leeks,Colombo,91,114.82,145.35,63.41,,,
+sarimax,12,price,leeks__Dambulla,leeks,Dambulla,87,116.8,149.33,62.91,,,
+sarimax,12,price,leeks__Meegoda,leeks,Meegoda,89,106.84,134.66,51.11,,,
+sarimax,12,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,79,128.99,159.61,70.57,,,
+sarimax,12,price,tomato__Colombo,tomato,Colombo,91,238.68,310.18,169.97,,,
+sarimax,12,price,tomato__Dambulla,tomato,Dambulla,87,196.86,261.28,200.13,,,
+sarimax,12,price,tomato__Meegoda,tomato,Meegoda,89,154.35,197.34,89.82,,,
+sarimax,12,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,79,199.59,269.62,212.09,,,
+xgboost,1,price,carrot__Colombo,carrot,Colombo,103,91.65,148.0,29.95,45.83,74.76,260.54
+xgboost,1,price,carrot__Dambulla,carrot,Dambulla,101,94.82,176.55,28.3,47.41,74.26,268.68
+xgboost,1,price,carrot__Meegoda,carrot,Meegoda,102,108.31,200.67,26.71,54.16,80.39,297.4
+xgboost,1,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,94,104.03,185.16,28.87,52.01,75.53,287.99
+xgboost,1,price,leeks__Colombo,leeks,Colombo,103,44.16,61.84,21.08,22.08,87.38,161.2
+xgboost,1,price,leeks__Dambulla,leeks,Dambulla,101,48.48,68.43,22.49,24.24,83.17,166.22
+xgboost,1,price,leeks__Meegoda,leeks,Meegoda,102,47.07,66.96,18.69,23.53,90.2,181.82
+xgboost,1,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,94,42.53,61.36,19.63,21.26,88.3,166.44
+xgboost,1,price,tomato__Colombo,tomato,Colombo,103,89.0,127.15,38.34,44.5,87.38,315.56
+xgboost,1,price,tomato__Dambulla,tomato,Dambulla,101,85.31,123.57,47.58,42.66,76.24,266.39
+xgboost,1,price,tomato__Meegoda,tomato,Meegoda,102,92.09,133.21,37.63,46.05,84.31,327.0
+xgboost,1,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,94,93.71,138.06,49.61,46.85,71.28,278.71
+xgboost,2,price,carrot__Colombo,carrot,Colombo,102,112.87,189.97,34.38,56.44,72.55,280.9
+xgboost,2,price,carrot__Dambulla,carrot,Dambulla,100,119.44,216.62,33.84,59.72,73.0,291.9
+xgboost,2,price,carrot__Meegoda,carrot,Meegoda,101,130.71,246.33,31.32,65.35,75.25,319.35
+xgboost,2,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,93,129.09,232.23,34.39,64.54,72.04,310.34
+xgboost,2,price,leeks__Colombo,leeks,Colombo,102,47.8,69.17,21.81,23.9,84.31,181.14
+xgboost,2,price,leeks__Dambulla,leeks,Dambulla,100,51.44,74.67,23.42,25.72,86.0,187.71
+xgboost,2,price,leeks__Meegoda,leeks,Meegoda,101,51.05,78.53,19.54,25.53,87.13,201.03
+xgboost,2,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,93,47.41,73.26,20.94,23.7,86.02,187.03
+xgboost,2,price,tomato__Colombo,tomato,Colombo,102,102.44,150.12,40.91,51.22,78.43,335.27
+xgboost,2,price,tomato__Dambulla,tomato,Dambulla,100,95.38,139.08,49.83,47.69,77.0,285.91
+xgboost,2,price,tomato__Meegoda,tomato,Meegoda,101,103.49,152.87,38.07,51.75,78.22,349.34
+xgboost,2,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,93,104.18,153.9,54.56,52.09,70.97,299.64
+xgboost,4,price,carrot__Colombo,carrot,Colombo,100,132.51,199.78,45.63,66.26,67.0,320.47
+xgboost,4,price,carrot__Dambulla,carrot,Dambulla,98,140.15,212.2,46.04,70.07,67.35,338.6
+xgboost,4,price,carrot__Meegoda,carrot,Meegoda,99,152.54,232.3,42.71,76.27,64.65,368.69
+xgboost,4,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,91,150.82,219.47,49.15,75.41,62.64,353.08
+xgboost,4,price,leeks__Colombo,leeks,Colombo,100,62.43,89.95,28.51,31.21,88.0,224.89
+xgboost,4,price,leeks__Dambulla,leeks,Dambulla,98,55.27,84.1,23.97,27.63,91.84,233.16
+xgboost,4,price,leeks__Meegoda,leeks,Meegoda,99,62.92,91.47,24.63,31.46,86.87,247.89
+xgboost,4,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,91,62.66,89.96,27.95,31.33,85.71,231.48
+xgboost,4,price,tomato__Colombo,tomato,Colombo,100,134.74,195.69,56.04,67.37,69.0,364.19
+xgboost,4,price,tomato__Dambulla,tomato,Dambulla,98,123.69,175.81,69.7,61.84,67.35,319.43
+xgboost,4,price,tomato__Meegoda,tomato,Meegoda,99,133.11,194.67,50.09,66.55,71.72,380.95
+xgboost,4,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,91,129.22,186.82,77.17,64.61,68.13,348.04
+xgboost,8,price,carrot__Colombo,carrot,Colombo,96,141.86,185.98,66.85,70.93,63.54,380.47
+xgboost,8,price,carrot__Dambulla,carrot,Dambulla,94,152.29,193.98,68.28,76.14,63.83,398.62
+xgboost,8,price,carrot__Meegoda,carrot,Meegoda,95,156.3,202.73,59.52,78.15,64.21,422.94
+xgboost,8,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,87,159.58,205.68,70.16,79.79,60.92,412.86
+xgboost,8,price,leeks__Colombo,leeks,Colombo,96,71.28,94.03,38.62,35.64,86.46,254.14
+xgboost,8,price,leeks__Dambulla,leeks,Dambulla,94,69.71,93.15,37.23,34.85,86.17,264.98
+xgboost,8,price,leeks__Meegoda,leeks,Meegoda,95,73.79,95.91,33.57,36.9,87.37,272.78
+xgboost,8,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,87,70.23,97.09,35.75,35.12,85.06,263.32
+xgboost,8,price,tomato__Colombo,tomato,Colombo,96,162.68,215.53,86.98,81.34,65.62,380.02
+xgboost,8,price,tomato__Dambulla,tomato,Dambulla,94,135.88,176.88,103.89,67.94,62.77,340.91
+xgboost,8,price,tomato__Meegoda,tomato,Meegoda,95,156.4,210.36,77.2,78.2,66.32,382.63
+xgboost,8,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,87,132.83,181.32,119.25,66.42,65.52,361.47
+xgboost,12,price,carrot__Colombo,carrot,Colombo,92,165.57,213.64,81.46,82.79,51.09,334.2
+xgboost,12,price,carrot__Dambulla,carrot,Dambulla,90,175.0,223.31,83.38,87.5,48.89,349.77
+xgboost,12,price,carrot__Meegoda,carrot,Meegoda,91,177.91,232.88,72.07,88.96,48.35,367.56
+xgboost,12,price,carrot__Nuwara Eliya,carrot,Nuwara Eliya,84,188.32,236.69,89.46,94.16,47.62,354.93
+xgboost,12,price,leeks__Colombo,leeks,Colombo,92,71.83,96.13,39.65,35.91,84.78,252.64
+xgboost,12,price,leeks__Dambulla,leeks,Dambulla,90,76.48,98.43,43.35,38.24,87.78,258.68
+xgboost,12,price,leeks__Meegoda,leeks,Meegoda,91,78.35,102.94,36.74,39.17,85.71,261.64
+xgboost,12,price,leeks__Nuwara Eliya,leeks,Nuwara Eliya,84,78.96,101.61,43.95,39.48,88.1,261.46
+xgboost,12,price,tomato__Colombo,tomato,Colombo,92,135.19,191.93,74.09,67.59,58.7,331.64
+xgboost,12,price,tomato__Dambulla,tomato,Dambulla,90,114.94,157.39,88.25,57.47,64.44,295.69
+xgboost,12,price,tomato__Meegoda,tomato,Meegoda,91,134.61,188.49,64.93,67.31,61.54,336.21
+xgboost,12,price,tomato__Nuwara Eliya,tomato,Nuwara Eliya,84,122.35,181.73,100.56,61.18,60.71,302.18

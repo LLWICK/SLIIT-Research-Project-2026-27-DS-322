@@ -10,12 +10,24 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import yaml
 
 from training.config import HORIZONS, PANEL_PATH, assign_split
-from data_pipeline.build.cultivation_progress import attach_progress, find_monthly_table, load_monthly
-from data_pipeline.build.macros import MACRO_COLUMNS, find_macro_table
+from data_pipeline.build.cultivation_features import (
+    SOURCE_LAGGED_SEASONAL_EXTENT,
+    SOURCE_NONE,
+    SOURCE_OBSERVED_MONTHLY,
+    ObservedMonthlyProvider,
+    SyntheticCalendarProvider,
+    render_modes_audit,
+    validate_cultivation_outputs,
+)
+from data_pipeline.build.cultivation_progress import assert_formula, attach_progress, find_monthly_table, load_monthly
+from data_pipeline.build.join_weather import ORIGIN_WEIGHT_METHOD
+from data_pipeline.build.macros import MACRO_COLUMNS, asof_macros, write_macro_note
+from data_pipeline.build.supply_lags import assert_lagged_extent_examples, attach_finished_extent_features
 from data_pipeline.config import processed_dir
 from training.build_feature_frame import week_within_season
 
@@ -47,6 +59,8 @@ def _weather_block(group: pd.DataFrame) -> pd.DataFrame:
     out = group.copy()
     rain = pd.to_numeric(group.get("weather_precip_mm"), errors="coerce")
     temp = pd.to_numeric(group.get("weather_tmean_c"), errors="coerce")
+    # Preceding complete weeks only. Missing rain stays missing; it is not filled with 0.
+    out["origin_rainfall_1w_mm"] = rain.shift(1)
     out["origin_rainfall_sum_4w_mm"] = rain.shift(1).rolling(4, min_periods=3).sum()
     out["origin_rainfall_sum_8w_mm"] = rain.shift(1).rolling(8, min_periods=6).sum()
     out["origin_mean_temp_4w_c"] = temp.shift(1).rolling(4, min_periods=3).mean()
@@ -116,11 +130,15 @@ def _origin_mapping(origin_map: dict) -> pd.DataFrame:
                         "market_id": _market_id(market),
                         "origin_district": district,
                         "weight": pd.NA,
+                        "supply_weight": pd.NA,
+                        "origin_weight_method": ORIGIN_WEIGHT_METHOD,
                         "effective_from": "2016-01-04",
                         "mapping_source": spec.get("note") or "",
                         "assumption": bool(spec.get("assumption", True)),
                         "aggregation_rule": (
-                            "No measured trade share. Weather on the panel is the extent-weighted mean of mapped origin points. "
+                            "No measured trade share. supply_weight is null. "
+                            "Weather is the extent-weighted mean of origin_map weather points, using lagged finished-season extent "
+                            "and splitting a district across its weather points. If that extent is missing, the join uses equal weights. "
                             "Cultivation hectares, when a monthly file exists, are summed across these districts before dividing."
                         ),
                     }
@@ -129,43 +147,83 @@ def _origin_mapping(origin_map: dict) -> pd.DataFrame:
 
 
 def _attach_economics(frame: pd.DataFrame) -> tuple[pd.DataFrame, str]:
-    found = find_macro_table()
-    frame["diesel_price_lkr_litre"] = pd.NA
-    frame["usd_lkr_rate"] = pd.NA
-    frame["inflation_rate_pct"] = pd.NA
-    if found is None:
-        return frame, "not_found"
-    series = pd.read_csv(found) if found.suffix.lower() == ".csv" else pd.read_excel(found)
-    series.columns = [str(column).strip().lower().replace(" ", "_") for column in series.columns]
-    if "available_date" not in series.columns:
-        return frame, "rejected_no_available_date"
-    series["available_date"] = pd.to_datetime(series["available_date"])
-    keep = ["available_date", *[name for name in MACRO_COLUMNS if name in series.columns]]
-    series = series[keep].sort_values("available_date")
-    left = frame.sort_values("forecast_date")
-    merged = pd.merge_asof(left, series, left_on="forecast_date", right_on="available_date", direction="backward")
+    merged, meta = asof_macros(frame, "forecast_date")
+    write_macro_note(meta)
     rename = {
         "diesel_lkr_per_litre": "diesel_price_lkr_litre",
         "usd_lkr": "usd_lkr_rate",
         "inflation_yoy": "inflation_rate_pct",
     }
     for source, target in rename.items():
-        if source in merged.columns:
-            merged[target] = merged[source]
-    return merged.drop(columns=["available_date"], errors="ignore"), f"joined:{found.name}"
+        merged[target] = merged[source] if source in merged.columns else pd.NA
+    merged = merged.drop(columns=[name for name in MACRO_COLUMNS if name in merged.columns])
+    if meta["status"] != "joined":
+        return merged, "not_found"
+    if len(meta["columns"]) < len(MACRO_COLUMNS):
+        return merged, "incomplete:" + ",".join(meta["columns"])
+    return merged, f"joined:{Path(meta['path']).name}"
 
 
-def build(panel: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+def _assert_forecast_identity(table: pd.DataFrame) -> None:
+    """target_week is the label week, horizon weeks after the issue Monday."""
+    issue = pd.to_datetime(table["forecast_issue_week"])
+    target = pd.to_datetime(table["target_week"])
+    horizon = pd.to_numeric(table["forecast_horizon_weeks"], errors="coerce")
+    if not bool(issue.eq(pd.to_datetime(table["forecast_date"])).all()):
+        raise AssertionError("forecast_issue_week is not the forecast Monday")
+    if not bool(issue.dt.dayofweek.eq(0).all()) or not bool(target.dt.dayofweek.eq(0).all()):
+        raise AssertionError("forecast weeks are not Mondays")
+    if not bool(horizon.eq(pd.to_numeric(table["horizon_weeks"])).all()):
+        raise AssertionError("forecast_horizon_weeks does not match horizon_weeks")
+    if not bool((target - issue).dt.days.eq(horizon * 7).all()):
+        raise AssertionError("target_week is not horizon weeks after the issue Monday")
+
+
+def assert_trailing_rainfall(table: pd.DataFrame, panel: pd.DataFrame) -> None:
+    """The one-week rainfall feature is the previous complete week, with gaps left missing."""
+    ordered = panel.sort_values(["crop", "market", "week_start"]).copy()
+    rain = pd.to_numeric(ordered["weather_precip_mm"], errors="coerce")
+    ordered["expected_1w"] = rain.groupby([ordered["crop"], ordered["market"]], sort=False).shift(1)
+    ordered["crop_id"] = ordered["crop"].astype(str).str.lower()
+    ordered["market_id"] = ordered["market"].map(_market_id)
+    ordered["forecast_date"] = pd.to_datetime(ordered["week_start"])
+    left = table.drop_duplicates(["crop_id", "market_id", "forecast_date"])[
+        ["crop_id", "market_id", "forecast_date", "origin_rainfall_1w_mm"]
+    ]
+    merged = left.merge(
+        ordered[["crop_id", "market_id", "forecast_date", "expected_1w"]],
+        on=["crop_id", "market_id", "forecast_date"],
+        how="left",
+    )
+    if len(merged) != len(left):
+        raise AssertionError("rainfall check duplicated forecast weeks")
+    actual = pd.to_numeric(merged["origin_rainfall_1w_mm"], errors="coerce")
+    expected = pd.to_numeric(merged["expected_1w"], errors="coerce")
+    both_missing = actual.isna() & expected.isna()
+    close = (actual - expected).abs().lt(1e-6)
+    if not bool((both_missing | close).all()):
+        raise AssertionError("origin_rainfall_1w_mm is not the previous complete week")
+    if bool((expected.isna() & actual.notna()).any()):
+        raise AssertionError("missing rainfall was filled")
+
+
+def build(panel: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame, dict, pd.DataFrame, pd.DataFrame]:
     panel = panel.copy() if panel is not None else pd.read_parquet(PANEL_PATH)
     origin_map = yaml.safe_load(MAP_PATH.read_text(encoding="utf-8"))
     monthly_path = find_monthly_table()
     monthly = load_monthly(monthly_path) if monthly_path is not None else None
     panel = attach_progress(panel, monthly, origin_map)
+    seasonal = pd.read_csv(processed_dir() / "dcs_highland_seasonal.csv")
+    panel = attach_finished_extent_features(panel, seasonal, origin_map)
+    observed = ObservedMonthlyProvider(monthly, panel).build()
+    synthetic = SyntheticCalendarProvider(seasonal, origin_map).build()
     weekly = _weekly(panel)
     table = _explode(weekly)
     table["crop_id"] = table["crop"].astype(str).str.lower()
     table["market_id"] = table["market"].map(_market_id)
     table["forecast_date"] = pd.to_datetime(table["week_start"])
+    table["forecast_issue_week"] = table["forecast_date"]
+    table["forecast_horizon_weeks"] = table["horizon_weeks"].astype(int)
     table["price_type"] = "wholesale"
     table["price_unit"] = "LKR/kg"
     table["source_name"] = "HARTI"
@@ -205,18 +263,37 @@ def build(panel: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame
             table["cultivation_available_at"].ne(changed)
         )
     table["cultivation_missing_flag"] = table["cultivation_progress_ratio"].isna()
+    lagged_extent = (
+        table["previous_season_extent"].notna()
+        | table["same_season_previous_year_extent"].notna()
+        | table["historical_mean_season_extent"].notna()
+        | table["extent_change_vs_previous_season"].notna()
+    )
+    if monthly is None:
+        table["cultivation_source"] = np.where(lagged_extent, SOURCE_LAGGED_SEASONAL_EXTENT, SOURCE_NONE)
+    else:
+        table["cultivation_source"] = np.where(
+            table["cultivation_progress_ratio"].notna(),
+            SOURCE_OBSERVED_MONTHLY,
+            np.where(lagged_extent, SOURCE_LAGGED_SEASONAL_EXTENT, SOURCE_NONE),
+        )
+    table["cultivation_is_synthetic"] = False
+    table["cultivation_scenario"] = pd.Series(pd.NA, index=table.index, dtype="object")
     table, macro_status = _attach_economics(table)
     table["diesel_missing_flag"] = table["diesel_price_lkr_litre"].isna()
     table["usd_missing_flag"] = table["usd_lkr_rate"].isna()
     table["inflation_missing_flag"] = table["inflation_rate_pct"].isna()
-    splits = assign_split(table["forecast_date"])
+    splits = assign_split(table["forecast_issue_week"])
     table["split"] = splits["split"]
     table["is_shock"] = splits["is_shock"]
+    _assert_forecast_identity(table)
     columns = [
         "crop_id",
         "market_id",
         "forecast_date",
+        "forecast_issue_week",
         "horizon_weeks",
+        "forecast_horizon_weeks",
         "target_week",
         "target_price_lkr_kg",
         "target_is_observed",
@@ -234,6 +311,7 @@ def build(panel: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame
         "season_transition",
         "forecast_week_of_year",
         "week_within_season",
+        "origin_rainfall_1w_mm",
         "origin_rainfall_sum_4w_mm",
         "origin_rainfall_sum_8w_mm",
         "origin_mean_temp_4w_c",
@@ -244,6 +322,14 @@ def build(panel: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame
         "origin_target_hectares",
         "origin_achieved_hectares",
         "cultivation_progress_ratio",
+        "cultivation_target_exceeded",
+        "previous_season_extent",
+        "same_season_previous_year_extent",
+        "historical_mean_season_extent",
+        "extent_change_vs_previous_season",
+        "cultivation_source",
+        "cultivation_is_synthetic",
+        "cultivation_scenario",
         "achieved_hectares_change",
         "cultivation_report_age_days",
         "cultivation_report_month",
@@ -266,37 +352,53 @@ def build(panel: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame
         "is_shock",
     ]
     table = table[columns].sort_values(["crop_id", "market_id", "forecast_date", "horizon_weeks"]).reset_index(drop=True)
+    assert_trailing_rainfall(table, panel)
     mapping = _origin_mapping(origin_map)
     status = {
         "rows": int(len(table)),
         "horizons": list(HORIZONS),
         "cultivation": "joined" if monthly is not None else "missing_no_district_monthly_file",
+        "observed_monthly_file": None if monthly_path is None else str(monthly_path),
+        "observed_rows": int(len(observed)),
+        "synthetic_rows": int(len(synthetic)),
+        "origin_weight_method": ORIGIN_WEIGHT_METHOD,
         "macros": macro_status,
         "target_observed_share": round(float(table["target_is_observed"].mean()), 3),
         "weather_missing_share": round(float(table["weather_missing_flag"].mean()), 3),
     }
-    return table, mapping, status
+    return table, mapping, status, observed, synthetic
 
 
 def _write_dictionary(table: pd.DataFrame, status: dict, path: Path) -> None:
     labels = {
         "crop_id": "A identity. Not a future value.",
         "market_id": "A identity. Wholesale market, not the growing district.",
-        "forecast_date": "Monday on which inputs are frozen.",
-        "horizon_weeks": "How many weeks ahead the label sits. Includes 4, 8, and 12.",
-        "target_week": "Future week. Known as a calendar date. Not a price.",
+        "forecast_date": "Monday on which inputs are frozen. Same value as forecast_issue_week.",
+        "forecast_issue_week": "Monday the forecast is issued. Every time-varying input is known on or before this Monday.",
+        "horizon_weeks": "How many weeks ahead the label sits. Same value as forecast_horizon_weeks.",
+        "forecast_horizon_weeks": "Weeks from forecast_issue_week to target_week. The label is the price at target_week.",
+        "target_week": "Future Monday. Known as a calendar date. The label is the price of this week, not an input.",
         "target_price_lkr_kg": "Label only. Blank when that future week was not published.",
         "last_observed_price_lkr_kg": "Latest published price strictly before forecast_date.",
         "price_lag_1w": "Published price one week before forecast_date. Blank if that week was not published.",
         "price_change_4w_pct": "Change from price_lag_4w to price_lag_1w. Both must be published.",
-        "origin_rainfall_sum_4w_mm": "Origin-district rain over the four complete weeks before forecast_date.",
+        "origin_rainfall_1w_mm": "Origin-district rain in the one complete week before forecast_date. Missing rain is left missing.",
+        "origin_rainfall_sum_4w_mm": "Origin-district rain over the four complete weeks before forecast_date. The sum starts after shift(1).",
         "origin_rainfall_anomaly_4w_mm": "That four-week sum minus the median of earlier years at the same week. Blank until three earlier years exist.",
         "diesel_price_lkr_litre": "Empty until a dated diesel series is on disk. Not invented.",
         "usd_lkr_rate": "Empty until a dated exchange-rate series is on disk.",
         "inflation_rate_pct": "Empty until a dated published inflation series is on disk.",
-        "origin_target_hectares": "Empty until district-month target hectares exist.",
-        "origin_achieved_hectares": "Empty until district-month achieved hectares exist.",
-        "cultivation_progress_ratio": "Sum of achieved divided by sum of target. Empty when either is missing.",
+        "origin_target_hectares": "Empty until district-month target hectares exist. Not copied from seasonal extent.",
+        "origin_achieved_hectares": "Empty until district-month achieved hectares exist. Not copied from seasonal extent.",
+        "cultivation_progress_ratio": "Sum of achieved divided by sum of target, not clipped at 1. Empty when the monthly file is absent. Not the synthetic logistic.",
+        "cultivation_target_exceeded": "True only when the raw achieved/target ratio is above 1. Empty when progress is empty.",
+        "previous_season_extent": "Supply-district extent of the last Yala or Maha that has already finished. Not the current season.",
+        "same_season_previous_year_extent": "Extent of the same season one year earlier, included only after that season has finished.",
+        "historical_mean_season_extent": "Mean of finished Yala and Maha supply extents before forecast_date. The unfinished season is excluded.",
+        "extent_change_vs_previous_season": "previous_season_extent minus the finished season immediately before it, in hectares.",
+        "cultivation_source": "observed_monthly, lagged_seasonal_extent, or none. synthetic_calendar is not used on this table.",
+        "cultivation_is_synthetic": "False on this table. Synthetic rows are only in cultivation_synthetic.parquet.",
+        "cultivation_scenario": "Null on this table. early, typical, and late exist only on the synthetic file.",
         "cultivation_report_age_days": "forecast_date minus the report availability date.",
         "price_available_at": "Day before forecast_date. The current week's average is not treated as known on Monday.",
         "target_is_observed": "Score only rows where this is true.",
@@ -311,7 +413,9 @@ def _write_dictionary(table: pd.DataFrame, status: dict, path: Path) -> None:
         f"Share of rows missing the 4-week origin rainfall sum: {status['weather_missing_share']}.",
         "",
         "The future price is `target_price_lkr_kg`. It is not an input.",
-        "Seasonal Census extent is not copied into the cultivation columns.",
+        "Seasonal Census extent is not copied into `cultivation_progress_ratio`.",
+        "Lagged extent columns use only seasons that have already finished.",
+        "Synthetic calendar progress is not on this table. It is in `cultivation_synthetic.parquet` and is not evidence about observed cultivation progress.",
         "",
         "| Column | Non-null share | Role |",
         "| --- | ---: | --- |",
@@ -323,18 +427,50 @@ def _write_dictionary(table: pd.DataFrame, status: dict, path: Path) -> None:
 
 
 def main() -> None:
-    table, mapping, status = build()
+    assert_formula()
+    assert_lagged_extent_examples()
+    table, mapping, status, observed, synthetic = build()
+    seasonal = pd.read_csv(processed_dir() / "dcs_highland_seasonal.csv")
+    origin_map = yaml.safe_load(MAP_PATH.read_text(encoding="utf-8"))
+    summary = validate_cultivation_outputs(
+        table,
+        synthetic,
+        observed,
+        mapping,
+        seasonal,
+        origin_map,
+        monthly_found=status["observed_monthly_file"] is not None,
+    )
     out = processed_dir() / "latest"
     out.mkdir(parents=True, exist_ok=True)
     table_path = out / "training_table.parquet"
     map_path = out / "supply_origin_mapping.csv"
+    observed_path = out / "cultivation_observed.parquet"
+    synthetic_path = out / "cultivation_synthetic.parquet"
     table.to_parquet(table_path, index=False)
     mapping.to_csv(map_path, index=False)
+    observed.to_parquet(observed_path, index=False)
+    synthetic.to_parquet(synthetic_path, index=False)
     docs = Path(__file__).resolve().parents[3] / "docs" / "Training-Table-Columns-IT23415836.md"
+    audit = Path(__file__).resolve().parents[3] / "docs" / "Cultivation-Modes-IT23415836.md"
     _write_dictionary(table, status, docs)
+    audit.write_text(render_modes_audit(summary), encoding="utf-8")
     print(f"wrote {table_path} rows={status['rows']} cultivation={status['cultivation']} macros={status['macros']}")
-    print(f"wrote {map_path} rows={len(mapping)}")
+    print(f"wrote {map_path} rows={len(mapping)} origin_weight_method={status['origin_weight_method']}")
+    print(f"wrote {observed_path} rows={status['observed_rows']} monthly_file={status['observed_monthly_file']}")
+    print(f"wrote {synthetic_path} rows={status['synthetic_rows']}")
     print(f"wrote {docs}")
+    print(f"wrote {audit}")
+    print(
+        "coverage "
+        f"progress_nonnull={summary['progress_nonnull']} "
+        f"previous_season_extent={summary['previous_season_extent_nonnull_share']} "
+        f"same_season_previous_year={summary['same_season_previous_year_extent_nonnull_share']} "
+        f"historical_mean={summary['historical_mean_season_extent_nonnull_share']} "
+        f"extent_change={summary['extent_change_vs_previous_season_nonnull_share']} "
+        f"rainfall_1w={summary['origin_rainfall_1w_mm_nonnull_share']} "
+        f"empty_lagged_series={summary['series_with_no_lagged_extent']}"
+    )
 
 
 if __name__ == "__main__":

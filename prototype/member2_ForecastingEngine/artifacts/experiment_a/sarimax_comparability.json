@@ -1,0 +1,98 @@
+{
+  "test_period": "2024-2025",
+  "key": [
+    "crop",
+    "market",
+    "forecast_issue_week",
+    "horizon"
+  ],
+  "observed_price_mask": "rows already scored in artifacts/experiment_a/predictions.csv",
+  "counts": {
+    "lightgbm": 5739,
+    "xgboost": 5739,
+    "sarimax": 5535
+  },
+  "lightgbm_equals_xgboost": true,
+  "exact_match_before_gap_fill": false,
+  "reused_test_rows": 5535,
+  "missing_test_rows": 204,
+  "extra_sarimax_test_rows": 0,
+  "by_horizon": [
+    {
+      "horizon": 1,
+      "lightgbm_rows": 1200,
+      "xgboost_rows": 1200,
+      "sarimax_rows": 1158,
+      "lightgbm_equals_xgboost": true,
+      "sarimax_missing_from_trees": 42,
+      "sarimax_extra": 0,
+      "overlap": 1158
+    },
+    {
+      "horizon": 2,
+      "lightgbm_rows": 1188,
+      "xgboost_rows": 1188,
+      "sarimax_rows": 1146,
+      "lightgbm_equals_xgboost": true,
+      "sarimax_missing_from_trees": 42,
+      "sarimax_extra": 0,
+      "overlap": 1146
+    },
+    {
+      "horizon": 4,
+      "lightgbm_rows": 1164,
+      "xgboost_rows": 1164,
+      "sarimax_rows": 1119,
+      "lightgbm_equals_xgboost": true,
+      "sarimax_missing_from_trees": 45,
+      "sarimax_extra": 0,
+      "overlap": 1119
+    },
+    {
+      "horizon": 8,
+      "lightgbm_rows": 1116,
+      "xgboost_rows": 1116,
+      "sarimax_rows": 1074,
+      "lightgbm_equals_xgboost": true,
+      "sarimax_missing_from_trees": 42,
+      "sarimax_extra": 0,
+      "overlap": 1074
+    },
+    {
+      "horizon": 12,
+      "lightgbm_rows": 1071,
+      "xgboost_rows": 1071,
+      "sarimax_rows": 1038,
+      "lightgbm_equals_xgboost": true,
+      "sarimax_missing_from_trees": 33,
+      "sarimax_extra": 0,
+      "overlap": 1038
+    }
+  ],
+  "exact_match": false,
+  "reuse_acceptable_without_refit": false,
+  "decision": "Cached SARIMAX keys are a subset of the LightGBM and XGBoost keys. Matching rows were reused from artifacts/latest. Missing issue weeks were refit with the saved order; artifacts/latest was not rewritten.",
+  "gap_fill": {
+    "order": [
+      1,
+      1,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      52
+    ],
+    "verification_rows": 144,
+    "max_abs_error_vs_cached": 0.0,
+    "rows_written": 246,
+    "test_rows_written": 204,
+    "calibrate_rows_written": 42,
+    "path": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\prototype\\member2_ForecastingEngine\\artifacts\\experiment_a\\sarimax_gap_predictions.csv",
+    "reason": "SARIMAX skipped issue weeks whose feature-frame price was not observed. The trees still score those Mondays when an earlier price and the target price were observed."
+  },
+  "exact_match_after_gap_fill": true,
+  "predictions_csv_unchanged": true,
+  "latest_unchanged": true
+}
