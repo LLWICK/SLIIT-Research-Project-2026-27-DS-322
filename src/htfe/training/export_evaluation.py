@@ -241,7 +241,30 @@ def _refresh_screens() -> None:
         elif "picp_cqr" in item and not pd.isna(item["picp_cqr"]):
             row["picp"] = round(float(item["picp_cqr"]), 2)
             row["interval_width"] = round(float(item["interval_width_cqr"]), 2)
+    _refresh_naive(comparison, test)
     (STUDIO_DATA / "comparison.json").write_text(json.dumps(comparison, indent=2), encoding="utf-8")
+
+
+def _refresh_naive(comparison: list[dict], lightgbm_test: pd.DataFrame) -> None:
+    """Replace the old pooled naive rows with this run's 4-week test rows."""
+    from htfe.config import built_file
+    from htfe.training.baselines import score_same_rows
+
+    table_path = built_file("training_table.parquet")
+    if not table_path.is_file():
+        return
+    scored = score_same_rows(lightgbm_test, pd.read_parquet(table_path))
+    for row in comparison:
+        block = scored.get(row.get("id"))
+        if block is None:
+            continue
+        row["n_scored"] = block["n_scored"]
+        row["mae"] = block["mae"]
+        row["rmse"] = block["rmse"]
+        row["mape"] = block["mape"]
+        row["pinball"] = None
+        row["picp"] = None
+        row["interval_width"] = None
 
 
 if __name__ == "__main__":

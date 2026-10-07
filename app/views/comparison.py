@@ -22,39 +22,55 @@ def render(data: dict[str, Any]) -> None:
         "Calibrated interval coverage is still below the nominal 90%.",
     )
 
+    last = next(row for row in comparison if row["id"] == "naive_last")
+    seasonal = next(row for row in comparison if row["id"] == "seasonal_naive_52")
     with st.container(border=True):
-        section_title("4-week test", "Experiment B. Naive rows are an earlier pooled run and are not the same row set.")
+        section_title(
+            "4-week test",
+            f"Last-value uses the same {last['n_scored']:,} rows as Experiment B LightGBM. "
+            f"Seasonal naive uses {seasonal['n_scored']:,} of those rows, the ones with a published price 52 weeks before the target. "
+            "LSTM was not run.",
+        )
         table = pd.DataFrame(
             [
                 {
                     "Model": row["model"],
+                    "Rows": row["n_scored"],
                     "MAE": row["mae"],
                     "RMSE": row["rmse"],
                     "MAPE %": row["mape"],
                     "Pinball": row["pinball"],
                     "PICP %": row["picp"],
                     "Width": row["interval_width"],
-                    "Backend": row["backend"],
                 }
                 for row in comparison
             ]
         )
         st.dataframe(table, width="stretch", hide_index=True)
 
+    scored = [row for row in comparison if row.get("mae") is not None]
     mae_col, picp_col = st.columns(2)
-    ids = [row["id"] for row in comparison]
+    ids = [row["id"] for row in scored]
     with mae_col:
         with st.container(border=True):
-            section_title("Point accuracy", "MAE (LKR/kg)")
-            fig = go.Figure(go.Bar(x=ids, y=[row["mae"] or 0 for row in comparison], marker_color=HARVEST, name="MAE"))
+            section_title("Point accuracy", "MAE (LKR/kg). Unscored models are omitted.")
+            fig = go.Figure(go.Bar(x=ids, y=[row["mae"] for row in scored], marker_color=HARVEST, name="MAE"))
             fig.update_layout(showlegend=False, yaxis_title="Rs. / kg")
             show_chart(fig, 300)
+    intervals = [row for row in scored if row.get("picp") is not None]
     with picp_col:
         with st.container(border=True):
-            section_title("Uncertainty quality", "PICP vs interval width")
+            section_title("Uncertainty quality", "PICP vs interval width. Naive forecasts have no interval.")
             fig2 = go.Figure()
-            fig2.add_trace(go.Bar(x=ids, y=[row["picp"] or 0 for row in comparison], marker_color=SKY, name="PICP"))
-            fig2.add_trace(go.Bar(x=ids, y=[row["interval_width"] or 0 for row in comparison], marker_color=AMBER, name="Width"))
+            fig2.add_trace(go.Bar(x=[row["id"] for row in intervals], y=[row["picp"] for row in intervals], marker_color=SKY, name="PICP"))
+            fig2.add_trace(
+                go.Bar(
+                    x=[row["id"] for row in intervals],
+                    y=[row["interval_width"] for row in intervals],
+                    marker_color=AMBER,
+                    name="Width",
+                )
+            )
             fig2.update_layout(barmode="group")
             show_chart(fig2, 300)
 
