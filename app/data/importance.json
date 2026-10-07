@@ -1,0 +1,62 @@
+[
+  {
+    "feature": "price_lag_1w",
+    "importance": 1.0,
+    "std": 0.0
+  },
+  {
+    "feature": "week_within_season",
+    "importance": 0.597,
+    "std": 0.0
+  },
+  {
+    "feature": "price_mean_4w",
+    "importance": 0.535,
+    "std": 0.0
+  },
+  {
+    "feature": "diesel_price_lkr_litre",
+    "importance": 0.34,
+    "std": 0.0
+  },
+  {
+    "feature": "origin_rainfall_sum_4w_mm",
+    "importance": 0.309,
+    "std": 0.0
+  },
+  {
+    "feature": "usd_lkr_rate",
+    "importance": 0.263,
+    "std": 0.0
+  },
+  {
+    "feature": "inflation_rate_pct",
+    "importance": 0.252,
+    "std": 0.0
+  },
+  {
+    "feature": "origin_rainfall_anomaly_4w_mm",
+    "importance": 0.236,
+    "std": 0.0
+  },
+  {
+    "feature": "crop_id",
+    "importance": 0.162,
+    "std": 0.0
+  },
+  {
+    "feature": "price_lag_2w",
+    "importance": 0.157,
+    "std": 0.0
+  },
+  {
+    "feature": "price_change_4w_pct",
+    "importance": 0.151,
+    "std": 0.0
+  },
+  {
+    "feature": "origin_rainfall_sum_8w_mm",
+    "importance": 0.113,
+    "std": 0.0
+  }
+]

@@ -1,0 +1,130 @@
+{
+  "by_series": [
+    {
+      "crop": "carrot",
+      "market": "colombo",
+      "rows": 522,
+      "observed": 483,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 92.5
+    },
+    {
+      "crop": "carrot",
+      "market": "dambulla",
+      "rows": 522,
+      "observed": 489,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 93.7
+    },
+    {
+      "crop": "carrot",
+      "market": "meegoda",
+      "rows": 522,
+      "observed": 476,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 91.2
+    },
+    {
+      "crop": "carrot",
+      "market": "nuwara_eliya",
+      "rows": 522,
+      "observed": 473,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 90.6
+    },
+    {
+      "crop": "leeks",
+      "market": "colombo",
+      "rows": 522,
+      "observed": 483,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 92.5
+    },
+    {
+      "crop": "leeks",
+      "market": "dambulla",
+      "rows": 522,
+      "observed": 489,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 93.7
+    },
+    {
+      "crop": "leeks",
+      "market": "meegoda",
+      "rows": 522,
+      "observed": 476,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 91.2
+    },
+    {
+      "crop": "leeks",
+      "market": "nuwara_eliya",
+      "rows": 522,
+      "observed": 473,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 90.6
+    },
+    {
+      "crop": "tomato",
+      "market": "colombo",
+      "rows": 522,
+      "observed": 483,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 92.5
+    },
+    {
+      "crop": "tomato",
+      "market": "dambulla",
+      "rows": 522,
+      "observed": 489,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 93.7
+    },
+    {
+      "crop": "tomato",
+      "market": "meegoda",
+      "rows": 522,
+      "observed": 476,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 91.2
+    },
+    {
+      "crop": "tomato",
+      "market": "nuwara_eliya",
+      "rows": 522,
+      "observed": 471,
+      "start": "2016-01-04",
+      "end": "2025-12-29",
+      "coverage_pct": 90.2
+    }
+  ],
+  "exclusions": [
+    {
+      "item": "Unobserved weeks",
+      "reason": "Gaps stay blank. Long gaps are not interpolated, and every metric uses observed prices only."
+    },
+    {
+      "item": "Retail series",
+      "reason": "The scored panel is wholesale weekly prices."
+    },
+    {
+      "item": "Potato, red onion, local big onion",
+      "reason": "Not in the HARTI workbook, or too incomplete to model."
+    },
+    {
+      "item": "Live commitments",
+      "reason": "No district-month target and achieved file is on disk. Experiment C was not trained. Lagged finished-season extent is a historical feature in Experiment B, not current cultivation progress."
+    }
+  ]
+}

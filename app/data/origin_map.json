@@ -1,0 +1,57 @@
+{
+  "carrot": {
+    "nuwara_eliya": [
+      "nuwara_eliya"
+    ],
+    "dambulla": [
+      "nuwara_eliya",
+      "badulla"
+    ],
+    "colombo": [
+      "nuwara_eliya",
+      "badulla"
+    ],
+    "meegoda": [
+      "nuwara_eliya",
+      "badulla"
+    ]
+  },
+  "leeks": {
+    "nuwara_eliya": [
+      "nuwara_eliya"
+    ],
+    "dambulla": [
+      "nuwara_eliya",
+      "badulla"
+    ],
+    "colombo": [
+      "nuwara_eliya",
+      "badulla"
+    ],
+    "meegoda": [
+      "nuwara_eliya",
+      "badulla"
+    ]
+  },
+  "tomato": {
+    "nuwara_eliya": [
+      "nuwara_eliya",
+      "matale"
+    ],
+    "dambulla": [
+      "matale",
+      "nuwara_eliya",
+      "badulla"
+    ],
+    "colombo": [
+      "matale",
+      "badulla",
+      "nuwara_eliya"
+    ],
+    "meegoda": [
+      "matale",
+      "badulla",
+      "nuwara_eliya"
+    ]
+  }
+}
