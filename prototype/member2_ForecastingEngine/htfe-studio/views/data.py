@@ -79,9 +79,12 @@ def render(data: dict[str, Any]) -> None:
                         name="Season pairs",
                     )
                 )
-            scatter.update_layout(xaxis_title="Intensity (season t)", yaxis_title="Price next season")
+            scatter.update_layout(xaxis_title="Seasonal extent ratio", yaxis_title="Price next season")
             show_chart(scatter, 320)
-            st.caption("Planting pressure this season against the next season’s market price.")
+            st.caption(
+                "Each point is a finished season’s extent ratio against the next season’s average price. "
+                "This is not current achieved hectares divided by target hectares."
+            )
 
     with rules:
         with st.container(border=True):

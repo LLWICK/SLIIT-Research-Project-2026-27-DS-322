@@ -48,8 +48,8 @@ def render(data: dict[str, Any]) -> None:
     else:
         k1.metric("Frozen demo panel", f"{meta['n_panel']:,}")
         k2.metric("Scored test weeks", f"{meta['n_scored_test']:,}")
-        k3.metric("Confidence target", "90%")
-        k4.metric("Commitment source", title_case(str(meta.get("commitment_source", "simulated"))))
+        k3.metric("Coverage target", "90%", "4-week test is 81.79%")
+        k4.metric("District-month file", "Not on disk", "Experiment C was not trained")
         st.markdown(
             '<div class="warn-alert"><b>⚠️ Live extract not on this path</b><br>'
             "Charts still use the frozen scored panel so metrics stay reproducible. "

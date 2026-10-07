@@ -41,8 +41,12 @@ def render(data: dict[str, Any]) -> None:
             }
         )
     with st.container(border=True):
-        section_title("Ablation", "A historical · B weather and macros · C plus cultivation progress")
+        section_title("Ablation", "A historical · B weather, macros, and lagged extent · C not trained")
         st.dataframe(pd.DataFrame(arms), width="stretch", hide_index=True)
+        st.caption(
+            "The PICP in this table is the raw 5–95% interval. "
+            "After the 2023 adjustment, Experiment B LightGBM covers 81.79% of the 4-week test prices. That is below 90%."
+        )
         by_horizon = ablation.get("by_horizon") if isinstance(ablation, dict) else None
         if by_horizon:
             st.caption("Pooled test weeks. Horizon-level figures are in the run folder.")
@@ -51,8 +55,10 @@ def render(data: dict[str, Any]) -> None:
         section_title("Monthly re-forecast", "Update cultivation progress, do not retrain")
         if not weeks:
             st.warning(
-                "No re-forecast rows. The model was not given a monthly achieved/target series, "
-                "so a later cultivation report cannot be passed in. Week 2 / 5 / 8 / 12 is not this experiment."
+                "Experiment C was not trained. There is no district-month file of target and achieved hectares, "
+                "so these rows are empty and week 2 / 5 / 8 / 12 is not this experiment. "
+                "The dashboard writes a new achieved/target record into a separate runtime model and scores it again. "
+                "That is the update mechanism. It is not an accuracy result."
             )
         else:
             st.dataframe(pd.DataFrame(weeks), width="stretch", hide_index=True)

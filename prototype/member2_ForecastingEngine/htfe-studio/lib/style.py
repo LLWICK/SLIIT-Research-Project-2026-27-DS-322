@@ -367,7 +367,7 @@ def range_bar(low: float, mid: float, high: float) -> None:
     st.markdown(
         f'<div class="range-track"><div class="range-fill"></div>'
         f'<div class="range-mark" style="left:{pos:.1f}%"></div></div>'
-        f'<p class="mist">90% likely range · expected sits inside the band</p>',
+        f'<p class="mist">Nominal 90% band. The Experiment B 4-week test covers 81.79% of prices, which is below that target.</p>',
         unsafe_allow_html=True,
     )
 

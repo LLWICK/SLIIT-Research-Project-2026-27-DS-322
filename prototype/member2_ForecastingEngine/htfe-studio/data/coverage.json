@@ -124,7 +124,7 @@
     },
     {
       "item": "Live commitments",
-      "reason": "Cultivation intensity is a lagged Census extent proxy, not a HARTI registration feed."
+      "reason": "No district-month target and achieved file is on disk. Experiment C was not trained. Lagged finished-season extent is a historical feature in Experiment B, not current cultivation progress."
     }
   ]
 }

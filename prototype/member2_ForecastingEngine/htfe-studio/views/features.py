@@ -18,8 +18,8 @@ def render(data: dict[str, Any]) -> None:
     page_header(
         "Leak-safe features",
         "Markets observe prices. Districts grow crops.",
-        "Weather and commitments never join on the market name. They are aggregated from the origin map, "
-        "and intensity is as-of-week: a registration after the forecast week cannot enter the feature.",
+        "Weather is taken from the supply districts in the origin map, not from the market town. "
+        "A cultivation record is used only when its date is on or before the forecast Monday.",
     )
 
     section_title("Origin map", "Supply districts behind each modelled market")
@@ -64,7 +64,7 @@ def render(data: dict[str, Any]) -> None:
                     name="Importance",
                 )
             )
-            fig.update_layout(showlegend=False, xaxis_title="Permutation importance")
+            fig.update_layout(showlegend=False, xaxis_title="Mean absolute SHAP")
             show_chart(fig, 280)
             for row in top:
                 st.caption(f"{row['feature']}  ·  {row['importance']:.2f}  ({100 * row['importance'] / peak:.0f}% of lag-1)")

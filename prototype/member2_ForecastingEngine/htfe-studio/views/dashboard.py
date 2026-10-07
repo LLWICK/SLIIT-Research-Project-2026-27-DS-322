@@ -98,7 +98,7 @@ def render(data: dict[str, Any]) -> None:
                 unsafe_allow_html=True,
             )
             range_bar(low, expected, high)
-            fact("Coverage target", "90%")
+            fact("Experiment B 4-week coverage", "81.79%, below 90%")
             fact("Cultivation update applied", "Yes" if match.get("applied_cultivation_update") else "No")
             fact("Progress source", str(match.get("commitment_source") or "not available"))
             st.caption(match.get("note") or "")

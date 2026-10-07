@@ -25,13 +25,14 @@ def render(data: dict[str, Any]) -> None:
         if qhat is None
         else (
             "We do not claim an i.i.d. mathematical guarantee on agricultural prices. "
-            f"The 5th and 95th LightGBM quantiles are conformalized on 2023 only "
-            f"(1-week q̂ = {qhat}). The PICP shown here is the calibrated 4-week test, and it is below 90%."
+            "The chart is the Experiment B LightGBM 4-week test. "
+            f"The quantiles were conformalized on 2023 only (1-week q̂ = {qhat}; the 4-week adjustment is 19.8185). "
+            "The PICP shown here is that calibrated 4-week test, and it is below 90%."
         ),
     )
 
     c1, c2, c3 = st.columns(3)
-    c1.metric("Empirical PICP", f"{lgb['picp']}%", "Target 90%")
+    c1.metric("Empirical PICP", f"{lgb['picp']}%", "Below the 90% target")
     c2.metric("Mean width (Rs.)", f"{lgb['interval_width']:.0f}", "Sharpness half of the result")
     c3.metric("CQR q-hat", "not run" if qhat is None else str(qhat), "Raw quantiles only" if qhat is None else "Added to both tails")
 
@@ -55,7 +56,7 @@ def render(data: dict[str, Any]) -> None:
                 fill="tonexty",
                 fillcolor="rgba(37,99,235,0.16)",
                 line=dict(width=0),
-                name="90% interval",
+                name="Calibrated interval",
             )
         )
         fig.add_trace(go.Scatter(x=slice_df["week_start"], y=slice_df["y_true"], mode="lines", line=dict(color=AMBER, width=2), name="Realised price"))

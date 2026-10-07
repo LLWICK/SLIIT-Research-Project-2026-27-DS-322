@@ -12,79 +12,64 @@
     "note": "Intervals are split-conformal on 2023 only. Test coverage is below the nominal 90%.",
     "metrics": {
       "overall": {
-        "n_scored": 5535,
-        "mae": 93.2,
-        "rmse": 147.2,
-        "mape": 42.62,
-        "pinball": 46.6,
-        "picp": 83.13,
-        "interval_width": 434.36
+        "n_scored": 1164,
+        "mae": 105.98,
+        "mape": 41.53,
+        "picp": 81.79,
+        "interval_width": 379.96,
+        "note": "Experiment B LightGBM, horizon 4, 2024-2025 test. PICP uses the 2023 conformal adjustment. Coverage is below 90%."
       },
       "by_crop": {
         "carrot": {
-          "n_scored": 1845,
-          "mae": 121.38,
-          "rmse": 189.25,
-          "mape": 43.52,
-          "pinball": 60.69,
-          "picp": 80.7,
-          "interval_width": 542.6
+          "n_scored": 388,
+          "mae": 137.15,
+          "mape": 42.39,
+          "picp": 77.32,
+          "interval_width": 441.49
         },
         "leeks": {
-          "n_scored": 1845,
-          "mae": 52.81,
-          "rmse": 77.21,
-          "mape": 25.22,
-          "pinball": 26.41,
-          "picp": 93.6,
-          "interval_width": 332.92
+          "n_scored": 388,
+          "mae": 57.7,
+          "mape": 23.36,
+          "picp": 91.75,
+          "interval_width": 291.27
         },
         "tomato": {
-          "n_scored": 1845,
-          "mae": 105.4,
-          "rmse": 152.4,
-          "mape": 59.13,
-          "pinball": 52.7,
-          "picp": 75.07,
-          "interval_width": 427.57
+          "n_scored": 388,
+          "mae": 123.09,
+          "mape": 58.85,
+          "picp": 76.29,
+          "interval_width": 407.12
         }
       },
       "by_market": {
         "colombo": {
-          "n_scored": 1464,
-          "mae": 90.85,
-          "rmse": 141.4,
-          "mape": 41.12,
-          "pinball": 45.43,
-          "picp": 84.36,
-          "interval_width": 427.17
+          "n_scored": 300,
+          "mae": 103.74,
+          "mape": 39.85,
+          "picp": 82.0,
+          "interval_width": 373.13
         },
         "dambulla": {
-          "n_scored": 1404,
-          "mae": 89.59,
-          "rmse": 141.48,
-          "mape": 44.95,
-          "pinball": 44.8,
-          "picp": 80.77,
-          "interval_width": 408.89
+          "n_scored": 294,
+          "mae": 101.64,
+          "mape": 43.95,
+          "picp": 81.97,
+          "interval_width": 364.19
         },
         "meegoda": {
-          "n_scored": 1434,
-          "mae": 97.35,
-          "rmse": 156.65,
-          "mape": 37.29,
-          "pinball": 48.67,
-          "picp": 85.5,
-          "interval_width": 471.03
+          "n_scored": 297,
+          "mae": 111.81,
+          "mape": 35.8,
+          "picp": 83.16,
+          "interval_width": 406.42
         },
         "nuwara_eliya": {
-          "n_scored": 1233,
-          "mae": 95.26,
-          "rmse": 148.98,
-          "mape": 47.97,
-          "pinball": 47.63,
-          "picp": 81.59,
-          "interval_width": 429.26
+          "n_scored": 273,
+          "mae": 106.78,
+          "mape": 47.0,
+          "picp": 79.85,
+          "interval_width": 375.67
         }
       },
       "by_season": {

@@ -59,7 +59,7 @@ def render(data: dict[str, Any]) -> None:
             show_chart(fig2, 300)
 
     with st.container(border=True):
-        section_title("LightGBM slices", "Per crop and market")
+        section_title("LightGBM slices", "Experiment B, 4-week test, same scored rows")
         crop_col, market_col = st.columns(2)
         with crop_col:
             st.caption("By crop")
