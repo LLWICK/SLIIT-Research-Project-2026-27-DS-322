@@ -171,10 +171,26 @@ def _write_doc(rows: list[dict]) -> None:
         [
             "",
             "A negative change versus A means a lower error than price and season alone.",
-            "The full B row is a refit with the saved hyperparameters. The official B metrics remain in `artifacts/experiment_b`.",
+            "The full B row is a refit with the saved hyperparameters. The official B metrics remain in `outputs/experiment_b`.",
             "",
         ]
     )
+    weather = next((row for row in rows if row["arm"] == "weather"), None)
+    if weather is not None:
+        a_metrics = pd.read_csv(A_DIR / "metrics_by_model_horizon.csv")
+        a12 = a_metrics[
+            a_metrics["model"].eq("lightgbm")
+            & a_metrics["horizon"].eq(12)
+            & a_metrics["slice"].eq("test")
+            & a_metrics["target_form"].eq("price")
+        ]
+        weather12 = float(weather["mae_by_horizon"]["12"])
+        if not a12.empty and weather12 > float(a12.iloc[0]["mae"]):
+            lines.append(
+                f"At 12 weeks, weather alone has MAE {weather12:.2f}, which does not beat Experiment A at {float(a12.iloc[0]['mae']):.2f}. "
+                "The long-horizon gain is the combination, not weather by itself."
+            )
+            lines.append("")
     DOC.write_text("\n".join(lines), encoding="utf-8")
 
 

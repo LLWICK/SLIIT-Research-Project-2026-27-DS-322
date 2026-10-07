@@ -14,14 +14,9 @@ def render(data: dict[str, Any]) -> None:
     models = data["models"]
     comparison = data["comparison"]
     lgb = next(row for row in comparison if row["id"] == "lightgbm")
-    try:
-        loaded = load_predictions()
-    except FileNotFoundError:
-        st.info("The interval chart is written to app/data/predictions.json when you train. The scores above are the saved Experiment B test.")
-        return
-    preds = pd.DataFrame(loaded)
-
-    qhat = models["lightgbm"].get("qhat")
+    qhat_by_horizon = models["lightgbm"].get("qhat_by_horizon") or {}
+    qhat = qhat_by_horizon.get("4", models["lightgbm"].get("qhat"))
+    qhat_1 = qhat_by_horizon.get("1", models["lightgbm"].get("qhat"))
     page_header(
         "Forecast intervals",
         "Raw 5% and 95% quantiles" if qhat is None else "90% targeted coverage, empirically evaluated",
@@ -31,16 +26,24 @@ def render(data: dict[str, Any]) -> None:
         else (
             "We do not claim an i.i.d. mathematical guarantee on agricultural prices. "
             "The chart is the Experiment B LightGBM 4-week test. "
-            f"The quantiles were conformalized on 2023 only (1-week q̂ = {qhat}; the 4-week adjustment is 19.8185). "
+            f"The quantiles were conformalized on 2023 only (1-week q̂ = {qhat_1}; the 4-week adjustment is {qhat}). "
             "The PICP shown here is that calibrated 4-week test, and it is below 90%."
         ),
     )
+    try:
+        loaded = load_predictions()
+    except FileNotFoundError:
+        loaded = []
+    preds = pd.DataFrame(loaded) if loaded else pd.DataFrame()
 
     c1, c2, c3 = st.columns(3)
     c1.metric("Empirical PICP", f"{lgb['picp']}%", "Below the 90% target")
     c2.metric("Mean width (Rs.)", f"{lgb['interval_width']:.0f}", "Sharpness half of the result")
     c3.metric("CQR q-hat", "not run" if qhat is None else str(qhat), "Raw quantiles only" if qhat is None else "Added to both tails")
 
+    if preds.empty:
+        st.info("The interval chart is written when Experiment B is trained. The scores above are the saved 4-week test.")
+        return
     with st.container(border=True):
         crops = sorted(preds["crop"].unique())
         crop_col, market_col = st.columns(2)

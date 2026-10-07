@@ -200,9 +200,39 @@ def _tune(frame: pd.DataFrame, columns: list[str]) -> dict:
     }
 
 
+def _fit_sarimax_cache() -> str:
+    """Fit the locked SARIMAX order when this branch has no saved prediction file."""
+    from htfe.config import OUTPUTS, built_file
+    from htfe.models.sarimax import DEFAULT_ORDER, DEFAULT_SEASONAL, predict
+
+    path = built_file("feature_frame.parquet")
+    if not path.exists():
+        from htfe.features.frame import build
+
+        frame = build()
+        path = OUTPUTS / "panel" / "feature_frame.parquet"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        frame.to_parquet(path, index=False)
+    else:
+        frame = pd.read_parquet(path)
+    print(f"fitting SARIMAX {DEFAULT_ORDER}x{DEFAULT_SEASONAL} from {path}", flush=True)
+    raw, meta = predict(frame, order=DEFAULT_ORDER, seasonal=DEFAULT_SEASONAL)
+    if raw.empty:
+        raise RuntimeError(f"SARIMAX fit produced no rows: {meta}")
+    LATEST_PREDICTIONS.parent.mkdir(parents=True, exist_ok=True)
+    raw.to_csv(LATEST_PREDICTIONS, index=False)
+    order_dir = LATEST_PREDICTIONS.parent / "models"
+    order_dir.mkdir(parents=True, exist_ok=True)
+    (order_dir / "sarima_order.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
+    return f"fitted {len(raw)} SARIMAX rows at fixed order {DEFAULT_ORDER}x{DEFAULT_SEASONAL}"
+
+
 def _reuse_sarimax(table: pd.DataFrame) -> tuple[pd.DataFrame, str]:
+    fitted_note = ""
     if not LATEST_PREDICTIONS.exists():
-        return pd.DataFrame(), "artifacts/latest/predictions.csv is missing, and SARIMAX was not refit"
+        fitted_note = _fit_sarimax_cache()
+    if not LATEST_PREDICTIONS.exists():
+        return pd.DataFrame(), "SARIMAX was not fit"
     predictions = pd.read_csv(LATEST_PREDICTIONS)
     sarimax = predictions[predictions["model"].eq("sarimax")].copy()
     if sarimax.empty:
@@ -251,7 +281,10 @@ def _reuse_sarimax(table: pd.DataFrame) -> tuple[pd.DataFrame, str]:
         "sarimax",
     )
     # _score_frame recomputes y_pred from arrays already in price space. Quantiles stay empty.
-    return kept, f"reused {len(kept)} SARIMAX rows from artifacts/latest/predictions.csv; same price target and horizons"
+    note = f"aligned {len(kept)} SARIMAX rows to the training-table price target and horizons"
+    if fitted_note:
+        note = f"{fitted_note}; {note}"
+    return kept, note
 
 
 def _status(trained_a: bool, a_reason: str, macro_reason: str, b_ready: bool, c_reason: str) -> dict:
@@ -322,6 +355,10 @@ def main() -> None:
     by_model, by_series = metrics_tables(predictions)
     OUT.mkdir(parents=True, exist_ok=True)
     predictions.to_csv(OUT / "predictions.csv", index=False)
+    from htfe.training.align_experiment_a import _cqr
+
+    _cqr_rows, cqr_payload = _cqr(predictions)
+    (OUT / "cqr.json").write_text(json.dumps(cqr_payload, indent=2), encoding="utf-8")
     by_model.to_csv(OUT / "metrics_by_model_horizon.csv", index=False)
     by_series.to_csv(OUT / "metrics_by_series.csv", index=False)
     manifest = {

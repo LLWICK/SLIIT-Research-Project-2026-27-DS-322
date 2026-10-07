@@ -43,6 +43,37 @@ def _rows(frame: pd.DataFrame, experiment: str) -> list[dict]:
     return rows
 
 
+def _one(rows: list[dict], experiment: str, model: str, horizon: int) -> dict | None:
+    for row in rows:
+        if row["experiment"] == experiment and row["model"] == model and row["horizon"] == horizon:
+            return row
+    return None
+
+
+def _score_paragraph(rows: list[dict]) -> str:
+    def mae(experiment: str, model: str, horizon: int) -> str:
+        row = _one(rows, experiment, model, horizon)
+        return "not scored" if row is None else f"{row['mae']:.2f}"
+
+    a4 = _one(rows, "A", "lightgbm", 4)
+    b4 = _one(rows, "B", "lightgbm", 4)
+    drop = ""
+    if a4 is not None and b4 is not None and a4["mae"]:
+        change = (b4["mae"] - a4["mae"]) / a4["mae"] * 100
+        drop = f" LightGBM MAE at 4 weeks changes by {change:.2f}% from A ({a4['mae']:.2f}) to B ({b4['mae']:.2f})."
+    coverage = ""
+    if b4 is not None and b4.get("picp_cqr") is not None:
+        coverage = f" The 4-week LightGBM calibrated coverage is {b4['picp_cqr']:.2f}%, which is below 90%."
+    return (
+        f"At 1 week, SARIMAX MAE is {mae('B', 'sarimax', 1)}, LightGBM B is {mae('B', 'lightgbm', 1)}, "
+        f"and XGBoost B is {mae('B', 'xgboost', 1)}. "
+        f"At 4 weeks, LightGBM B is {mae('B', 'lightgbm', 4)}, XGBoost B is {mae('B', 'xgboost', 4)}, "
+        f"and SARIMAX is {mae('B', 'sarimax', 4)}. "
+        f"At 12 weeks, LightGBM B is {mae('B', 'lightgbm', 12)} and SARIMAX is {mae('B', 'sarimax', 12)}."
+        f"{drop}{coverage} Read the table above for the full set. Do not quote a number that is not in that table."
+    )
+
+
 def _markdown(rows: list[dict]) -> str:
     lines = [
         "# How the models were trained, what they output, and how they were scored",
@@ -103,17 +134,9 @@ def _markdown(rows: list[dict]) -> str:
             "",
             "## What the scores say",
             "",
-            "At 1 week, SARIMAX has the lowest MAE, 62.22. LightGBM B is 75.00 and XGBoost B is 74.10. At 4 weeks, LightGBM B is 105.98, ahead of XGBoost B at 106.80 and SARIMAX at 122.64. At 12 weeks, LightGBM B is 106.66 against SARIMAX at 181.44.",
+            _score_paragraph(rows),
             "",
-            "Against Experiment A, LightGBM’s MAE falls at every horizon once weather, macros, and lagged extent are added. The 4-week drop is 10.12%, from 117.91 to 105.98. The 12-week drop is 17.91%, from 129.93 to 106.66.",
-            "",
-            "A separate fit that adds only one of those groups, with the same LightGBM settings, shows that at 4 weeks weather helps most on its own, then macros, then lagged extent. Together they help more than any one group, and the gains overlap. At 12 weeks, weather alone does not beat A. The long-horizon gain is the combination.",
-            "",
-            "Calibrated coverage is about 79–84%. The nominal interval is 90%. Calibration widened the bands and still did not reach 90%. That is reported as a shortfall.",
-            "",
-            "MAPE above 50% at 8 and 12 weeks is the difficulty of a long wholesale-price forecast, and it is worse for tomato than for leeks. The crop-and-market breakdown is in `docs/Experiment-AB-Comparison-IT23415836.md`.",
-            "",
-            "Experiment C is not in this table. A seasonal Census total and a synthetic planting curve were not used as current cultivation progress.",
+            "Experiment C is not in this table. A seasonal Census total and a synthetic planting curve were not used as current cultivation progress. The nominal interval is 90%. Calibrated coverage below that is a shortfall.",
             "",
         ]
     )
@@ -138,9 +161,87 @@ def main() -> None:
         "rows": a_rows + b_rows,
     }
     (STUDIO_DATA / "evaluation.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    DOC.write_text(_markdown(b_rows), encoding="utf-8")
+    DOC.parent.mkdir(parents=True, exist_ok=True)
+    DOC.write_text(_markdown(a_rows + b_rows), encoding="utf-8")
+    _refresh_screens()
     print(f"wrote {STUDIO_DATA / 'evaluation.json'}", flush=True)
     print(f"wrote {DOC}", flush=True)
+
+
+def _refresh_screens() -> None:
+    """Point the studio 4-week cards and the interval chart at this training run."""
+    predictions = pd.read_csv(ARTIFACTS / "experiment_b" / "predictions.csv")
+    cqr = json.loads((ARTIFACTS / "experiment_b" / "cqr.json").read_text(encoding="utf-8"))
+    qhat = float(cqr["qhat_by_model"]["lightgbm"]["4"])
+    test = predictions[
+        predictions["model"].eq("lightgbm") & predictions["split"].eq("test") & predictions["horizon"].eq(4)
+    ].copy()
+    test["lower"] = (test["y_pred_q05"] - qhat).clip(lower=0.01)
+    test["upper"] = test["y_pred_q95"] + qhat
+    test["point"] = test["y_pred"]
+    test["week_start"] = pd.to_datetime(test["target_week"]).dt.strftime("%Y-%m-%d")
+    test["market_key"] = test["market"].astype(str).str.lower().str.replace(" ", "_", regex=False)
+    covered = (test["y_true"] >= test["lower"]) & (test["y_true"] <= test["upper"])
+    chart = [
+        {
+            "crop": row.crop,
+            "market": row.market_key,
+            "week_start": row.week_start,
+            "y_true": round(float(row.y_true), 4),
+            "point": round(float(row.point), 4),
+            "lower": round(float(row.lower), 4),
+            "upper": round(float(row.upper), 4),
+        }
+        for row in test.itertuples(index=False)
+    ]
+    (STUDIO_DATA / "predictions.json").write_text(json.dumps({"lightgbm": chart}), encoding="utf-8")
+
+    def block(frame: pd.DataFrame) -> dict:
+        width = (frame["upper"] - frame["lower"]).mean()
+        return {
+            "n_scored": int(len(frame)),
+            "mae": round(float((frame["y_true"] - frame["point"]).abs().mean()), 2),
+            "mape": round(float(((frame["y_true"] - frame["point"]).abs() / frame["y_true"]).mean() * 100), 2),
+            "picp": round(float(covered.loc[frame.index].mean() * 100), 2),
+            "interval_width": round(float(width), 2),
+        }
+
+    models = json.loads((STUDIO_DATA / "models.json").read_text(encoding="utf-8"))
+    overall = block(test)
+    overall["note"] = "Experiment B LightGBM, horizon 4, 2024-2025 test. PICP uses the 2023 conformal adjustment. Coverage is below 90%."
+    models["lightgbm"]["metrics"]["overall"] = overall
+    models["lightgbm"]["metrics"]["by_crop"] = {crop: block(part) for crop, part in test.groupby("crop")}
+    models["lightgbm"]["metrics"]["by_market"] = {market: block(part) for market, part in test.groupby("market_key")}
+    models["lightgbm"]["qhat_by_horizon"] = {
+        str(horizon): float(value) for horizon, value in cqr["qhat_by_model"]["lightgbm"].items()
+    }
+    models["lightgbm"]["qhat"] = float(cqr["qhat_by_model"]["lightgbm"]["1"])
+    (STUDIO_DATA / "models.json").write_text(json.dumps(models, indent=2), encoding="utf-8")
+
+    metrics = pd.read_csv(ARTIFACTS / "experiment_b" / "metrics_by_model_horizon.csv")
+    horizon4 = metrics[metrics["slice"].eq("test") & metrics["target_form"].eq("price") & metrics["horizon"].eq(4)]
+    comparison = json.loads((STUDIO_DATA / "comparison.json").read_text(encoding="utf-8"))
+    ids = {"sarimax": "sarima", "lightgbm": "lightgbm", "xgboost": "xgboost"}
+    for row in comparison:
+        model = next((name for name, label in ids.items() if row.get("id") == label), None)
+        if model is None:
+            continue
+        match = horizon4[horizon4["model"].eq(model)]
+        if match.empty:
+            continue
+        item = match.iloc[0]
+        row["n_scored"] = int(item["n_scored"])
+        row["mae"] = round(float(item["mae"]), 2)
+        row["rmse"] = round(float(item["rmse"]), 2)
+        row["mape"] = round(float(item["mape"]), 2)
+        row["pinball"] = None if pd.isna(item["pinball"]) else round(float(item["pinball"]), 2)
+        if model == "lightgbm":
+            row["picp"] = overall["picp"]
+            row["interval_width"] = overall["interval_width"]
+        elif "picp_cqr" in item and not pd.isna(item["picp_cqr"]):
+            row["picp"] = round(float(item["picp_cqr"]), 2)
+            row["interval_width"] = round(float(item["interval_width_cqr"]), 2)
+    (STUDIO_DATA / "comparison.json").write_text(json.dumps(comparison, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

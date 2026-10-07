@@ -16,7 +16,7 @@
         "mae": 105.98,
         "mape": 41.53,
         "picp": 81.79,
-        "interval_width": 379.96,
+        "interval_width": 379.98,
         "note": "Experiment B LightGBM, horizon 4, 2024-2025 test. PICP uses the 2023 conformal adjustment. Coverage is below 90%."
       },
       "by_crop": {
