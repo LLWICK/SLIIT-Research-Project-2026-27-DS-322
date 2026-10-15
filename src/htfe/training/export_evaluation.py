@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pandas as pd
 
@@ -63,7 +64,11 @@ def _score_paragraph(rows: list[dict]) -> str:
         drop = f" LightGBM MAE at 4 weeks changes by {change:.2f}% from A ({a4['mae']:.2f}) to B ({b4['mae']:.2f})."
     coverage = ""
     if b4 is not None and b4.get("picp_cqr") is not None:
-        coverage = f" The 4-week LightGBM calibrated coverage is {b4['picp_cqr']:.2f}%, which is below 90%."
+        picp = float(b4["picp_cqr"])
+        if picp >= 90:
+            coverage = f" The 4-week LightGBM calibrated coverage is {picp:.2f}%. The intended level is 90%."
+        else:
+            coverage = f" The 4-week LightGBM calibrated coverage is {picp:.2f}%, which is below the intended 90%."
     return (
         f"At 1 week, SARIMAX MAE is {mae('B', 'sarimax', 1)}, LightGBM B is {mae('B', 'lightgbm', 1)}, "
         f"and XGBoost B is {mae('B', 'xgboost', 1)}. "
@@ -90,11 +95,11 @@ def _markdown(rows: list[dict]) -> str:
         "",
         "- Experiment A uses price lags and season only.",
         "- Experiment B adds origin-district weather, diesel, USD/LKR, inflation, and the cultivated extent of seasons that have already finished.",
-        "- Experiment C, current achieved hectares divided by target hectares, was not trained. That file is not on disk.",
+        "- Experiment C adds the national as-of cultivation ratio on the rows that have a real DOA report. It is a matched-row test against B* and is not mixed into the full-sample A/B table. District rows are audit-only. LSTM was not run.",
         "",
         "SARIMAX is a univariate seasonal baseline, order (1,1,1)×(1,0,0,52). It does not take the weather or macro columns, so its error is the same in A and B.",
         "",
-        "LightGBM and XGBoost are quantile models at 0.05, 0.50, and 0.95. Optuna tuned them on horizon 4 only, using pinball loss of the median price on the 2023 calibration weeks, then those settings were frozen for every horizon. The seed is 42. LightGBM used 15 trials. XGBoost used 8.",
+        "LightGBM and XGBoost are quantile models at 0.05, 0.50, and 0.95. Hyperparameters are the notebook defaults, seed 42. Optuna is not used. The tree count is chosen by early stopping on 2022 target weeks after fitting through 2021, then the trees are refit through 2022. 2023 is used only for the interval.",
         "",
         "Intervals are the 0.05 and 0.95 forecasts. Split conformal calibration adds a constant, fit only on 2023, to both tails. The 2024–2025 prices are not used to choose that constant.",
         "",
@@ -136,7 +141,7 @@ def _markdown(rows: list[dict]) -> str:
             "",
             _score_paragraph(rows),
             "",
-            "Experiment C is not in this table. A seasonal Census total and a synthetic planting curve were not used as current cultivation progress. The nominal interval is 90%. Calibrated coverage below that is a shortfall.",
+            "Experiment C is not in this full-sample table. The nominal interval is 90%. Report the measured calibrated PICP. Do not describe that measured share as 90% unless it is at least 90.",
             "",
         ]
     )
@@ -156,8 +161,10 @@ def main() -> None:
         "horizons": [1, 2, 4, 8, 12],
         "models": ["sarimax", "lightgbm", "xgboost"],
         "quantiles": [0.05, 0.50, 0.95],
-        "optuna": "horizon 4, median pinball on 2023, 15 LightGBM trials, 8 XGBoost trials, seed 42",
-        "experiment_c": "not trained",
+        "optuna": "not used. Fixed notebook hyperparameters, seed 42. Tree count selected on 2022 targets, then refit through 2022.",
+        "tree_protocol": "fit through 2021, early-stop on 2022, refit through 2022, 2023 only for qhat",
+        "experiment_c": "matched-row national test, separate from this full-sample table",
+        "lstm": "not run",
         "rows": a_rows + b_rows,
     }
     (STUDIO_DATA / "evaluation.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
@@ -170,15 +177,22 @@ def main() -> None:
 
 def _refresh_screens() -> None:
     """Point the studio 4-week cards and the interval chart at this training run."""
+    from htfe.training.evaluate import project_interval_around_median
+
     predictions = pd.read_csv(ARTIFACTS / "experiment_b" / "predictions.csv")
     cqr = json.loads((ARTIFACTS / "experiment_b" / "cqr.json").read_text(encoding="utf-8"))
     qhat = float(cqr["qhat_by_model"]["lightgbm"]["4"])
     test = predictions[
         predictions["model"].eq("lightgbm") & predictions["split"].eq("test") & predictions["horizon"].eq(4)
     ].copy()
-    test["lower"] = (test["y_pred_q05"] - qhat).clip(lower=0.01)
-    test["upper"] = test["y_pred_q95"] + qhat
-    test["point"] = test["y_pred"]
+    low, mid, high = project_interval_around_median(
+        test["y_pred_q05"].to_numpy(dtype=float),
+        test["y_pred"].to_numpy(dtype=float),
+        test["y_pred_q95"].to_numpy(dtype=float),
+    )
+    test["lower"] = pd.Series(low - qhat, index=test.index).clip(lower=0.01)
+    test["upper"] = high + qhat
+    test["point"] = mid
     test["week_start"] = pd.to_datetime(test["target_week"]).dt.strftime("%Y-%m-%d")
     test["market_key"] = test["market"].astype(str).str.lower().str.replace(" ", "_", regex=False)
     covered = (test["y_true"] >= test["lower"]) & (test["y_true"] <= test["upper"])
@@ -208,18 +222,50 @@ def _refresh_screens() -> None:
 
     models = json.loads((STUDIO_DATA / "models.json").read_text(encoding="utf-8"))
     overall = block(test)
-    overall["note"] = "Experiment B LightGBM, horizon 4, 2024-2025 test. PICP uses the 2023 conformal adjustment. Coverage is below 90%."
+    measured = overall["picp"]
+    if measured is not None and float(measured) >= 90:
+        coverage_note = f"Measured calibrated PICP is {measured:.2f}%. The intended level is 90%."
+    else:
+        coverage_note = f"Measured calibrated PICP is {measured}%. That is below the intended 90%."
+    overall["note"] = (
+        "Experiment B LightGBM, horizon 4, 2024-2025 test. PICP uses the 2023 conformal adjustment on the ordered interval. "
+        + coverage_note
+    )
     models["lightgbm"]["metrics"]["overall"] = overall
     models["lightgbm"]["metrics"]["by_crop"] = {crop: block(part) for crop, part in test.groupby("crop")}
     models["lightgbm"]["metrics"]["by_market"] = {market: block(part) for market, part in test.groupby("market_key")}
+    models["lightgbm"]["metrics"]["by_season"] = {}
+    models["lightgbm"]["train_curve"] = []
     models["lightgbm"]["qhat_by_horizon"] = {
         str(horizon): float(value) for horizon, value in cqr["qhat_by_model"]["lightgbm"].items()
     }
     models["lightgbm"]["qhat"] = float(cqr["qhat_by_model"]["lightgbm"]["1"])
-    (STUDIO_DATA / "models.json").write_text(json.dumps(models, indent=2), encoding="utf-8")
 
     metrics = pd.read_csv(ARTIFACTS / "experiment_b" / "metrics_by_model_horizon.csv")
     horizon4 = metrics[metrics["slice"].eq("test") & metrics["target_form"].eq("price") & metrics["horizon"].eq(4)]
+    for model_name, key in (("xgboost", "xgboost"), ("sarimax", "sarima")):
+        match = horizon4[horizon4["model"].eq(model_name)]
+        block_metrics = models.get(key, {}).get("metrics")
+        if match.empty or not isinstance(block_metrics, dict):
+            continue
+        item = match.iloc[0]
+        block_metrics["overall"] = {
+            "n_scored": int(item["n_scored"]),
+            "mae": round(float(item["mae"]), 2),
+            "rmse": round(float(item["rmse"]), 2),
+            "mape": round(float(item["mape"]), 2),
+            "pinball": None if pd.isna(item["pinball"]) else round(float(item["pinball"]), 2),
+            "picp": None if "picp_cqr" not in item or pd.isna(item["picp_cqr"]) else round(float(item["picp_cqr"]), 2),
+            "interval_width": None
+            if "interval_width_cqr" not in item or pd.isna(item["interval_width_cqr"])
+            else round(float(item["interval_width_cqr"]), 2),
+            "note": "Horizon 4, 2024-2025 test, this notebook-protocol run. Not pooled across horizons.",
+        }
+        block_metrics["by_crop"] = {}
+        block_metrics["by_market"] = {}
+        block_metrics["by_season"] = {}
+    (STUDIO_DATA / "models.json").write_text(json.dumps(models, indent=2), encoding="utf-8")
+
     comparison = json.loads((STUDIO_DATA / "comparison.json").read_text(encoding="utf-8"))
     ids = {"sarimax": "sarima", "lightgbm": "lightgbm", "xgboost": "xgboost"}
     for row in comparison:
@@ -265,6 +311,105 @@ def _refresh_naive(comparison: list[dict], lightgbm_test: pd.DataFrame) -> None:
         row["pinball"] = None
         row["picp"] = None
         row["interval_width"] = None
+
+
+def export_this_run_studio(out_dir: Path | None = None) -> Path:
+    """Studio JSON for this run. Does not write app/data or the full-sample A/B cards."""
+    from htfe.training.evaluate import assert_safe_evaluation_dir
+
+    destination = assert_safe_evaluation_dir(out_dir or (OUTPUTS / "evaluation" / "studio_json"))
+    destination.mkdir(parents=True, exist_ok=True)
+    evaluation_root = OUTPUTS / "evaluation"
+    c_root = OUTPUTS / "experiment_c"
+    benchmark = pd.read_csv(evaluation_root / "common_key_benchmark.csv")
+    seasonal = pd.read_csv(evaluation_root / "seasonal_naive_benchmark.csv")
+    best = pd.read_csv(evaluation_root / "best_model_by_horizon.csv")
+    naive_bootstrap = pd.read_csv(evaluation_root / "model_vs_naive_block_bootstrap.csv")
+    b_saved = pd.read_csv(OUTPUTS / "experiment_b" / "metrics_by_model_horizon.csv")
+    b_saved = b_saved[b_saved["slice"].eq("test") & b_saved["target_form"].eq("price")]
+    c_metrics = pd.read_csv(c_root / "metrics_c.csv")
+    comparison = pd.read_csv(c_root / "b_star_vs_c.csv")
+    probabilistic = pd.read_csv(c_root / "evaluation" / "final_probabilistic_evaluation_c.csv")
+    crossing = pd.read_csv(c_root / "evaluation" / "quantile_crossing_diagnostic_c.csv")
+    conditional = pd.read_csv(c_root / "evaluation" / "conditional_interval_evaluation_c.csv")
+    novelty_bootstrap = pd.read_csv(c_root / "evaluation" / "bstar_vs_c_block_bootstrap.csv")
+    shap_path = c_root / "evaluation" / "shap_lightgbm_c_h4.csv"
+    shap = pd.read_csv(shap_path) if shap_path.is_file() else pd.DataFrame()
+    member3 = json.loads((c_root / "inference" / "member3_forecast_c.json").read_text(encoding="utf-8"))
+    status = json.loads((c_root / "status.json").read_text(encoding="utf-8"))
+    b_example = json.loads((evaluation_root / "inference" / "saved_b_example.json").read_text(encoding="utf-8"))
+
+    def dump(name: str, payload: dict) -> None:
+        (destination / name).write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+
+    dump(
+        "meta.json",
+        {
+            "project": "J26-DS-322",
+            "component": "Hybrid Temporal Forecasting Engine",
+            "target": "weekly wholesale price, LKR/kg",
+            "saved_artifact_tree_selection": (
+                "Eligible targets through 2021-12-31, early stopping on 2022 target weeks, "
+                "refit through 2022-12-31. 2023 is used only for qhat. "
+                "This is the fit behind the Experiment A, B, and C cards from this run."
+            ),
+            "tree_fit": "htfe.training.run_experiment_a.fit_quantile_trees",
+            "notebook_protocol_produced_these_cards": True,
+            "notebook_protocol": (
+                "selector training through 2021-12-31, early stopping on 2022 target weeks, "
+                "refit through 2022-12-31, 2023 reserved for conformal calibration"
+            ),
+            "app_data_rewritten": False,
+            "experiment_c_trained": bool(status.get("experiment_c_trained")),
+            "experiment_c_status": status.get("status"),
+            "spatial_scope": "national",
+            "district_rows_used_for_scoring": False,
+            "sarimax_order": "(1, 1, 1) x (1, 0, 0, 52)",
+            "lstm": "not run",
+            "measured_picp_pct_by_horizon": member3.get("measured_picp_pct_by_horizon"),
+            "saved_b_reproduction": b_example,
+        },
+    )
+    dump(
+        "evaluation.json",
+        {
+            "label": "this run, read from saved prediction files, not copied from a notebook printout",
+            "full_sample_experiment_b_test": b_saved.to_dict(orient="records"),
+            "matched_row_experiment_c": c_metrics.to_dict(orient="records"),
+            "fair_common_key_benchmark": benchmark.to_dict(orient="records"),
+            "note": (
+                "full_sample_experiment_b_test is the saved Experiment B file. "
+                "fair_common_key_benchmark is the identical-key subset. "
+                "Neither replaces app/data."
+            ),
+        },
+    )
+    dump(
+        "ablation.json",
+        {
+            "b_star_vs_c": comparison.to_dict(orient="records"),
+            "interpretation": (
+                "A negative MAE change means C has lower MAE than B* on the matched rows of this run. "
+                "C is lower only where mae_change_pct is negative. MAE and MAPE are separate columns."
+            ),
+        },
+    )
+    package = {
+        "point_forecast_benchmark": benchmark.to_dict(orient="records"),
+        "best_point_model_by_horizon": best.to_dict(orient="records"),
+        "seasonal_naive_common_subset": seasonal.to_dict(orient="records"),
+        "model_vs_naive_bootstrap": naive_bootstrap.to_dict(orient="records"),
+        "probabilistic_evaluation_c": probabilistic.to_dict(orient="records"),
+        "quantile_crossing_diagnostic_c": crossing.to_dict(orient="records"),
+        "conditional_interval_evaluation_c": conditional.to_dict(orient="records"),
+        "bstar_vs_c_bootstrap": novelty_bootstrap.to_dict(orient="records"),
+        "shap_top_features_h4_c": shap.to_dict(orient="records"),
+        "measured_picp_pct_by_horizon": member3.get("measured_picp_pct_by_horizon"),
+        "coverage_level_aim": 0.90,
+        "coverage_level_note": member3.get("coverage_level_note"),
+    }
+    dump("final_evaluation_package.json", package)
+    return destination
 
 
 if __name__ == "__main__":

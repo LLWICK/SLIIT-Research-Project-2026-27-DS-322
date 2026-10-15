@@ -3,8 +3,8 @@
 A forecast dated on a Monday uses only prices and weather from earlier weeks.
 The future wholesale price is the label, not an input.
 
-Usage (from member2_ForecastingEngine):
-  python -m training.build_training_table
+From the repo root, in Command Prompt, after `set PYTHONPATH=src`:
+  python -u -m htfe.training.build_training_table
 """
 from __future__ import annotations
 

@@ -32,6 +32,7 @@ ALIASES = {
 }
 SOURCE_MISSING = "unavailable_no_district_monthly_series"
 SOURCE_FOUND = "monthly_target_achieved"
+DOA_FILENAME = "doa_cultivation_progress.csv"
 
 
 def _normalise_columns(frame: pd.DataFrame) -> pd.DataFrame:
@@ -75,17 +76,42 @@ def find_monthly_table() -> Path | None:
     return cultivation_monthly_path()
 
 
+def doa_progress_path() -> Path | None:
+    """Known Department of Agriculture extract. This is not a disk scan.
+
+    Member 1's folder is checked first, then the processed data folder.
+    The file keeps the name ``doa_cultivation_progress.csv``. It is not
+    renamed to ``cultivation_monthly.csv`` and it is not a loader source.
+    """
+    from htfe.config import MEMBER1_DIR, PROCESSED_DIR
+
+    for path in (MEMBER1_DIR / DOA_FILENAME, PROCESSED_DIR / DOA_FILENAME):
+        if path.is_file():
+            return path
+    return None
+
+
+def _read_table(path: Path) -> pd.DataFrame:
+    if path.suffix.lower() == ".csv":
+        return pd.read_csv(path)
+    if path.suffix.lower() == ".parquet":
+        return pd.read_parquet(path)
+    return pd.read_excel(path)
+
+
 def load_monthly(path: Path | None = None) -> pd.DataFrame | None:
     found = path or find_monthly_table()
     if found is None:
         return None
-    if found.suffix.lower() == ".csv":
-        frame = pd.read_csv(found)
-    elif found.suffix.lower() == ".parquet":
-        frame = pd.read_parquet(found)
-    else:
-        frame = pd.read_excel(found)
-    frame = _normalise_columns(frame)
+    frame = _normalise_columns(_read_table(found))
+    missing = [name for name in REQUIRED if name not in frame.columns]
+    if missing:
+        raise ValueError(
+            "This cultivation file does not match the district-month contract "
+            f"(year, month, crop, district, target_ha, achieved_ha). Missing {missing}. "
+            "The district-month loader will not use it. "
+            "Experiment C reads national rows from doa_cultivation_progress.csv."
+        )
     frame = frame.dropna(subset=["crop", "district", "year", "month"])
     frame["year"] = frame["year"].astype(int)
     frame["month"] = frame["month"].astype(int)
@@ -99,6 +125,178 @@ def load_monthly(path: Path | None = None) -> pd.DataFrame | None:
         ["crop_key", "district_key", "year", "month"], keep="last"
     )
     return frame.reset_index(drop=True)
+
+
+def _as_int(value) -> int:
+    return int(value)
+
+
+def _scope_mask(frame: pd.DataFrame, scope: str) -> pd.Series:
+    if "scope_level" not in frame.columns:
+        if scope == "national":
+            return frame["district"].astype(str).str.strip().str.casefold().eq("national")
+        return ~frame["district"].astype(str).str.strip().str.casefold().eq("national")
+    return frame["scope_level"].astype(str).str.strip().str.casefold().eq(scope)
+
+
+def inspect_cultivation_sources() -> dict:
+    """Describe the known cultivation files without scanning the disk.
+
+    ``doa_cultivation_progress.csv`` keeps its own name. It is not passed to
+    the district-month loader. Whether the national Experiment C run has been
+    fit is recorded in ``outputs/experiment_c/status.json``.
+    """
+    monthly = find_monthly_table()
+    doa = doa_progress_path()
+    status: dict = {
+        "monthly_contract_path": None if monthly is None else str(monthly),
+        "monthly_contract_present": monthly is not None,
+        "doa_path": None if doa is None else str(doa),
+        "doa_present": doa is not None,
+        "wired_as_loader_source": False,
+        "experiment_c_trained": False,
+        "matches_loader_contract": False,
+        "columns": [],
+        "n_rows": 0,
+        "counts": [],
+        "sentences": [],
+        "headline": "National cultivation file not confirmed.",
+    }
+    if monthly is not None:
+        monthly_frame = _normalise_columns(_read_table(monthly))
+        missing = [name for name in REQUIRED if name not in monthly_frame.columns]
+        status["matches_loader_contract"] = not missing
+        status["wired_as_loader_source"] = not missing
+        status["monthly_rows"] = _as_int(len(monthly_frame))
+        status["monthly_columns"] = [str(column) for column in monthly_frame.columns]
+        if missing:
+            status["sentences"].append(
+                f"cultivation_monthly.csv is at {monthly}, but it is missing {missing}, so the district-month loader will not use it."
+            )
+        else:
+            status["sentences"].append(
+                f"cultivation_monthly.csv is at {monthly} and its columns match the loader. "
+                "Experiment C is fit from national rows in doa_cultivation_progress.csv, not from this district-month file."
+            )
+    if doa is None:
+        if not status["sentences"]:
+            status["sentences"] = [
+                "processed/doa_cultivation_progress.csv was not found at the known path.",
+                "data/member1/cultivation_monthly.csv and processed/cultivation_monthly.csv are absent.",
+                "Experiment C reads the national rows of doa_cultivation_progress.csv when that file is present.",
+            ]
+        status["headline"] = "processed/doa_cultivation_progress.csv was not found at the known path."
+        return status
+
+    frame = pd.read_csv(doa)
+    normalised = _normalise_columns(frame)
+    columns = [str(column) for column in frame.columns]
+    missing = [name for name in REQUIRED if name not in normalised.columns]
+    national = frame.loc[_scope_mask(frame, "national")]
+    district = frame.loc[_scope_mask(frame, "district")]
+    district_dates = sorted(district["observation_date"].dropna().astype(str).unique()) if "observation_date" in district.columns else []
+    district_available = sorted(district["available_date"].dropna().astype(str).unique()) if "available_date" in district.columns else []
+    district_crops = sorted(district["crop"].dropna().astype(str).str.strip().str.lower().unique()) if len(district) else []
+    district_seasons = (
+        sorted(district["season"].dropna().astype(str).str.strip().unique())
+        if len(district) and "season" in district.columns
+        else []
+    )
+    tomato_district = 0
+    if len(district) and "crop" in district.columns:
+        tomato_district = _as_int(district["crop"].astype(str).str.strip().str.lower().eq("tomato").sum())
+    zero_target = 0
+    zero_target_district = 0
+    positive_district = 0
+    if "target_ha" in frame.columns:
+        target = pd.to_numeric(frame["target_ha"], errors="coerce")
+        zero_target = _as_int(target.fillna(0).eq(0).sum())
+        if len(district):
+            district_target = pd.to_numeric(district["target_ha"], errors="coerce")
+            zero_target_district = _as_int(district_target.fillna(0).eq(0).sum())
+            positive_district = _as_int(district_target.gt(0).sum())
+    contract_match = not missing
+    # A single district snapshot is not a monthly series the as-of join can train on.
+    district_month_series = len(district_dates) > 1
+    status.update(
+        {
+            "columns": columns,
+            "n_rows": _as_int(len(frame)),
+            "n_national": _as_int(len(national)),
+            "n_district": _as_int(len(district)),
+            "district_observation_dates": district_dates,
+            "district_available_dates": district_available,
+            "district_crops": district_crops,
+            "district_seasons": district_seasons,
+            "tomato_district_rows": tomato_district,
+            "zero_target_rows": zero_target,
+            "zero_target_district_rows": zero_target_district,
+            "positive_target_district_rows": positive_district,
+            "missing_contract_columns": missing,
+            "doa_matches_loader_contract": contract_match,
+            "doa_is_district_month_series": bool(contract_match and district_month_series and len(district) > 0),
+            "experiment_c_trained": None,
+        }
+    )
+    # The DOA extract keeps its own filename. It is not renamed to cultivation_monthly.csv.
+    if len(district_dates) == 0:
+        date_sentence = "No district observation dates were found."
+    elif len(district_dates) == 1:
+        published = f" and published on {district_available[0]}" if len(district_available) == 1 else ""
+        crops = ", ".join(district_crops) if district_crops else "no listed crop"
+        date_sentence = f"Every district row is one snapshot, observed on {district_dates[0]}{published}, for {crops}."
+    else:
+        date_sentence = "District observation dates: " + ", ".join(district_dates) + "."
+    sentences = [
+        f"processed/{DOA_FILENAME} has {_as_int(len(frame))} rows.",
+        "Columns: " + ", ".join(columns) + ".",
+        "target_ha and achieved_ha are in the file, so these are target and achieved hectares rather than a renamed unrelated table.",
+        (
+            "year and month are not columns. The dates in the file are available_date and observation_date."
+            if missing
+            else "year and month are present."
+        ),
+        f"{_as_int(len(national))} rows are national totals. {_as_int(len(district))} rows are district rows.",
+        date_sentence,
+        (
+            "Tomato has no district rows."
+            if tomato_district == 0
+            else f"Tomato district rows: {tomato_district}."
+        ),
+        (
+            f"{zero_target_district} district rows have a target of 0 hectares. "
+            f"{positive_district} district rows have a target above 0."
+        ),
+        (
+            "The loader contract is year, month, crop, district, target_ha, and achieved_ha, "
+            "joined to each market's supply districts. This file was not copied to cultivation_monthly.csv."
+        ),
+        (
+            "District rows stay in the audit. The scored cultivation signal is national, "
+            "matches the official source season, and uses a report only when available_date "
+            "is on or before the forecast Monday. Ratios above 1 are kept. A non-positive target is not turned into 1."
+        ),
+    ]
+    status["sentences"] = sentences
+    status["headline"] = (
+        "The Department of Agriculture file has national totals and district rows. "
+        "Scored cultivation progress uses the national rows only. "
+        "This file is not renamed to cultivation_monthly.csv and is not joined as district supply. "
+        "The dashboard forecast is the runtime model. It is not Experiment C."
+    )
+    status["counts"] = [
+        {"Item": "Rows", "Value": str(status["n_rows"])},
+        {"Item": "National rows", "Value": str(status["n_national"])},
+        {"Item": "District rows", "Value": str(status["n_district"])},
+        {"Item": "District observation dates", "Value": ", ".join(district_dates) if district_dates else "none"},
+        {"Item": "District crops", "Value": ", ".join(district_crops) if district_crops else "none"},
+        {"Item": "Tomato district rows", "Value": str(tomato_district)},
+        {"Item": "District rows with target 0", "Value": str(zero_target_district)},
+        {"Item": "District rows with target above 0", "Value": str(positive_district)},
+        {"Item": "Missing loader columns", "Value": ", ".join(missing) if missing else "none"},
+        {"Item": "District-month loader", "Value": "not used for this file"},
+    ]
+    return status
 
 
 def write_gap_report(found: Path | None) -> Path:
@@ -129,15 +327,16 @@ def write_gap_report(found: Path | None) -> Path:
                 "",
                 "Methodology.docx section 3.9 requires district-month cultivation progress = achieved hectares / target hectares.",
                 "Looked for data/member1/cultivation_monthly.csv, then processed/cultivation_monthly.csv. The data disk is not scanned.",
-                "No such table is on disk.",
+                "That district-month contract file is not on disk.",
                 "",
-                "What is on disk instead:",
+                "What else was checked:",
                 "- `processed/dcs_highland_seasonal.csv` is Yala/Maha extent and production, not monthly target and achieved.",
-                "- The Department of Agriculture SEPC downloads page lists Crop Forecast monthly reports from February 2022 onward as Google Drive files, not as a district panel.",
-                "- The public November 2019 crop-forecast PDF is a national crop total (carrot, leeks, and tomato each have one target and one progress figure). It is not district-level, so it is not used as the feature.",
+                "- `processed/doa_cultivation_progress.csv` is read only when it is at that known path. It is not renamed into cultivation_monthly.csv.",
                 "",
-                "No hectares were invented. `cultivation_progress` is missing on every panel row.",
-                "Configuration C and the monthly re-forecast are therefore not claimed.",
+                *inspect_cultivation_sources()["sentences"],
+                "",
+                "No hectares were invented. The district-month column on the main training panel stays missing until a file matches that contract.",
+                "National exact-season scoring is a separate path and is written under outputs/experiment_c when that run has been executed.",
                 "",
             ]
         ),

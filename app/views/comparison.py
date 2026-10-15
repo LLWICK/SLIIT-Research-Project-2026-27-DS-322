@@ -1,29 +1,63 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lib.experiment_c import render_common_key_benchmark
+from lib.figures import show_figures
 from lib.load import title_case
+from lib.scores import b4_coverage_sentence, find_row
 from lib.style import AMBER, HARVEST, SKY, page_header, section_title, show_chart
+
+REPO = Path(__file__).resolve().parents[2]
+
+
+def _best_sentence(table: pd.DataFrame) -> str:
+    if table.empty:
+        return "The common-key best-model table has not been written yet."
+    parts = []
+    for row in table.itertuples(index=False):
+        parts.append(
+            f"{int(row.horizon)} week{'s' if int(row.horizon) != 1 else ''}: {row.model} "
+            f"(MAE {float(row.mae):.2f}, MAPE {float(row.mape):.2f}%, n={int(row.n_scored)})"
+        )
+    return "Lowest MAE on the common-key rows, by horizon — " + "; ".join(parts) + "."
 
 
 def render(data: dict[str, Any]) -> None:
     comparison = data["comparison"]
     models = data["models"]
     lgb = models["lightgbm"]
+    evaluation = data["evaluation"]
+    best_path = REPO / "outputs" / "evaluation" / "best_model_by_horizon.csv"
+    best = pd.read_csv(best_path) if best_path.is_file() else pd.DataFrame()
 
     page_header(
-        "Same test weeks · observed prices only",
-        "Horizon changes which model is ahead",
-        "At 1 week, SARIMAX has the lower error. From 4 weeks, Experiment B LightGBM is ahead of SARIMAX. "
-        "Calibrated interval coverage is still below the nominal 90%.",
+        "Which model is best",
+        "Common keys, one horizon at a time",
+        _best_sentence(best) + " " + b4_coverage_sentence(evaluation),
     )
+
+    with st.container(border=True):
+        section_title("Best at each horizon", "Saved common-key table from this run")
+        if best.empty:
+            st.info("outputs/evaluation/best_model_by_horizon.csv is missing.")
+        else:
+            st.dataframe(best, width="stretch", hide_index=True)
+            st.caption(
+                "This table names the lowest MAE on the rows shared by LightGBM, XGBoost, SARIMAX, and the last-value naive forecast. "
+                "It does not name one model for every horizon."
+            )
 
     last = next(row for row in comparison if row["id"] == "naive_last")
     seasonal = next(row for row in comparison if row["id"] == "seasonal_naive_52")
+    h4_x = find_row(evaluation, "B", "xgboost", 4)
+    h4_l = find_row(evaluation, "B", "lightgbm", 4)
+    h4_a = find_row(evaluation, "A", "lightgbm", 4)
     with st.container(border=True):
         section_title(
             "4-week test",
@@ -31,6 +65,12 @@ def render(data: dict[str, Any]) -> None:
             f"Seasonal naive uses {seasonal['n_scored']:,} of those rows, the ones with a published price 52 weeks before the target. "
             "LSTM was not run.",
         )
+        if h4_x and h4_l and h4_a:
+            st.caption(
+                f"On the full sample, XGBoost B MAE is {float(h4_x['mae']):.2f} and LightGBM B MAE is {float(h4_l['mae']):.2f}. "
+                f"LightGBM A MAE is {float(h4_a['mae']):.2f}. "
+                f"Last-value naive MAE is {float(last['mae']):.2f}, MAPE {float(last['mape']):.2f}%, n={int(last['n_scored'])}."
+            )
         table = pd.DataFrame(
             [
                 {
@@ -40,13 +80,17 @@ def render(data: dict[str, Any]) -> None:
                     "RMSE": row["rmse"],
                     "MAPE %": row["mape"],
                     "Pinball": row["pinball"],
-                    "PICP %": row["picp"],
+                    "PICP calibrated %": row["picp"],
                     "Width": row["interval_width"],
                 }
                 for row in comparison
             ]
         )
         st.dataframe(table, width="stretch", hide_index=True)
+        st.caption(
+            "PICP in this table is the calibrated interval. A value below 90 is below the intended level. "
+            "Naive forecasts have no interval."
+        )
 
     scored = [row for row in comparison if row.get("mae") is not None]
     mae_col, picp_col = st.columns(2)
@@ -83,6 +127,8 @@ def render(data: dict[str, Any]) -> None:
         with market_col:
             st.caption("By market")
             st.dataframe(_slice_table(lgb["metrics"].get("by_market", {})), width="stretch", hide_index=True)
+    render_common_key_benchmark()
+    show_figures("Comparison")
 
 
 def _slice_table(rows: dict[str, dict[str, Any]]) -> pd.DataFrame:

@@ -5,10 +5,15 @@ import numpy as np
 import pandas as pd
 
 from htfe.features.frame import feature_columns
-from htfe.training.config import CAL_END, EVAL_MARKETS, HORIZONS, TRAIN_END
+from htfe.training.config import CAL_END, TRAIN_END
 
 QUANTILES = (0.05, 0.50, 0.95)
 CATS = ("crop", "market", "disruption_flag")
+TREE_PROTOCOL = "notebook_2022_early_stop"
+NOTEBOOK_TREE_PROTOCOL = TREE_PROTOCOL
+SELECTOR_TRAIN_END = pd.Timestamp("2021-12-31")
+SELECTOR_VALID_START = pd.Timestamp("2022-01-01")
+SELECTOR_VALID_END = pd.Timestamp("2022-12-31")
 
 
 def _eligible(frame: pd.DataFrame, horizon: int, target_col: str) -> pd.DataFrame:
@@ -101,93 +106,194 @@ def _fit_xgb(x_train, y_train, x_cal, y_cal, alpha: float, params: dict | None =
     return model
 
 
-def predict_boosters(frame: pd.DataFrame, target_form: str = "logret") -> tuple[pd.DataFrame, dict]:
-    """Fit pooled trees and return prediction rows for evaluation markets only."""
-    target_name = {"logret": "y_logret_h", "ratio": "y_ratio_h", "level": "y_price_h"}[target_form]
-    model_names = {"logret": ("lightgbm", "xgboost"), "ratio": ("lightgbm_ratio",), "level": ("lightgbm_level",)}[target_form]
-    rows: list[dict] = []
-    curves: dict[str, list] = {name: [] for name in model_names}
-    importance: dict[str, float] = {}
+def selection_masks(
+    frame: pd.DataFrame,
+    target_column: str = "target_week",
+    *,
+    min_selector_train: int = 50,
+    min_selector_validation: int = 20,
+    min_final_train: int = 50,
+    min_calibration: int = 20,
+) -> dict:
+    """2021 fit, 2022 early-stop, refit through 2022. 2023 stays out of selection.
 
-    for horizon in HORIZONS:
-        subset = _eligible(frame, horizon, f"{target_name}{horizon}")
-        if subset.empty:
-            continue
-        design, names = _design(subset)
-        y = subset[f"{target_name}{horizon}"].to_numpy(dtype=float)
-        train = subset["split"].eq("train").to_numpy()
-        cal = subset["split"].eq("calibrate").to_numpy()
-        if train.sum() < 50 or cal.sum() < 20:
-            continue
-        x_train, y_train = design.iloc[np.flatnonzero(train)], y[train]
-        x_cal, y_cal = design.iloc[np.flatnonzero(cal)], y[cal]
-        score_mask = (
-            subset["market"].isin(EVAL_MARKETS) & subset["split"].isin(["calibrate", "test"])
-        ).to_numpy()
-        score = subset.iloc[np.flatnonzero(score_mask)]
-        x_score = design.iloc[np.flatnonzero(score_mask)]
+    This is the Notebook 1 tree chronology used by the experiment entry points.
+    """
+    target_week = pd.to_datetime(frame[target_column], format="mixed").dt.normalize()
+    split = frame["split"].astype(str)
+    train_rows = split.eq("train")
+    selector_train = train_rows & target_week.le(SELECTOR_TRAIN_END)
+    selector_validation = train_rows & target_week.ge(SELECTOR_VALID_START) & target_week.le(SELECTOR_VALID_END)
+    final_train = train_rows.copy()
+    calibration = split.eq("calibrate")
+    test = split.eq("test")
+    if bool((selector_train & selector_validation).any()):
+        raise RuntimeError("Internal selector train and validation rows overlap.")
+    if bool((selector_validation & calibration).any()):
+        raise RuntimeError("2023 calibration rows entered early-stopping validation.")
+    if bool((final_train & calibration).any()):
+        raise RuntimeError("Calibration rows entered final tree fitting.")
+    if bool((final_train & test).any()):
+        raise RuntimeError("Held-out test rows entered final tree fitting.")
+    if int(selector_train.sum()) < min_selector_train:
+        raise RuntimeError("Not enough rows before 2022 for selector training.")
+    if int(selector_validation.sum()) < min_selector_validation:
+        raise RuntimeError("Not enough 2022 rows for internal early stopping.")
+    if int(final_train.sum()) < min_final_train:
+        raise RuntimeError("Not enough rows for final pre-2023 model fitting.")
+    if int(calibration.sum()) < min_calibration:
+        raise RuntimeError("Not enough untouched 2023 rows for CQR calibration.")
+    selector_train_max = target_week[selector_train].max()
+    selector_validation_min = target_week[selector_validation].min()
+    if (
+        pd.notna(selector_train_max)
+        and pd.notna(selector_validation_min)
+        and selector_train_max >= selector_validation_min
+    ):
+        raise RuntimeError("Internal model-selection split is not chronological.")
+    return {
+        "selector_train": selector_train.to_numpy(),
+        "selector_validation": selector_validation.to_numpy(),
+        "final_train": final_train.to_numpy(),
+        "calibration": calibration.to_numpy(),
+        "test": test.to_numpy(),
+        "selector_train_max_target": selector_train_max,
+        "selector_validation_min_target": selector_validation_min,
+        "selector_validation_max_target": target_week[selector_validation].max(),
+        "final_train_max_target": target_week[final_train].max(),
+    }
 
-        fitted = {}
-        if "lightgbm" in model_names or "lightgbm_ratio" in model_names or "lightgbm_level" in model_names:
-            lgb_name = next(name for name in model_names if name.startswith("lightgbm"))
-            for alpha, label in ((0.05, "q05"), (0.50, "q50"), (0.95, "q95")):
-                if target_form != "logret" and alpha != 0.50:
-                    continue
-                model, curve = _fit_lgbm(x_train, y_train, x_cal, y_cal, alpha)
-                fitted[label] = model
-                if alpha == 0.50:
-                    curves[lgb_name] = curve
-                    gains = dict(zip(names, model.feature_importances_.tolist(), strict=False))
-                    for feature, gain in gains.items():
-                        importance[feature] = importance.get(feature, 0.0) + float(gain)
-        if "xgboost" in model_names:
-            for alpha, label in ((0.05, "x05"), (0.50, "x50"), (0.95, "x95")):
-                fitted[label] = _fit_xgb(x_train, y_train, x_cal, y_cal, alpha)
 
-        def _price(key: str) -> np.ndarray:
-            raw = fitted[key].predict(x_score)
-            return _reconstruct(score["price"], np.asarray(raw, dtype=float), target_form, score["recent_median_4"])
+def _lgb_settings(alpha: float, params: dict | None) -> dict:
+    settings = {
+        "objective": "quantile",
+        "alpha": alpha,
+        "n_estimators": 500,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "min_child_samples": 20,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "n_jobs": 1,
+        "verbosity": -1,
+        "random_state": 42,
+    }
+    if params:
+        settings.update(params)
+    settings["objective"] = "quantile"
+    settings["alpha"] = alpha
+    settings.pop("early_stopping_rounds", None)
+    return settings
 
-        lgb_point = _price("q50") if "q50" in fitted else None
-        xgb_point = _price("x50") if "x50" in fitted else None
-        lgb_lo = _price("q05") if "q05" in fitted else None
-        lgb_hi = _price("q95") if "q95" in fitted else None
-        xgb_lo = _price("x05") if "x05" in fitted else None
-        xgb_hi = _price("x95") if "x95" in fitted else None
 
-        for position, (_, row) in enumerate(score.iterrows()):
-            common = {
-                "unique_id": row["unique_id"],
-                "crop": row["crop"],
-                "market": row["market"],
-                "week_start": pd.Timestamp(row["week_start"]),
-                "target_week": pd.Timestamp(row[f"target_week_h{horizon}"]),
-                "horizon": horizon,
-                "y_true": float(row[f"y_price_h{horizon}"]),
-                "split": row["split"],
-                "is_shock": bool(row["is_shock"]),
-                "season": row["season"],
-                "target_form": target_form,
-                "cultivation_intensity": float(row["cultivation_intensity"]) if pd.notna(row["cultivation_intensity"]) else np.nan,
-            }
-            if lgb_point is not None:
-                rows.append(
-                    {
-                        **common,
-                        "model": "lightgbm" if target_form == "logret" else f"lightgbm_{target_form}",
-                        "y_pred": float(lgb_point[position]),
-                        "y_pred_q05": float(lgb_lo[position]) if lgb_lo is not None else np.nan,
-                        "y_pred_q95": float(lgb_hi[position]) if lgb_hi is not None else np.nan,
-                    }
-                )
-            if xgb_point is not None:
-                rows.append(
-                    {
-                        **common,
-                        "model": "xgboost",
-                        "y_pred": float(xgb_point[position]),
-                        "y_pred_q05": float(xgb_lo[position]) if xgb_lo is not None else np.nan,
-                        "y_pred_q95": float(xgb_hi[position]) if xgb_hi is not None else np.nan,
-                    }
-                )
-    return pd.DataFrame(rows), {"curves": curves, "importance": importance}
+def _xgb_settings(alpha: float, params: dict | None, *, early_stopping: bool) -> dict:
+    settings = {
+        "objective": "reg:quantileerror",
+        "quantile_alpha": alpha,
+        "n_estimators": 500,
+        "learning_rate": 0.05,
+        "max_depth": 6,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "tree_method": "hist",
+        "n_jobs": 1,
+        "random_state": 42,
+    }
+    if early_stopping:
+        settings["early_stopping_rounds"] = 50
+    if params:
+        settings.update({key: value for key, value in params.items() if key != "early_stopping_rounds" or early_stopping})
+    settings["objective"] = "reg:quantileerror"
+    settings["quantile_alpha"] = alpha
+    if not early_stopping:
+        settings.pop("early_stopping_rounds", None)
+    return settings
+
+
+def _stamp_or_none(value) -> str | None:
+    if pd.isna(value):
+        return None
+    return pd.Timestamp(value).strftime("%Y-%m-%d")
+
+
+def fit_selected_lightgbm(design: pd.DataFrame, y: np.ndarray, masks: dict, alpha: float, params: dict | None = None):
+    """Select the tree count on 2022 targets, then refit through 2022-12-31.
+
+    The 2023 rows are not passed to either fit. Callers keep them for qhat.
+    """
+    import lightgbm as lgb
+
+    settings = _lgb_settings(alpha, params)
+    cap = int(settings["n_estimators"])
+    selector = lgb.LGBMRegressor(**settings)
+    selector_train = np.flatnonzero(masks["selector_train"])
+    selector_valid = np.flatnonzero(masks["selector_validation"])
+    final_train = np.flatnonzero(masks["final_train"])
+    selector.fit(
+        design.iloc[selector_train],
+        y[masks["selector_train"]],
+        eval_set=[(design.iloc[selector_valid], y[masks["selector_validation"]])],
+        callbacks=[lgb.early_stopping(50, verbose=False), lgb.log_evaluation(0)],
+    )
+    best = getattr(selector, "best_iteration_", None)
+    n_estimators = cap if best is None or int(best) < 1 else int(best)
+    final_settings = dict(settings)
+    final_settings["n_estimators"] = n_estimators
+    model = lgb.LGBMRegressor(**final_settings)
+    model.fit(design.iloc[final_train], y[masks["final_train"]])
+    record = {
+        "family": "lightgbm",
+        "protocol": NOTEBOOK_TREE_PROTOCOL,
+        "quantile": float(alpha),
+        "n_estimators": n_estimators,
+        "selector_best_iteration": None if best is None else int(best),
+        "selector_train_rows": int(len(selector_train)),
+        "selector_validation_rows": int(len(selector_valid)),
+        "final_train_rows": int(len(final_train)),
+        "calibration_rows_unused": int(np.asarray(masks["calibration"]).sum()),
+        "selector_train_target_end": _stamp_or_none(masks["selector_train_max_target"]),
+        "selector_validation_target_start": _stamp_or_none(masks["selector_validation_min_target"]),
+        "selector_validation_target_end": _stamp_or_none(masks["selector_validation_max_target"]),
+        "final_train_target_end": _stamp_or_none(masks["final_train_max_target"]),
+    }
+    return model, record
+
+
+def fit_selected_xgboost(design: pd.DataFrame, y: np.ndarray, masks: dict, alpha: float, params: dict | None = None):
+    """Same 2022 early-stop then pre-2023 refit. XGBoost's best_iteration is zero-based."""
+    import xgboost as xgb
+
+    selector_settings = _xgb_settings(alpha, params, early_stopping=True)
+    cap = int(selector_settings["n_estimators"])
+    selector = xgb.XGBRegressor(**selector_settings)
+    selector_train = np.flatnonzero(masks["selector_train"])
+    selector_valid = np.flatnonzero(masks["selector_validation"])
+    final_train = np.flatnonzero(masks["final_train"])
+    selector.fit(
+        design.iloc[selector_train],
+        y[masks["selector_train"]],
+        eval_set=[(design.iloc[selector_valid], y[masks["selector_validation"]])],
+        verbose=False,
+    )
+    best = getattr(selector, "best_iteration", None)
+    n_estimators = cap if best is None else int(best) + 1
+    final_settings = _xgb_settings(alpha, params, early_stopping=False)
+    final_settings["n_estimators"] = n_estimators
+    model = xgb.XGBRegressor(**final_settings)
+    model.fit(design.iloc[final_train], y[masks["final_train"]], verbose=False)
+    record = {
+        "family": "xgboost",
+        "protocol": NOTEBOOK_TREE_PROTOCOL,
+        "quantile": float(alpha),
+        "n_estimators": n_estimators,
+        "selector_best_iteration_zero_based": None if best is None else int(best),
+        "selector_train_rows": int(len(selector_train)),
+        "selector_validation_rows": int(len(selector_valid)),
+        "final_train_rows": int(len(final_train)),
+        "calibration_rows_unused": int(np.asarray(masks["calibration"]).sum()),
+        "selector_train_target_end": _stamp_or_none(masks["selector_train_max_target"]),
+        "selector_validation_target_start": _stamp_or_none(masks["selector_validation_min_target"]),
+        "selector_validation_target_end": _stamp_or_none(masks["selector_validation_max_target"]),
+        "final_train_target_end": _stamp_or_none(masks["final_train_max_target"]),
+    }
+    return model, record

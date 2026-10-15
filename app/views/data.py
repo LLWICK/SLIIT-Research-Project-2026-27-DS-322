@@ -6,6 +6,9 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lib.cultivation_status import render_cultivation_status
+from lib.figures import show_figures
+from lib.experiment_c import load_experiment_c
 from lib.load import member1_status, title_case
 from lib.style import AMBER, HARVEST, card_grid, page_header, pick, section_title, show_chart
 
@@ -43,6 +46,8 @@ def render(data: dict[str, Any]) -> None:
             f"An older Member 1 extract is also on disk ({upstream['wholesale_rows']:,} wholesale rows). "
             "The chart on this page uses the real HARTI panel scored for this run."
         )
+
+    render_cultivation_status()
 
     with st.container(border=True):
         crops = sorted({row["crop"] for row in series})
@@ -89,8 +94,17 @@ def render(data: dict[str, Any]) -> None:
     with rules:
         with st.container(border=True):
             section_title("Data rules", "How this panel is treated")
+            trained = bool(load_experiment_c(0).get("trained"))
             for item in coverage.get("exclusions", []):
-                st.markdown(f"**{item['item']}**  \n{item['reason']}")
+                reason = item["reason"]
+                if item.get("item") == "Live commitments" and trained:
+                    reason = (
+                        "processed/doa_cultivation_progress.csv is a national progress file, not a district-month series. "
+                        "Experiment C was trained on the national as-of signal. District rows stay in the audit. "
+                        "Lagged finished-season extent remains a historical feature in the full-sample Experiment B run, "
+                        "not current cultivation progress."
+                    )
+                st.markdown(f"**{item['item']}**  \n{reason}")
 
     with st.container(border=True):
         section_title("Coverage", "Wholesale series used in the model")
@@ -100,7 +114,12 @@ def render(data: dict[str, Any]) -> None:
         cov_df["start"] = cov_df["start"].astype(str).str.slice(0, 10)
         cov_df["end"] = cov_df["end"].astype(str).str.slice(0, 10)
         st.dataframe(
-            cov_df.rename(columns={"coverage_pct": "coverage %"})[["crop", "market", "rows", "coverage %", "start", "end"]],
+            cov_df.rename(columns={"coverage_pct": "price weeks %"})[["crop", "market", "rows", "price weeks %", "start", "end"]],
             width="stretch",
             hide_index=True,
         )
+        st.caption(
+            "This percentage is how many weeks in the series have a published wholesale price. "
+            "It is not the forecast interval, and it is not the 90% coverage target."
+        )
+    show_figures("Data")

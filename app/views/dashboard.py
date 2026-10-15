@@ -4,6 +4,8 @@ from typing import Any
 
 import streamlit as st
 
+from lib.cultivation_status import render_cultivation_status
+from lib.scores import coverage_words, b4_row
 from lib.live_match import handoff_packet, handoff_request, match_forecast
 from lib.load import lkr, title_case, write_forecast_packet
 from lib.nav import go_member
@@ -24,11 +26,12 @@ def render(data: dict[str, Any]) -> None:
     page_header(
         "Cobweb decision support",
         "Price Forecast",
-        "Choose a crop and market. The interval comes from the saved model. "
-        "The cultivation control writes achieved hectares over target hectares and scores that model again. "
-        "The progress column was trained on the labelled synthetic curve, so this is the update mechanism, not the A/B accuracy result.",
+        "Choose a crop and market. The interval comes from the saved runtime model. "
+        "This forecast is the runtime model. It is not Experiment B and it is not Experiment C. "
+        "The cultivation control writes achieved hectares over target hectares and scores that runtime model again.",
     )
     stage_row(STAGES)
+    render_cultivation_status(compact=True)
 
     if "dash_intensity_pct" not in st.session_state:
         st.session_state.dash_intensity_pct = 85
@@ -98,7 +101,10 @@ def render(data: dict[str, Any]) -> None:
                 unsafe_allow_html=True,
             )
             range_bar(low, expected, high)
-            fact("Experiment B 4-week coverage", "81.79%, below 90%")
+            fact(
+                "Saved B horizon-4 coverage, not this forecast",
+                coverage_words(None if b4_row() is None else b4_row().get("picp_cqr")),
+            )
             fact("Cultivation update applied", "Yes" if match.get("applied_cultivation_update") else "No")
             fact("Progress source", str(match.get("commitment_source") or "not available"))
             st.caption(match.get("note") or "")

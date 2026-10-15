@@ -7,6 +7,9 @@ from typing import Any
 import pandas as pd
 import streamlit as st
 
+from lib.cultivation_status import load_cultivation_status
+from lib.scores import b4_row, coverage_words
+from lib.experiment_c import experiment_c
 from lib.load import member1_status, title_case
 from lib.nav import go_member
 from lib.style import page_header, section_title, stage_row
@@ -48,8 +51,16 @@ def render(data: dict[str, Any]) -> None:
     else:
         k1.metric("Frozen demo panel", f"{meta['n_panel']:,}")
         k2.metric("Scored test weeks", f"{meta['n_scored_test']:,}")
-        k3.metric("Coverage target", "90%", "4-week test is 81.79%")
-        k4.metric("District-month file", "Not on disk", "Experiment C was not trained")
+        measured = None if b4_row(data["evaluation"]) is None else b4_row(data["evaluation"]).get("picp_cqr")
+        k3.metric("4-week interval", coverage_words(measured), "Intended level is 90%")
+        cultivation = load_cultivation_status()
+        run = experiment_c()
+        if run.get("trained"):
+            k4.metric("Experiment C", "Trained", "National matched-row test")
+        elif cultivation.get("doa_present"):
+            k4.metric("DOA progress file", f"{cultivation['n_rows']} rows", "National rows scored. District rows audit-only.")
+        else:
+            k4.metric("District-month file", "Not on disk", "Experiment C has not been trained")
         st.markdown(
             '<div class="warn-alert"><b>⚠️ Live extract not on this path</b><br>'
             "Charts still use the frozen scored panel so metrics stay reproducible. "
@@ -82,8 +93,8 @@ def render(data: dict[str, Any]) -> None:
             cov_df["crop"] = cov_df["crop"].map(title_case)
             cov_df["market"] = cov_df["market"].map(title_case)
             st.dataframe(
-                cov_df.rename(columns={"coverage_pct": "coverage %"})[
-                    ["crop", "market", "rows", "coverage %"]
+                cov_df.rename(columns={"coverage_pct": "price weeks %"})[
+                    ["crop", "market", "rows", "price weeks %"]
                 ],
                 width="stretch",
                 hide_index=True,

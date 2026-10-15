@@ -6,7 +6,9 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lib.figures import show_figures
 from lib.load import load_predictions, title_case
+from lib.scores import coverage_words
 from lib.style import AMBER, HARVEST, page_header, pick, show_chart
 
 
@@ -27,7 +29,7 @@ def render(data: dict[str, Any]) -> None:
             "We do not claim an i.i.d. mathematical guarantee on agricultural prices. "
             "The chart is the Experiment B LightGBM 4-week test. "
             f"The quantiles were conformalized on 2023 only (1-week q̂ = {qhat_1}; the 4-week adjustment is {qhat}). "
-            "The PICP shown here is that calibrated 4-week test, and it is below 90%."
+            f"The measured calibrated 4-week PICP is {coverage_words(lgb.get('picp'))}."
         ),
     )
     try:
@@ -37,7 +39,7 @@ def render(data: dict[str, Any]) -> None:
     preds = pd.DataFrame(loaded) if loaded else pd.DataFrame()
 
     c1, c2, c3 = st.columns(3)
-    c1.metric("Empirical PICP", f"{lgb['picp']}%", "Below the 90% target")
+    c1.metric("Empirical PICP", f"{lgb['picp']}%", "90% is the intended level")
     c2.metric("Mean width (Rs.)", f"{lgb['interval_width']:.0f}", "Sharpness half of the result")
     c3.metric("CQR q-hat", "not run" if qhat is None else str(qhat), "Raw quantiles only" if qhat is None else "Added to both tails")
 
@@ -75,3 +77,4 @@ def render(data: dict[str, Any]) -> None:
             "Amber = realised wholesale price. Blue = median forecast. "
             + ("Band = split conformal interval around the LightGBM quantiles." if qhat is not None else "Band = raw 5% to 95% quantile, not conformal.")
         )
+    show_figures("Uncertainty")

@@ -124,7 +124,7 @@
     },
     {
       "item": "Live commitments",
-      "reason": "No district-month target and achieved file is on disk. Experiment C was not trained. Lagged finished-season extent is a historical feature in Experiment B, not current cultivation progress."
+      "reason": "processed/doa_cultivation_progress.csv is a national progress file, not a district-month series. Experiment C is trained on the national as-of signal. District rows stay in the audit. Lagged finished-season extent remains a historical feature in the full-sample Experiment B run, not current cultivation progress."
     }
   ]
 }

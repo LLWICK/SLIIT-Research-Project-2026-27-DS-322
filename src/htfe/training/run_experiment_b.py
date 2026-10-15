@@ -1,26 +1,24 @@
 """Train Experiment B and compare it with the saved Experiment A metrics.
 
-Usage from prototype/member2_ForecastingEngine:
-  python -u -m training.run_experiment_b
+From the repo root, in Command Prompt, after `set PYTHONPATH=src`:
+  python -u -m htfe.training.run_experiment_b
 
 B is price lags, seasonal features, origin-aligned historical weather, real
-as-of macros, and lagged finished-season extent. It does not refit SARIMAX,
-does not train C or S, and does not impute macros or cultivation.
+as-of macros, and lagged finished-season extent. This script does not refit
+SARIMAX and does not fit Experiment C. Experiment C is `run_experiment_c`.
+Macros and cultivation are not imputed.
 """
 from __future__ import annotations
 
 import hashlib
 import json
-import shutil
 import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-from htfe.training.align_experiment_a import _cqr
-from htfe.training.config import ARTIFACTS, CAL_END, EVAL_MARKETS, HORIZONS, TRAIN_END
-from htfe.training.evaluate import _block, metrics_tables
+from htfe.config import OUTPUTS
 from htfe.features.sets import (
     EXTENT_FEATURES,
     MACRO_FEATURES,
@@ -32,13 +30,12 @@ from htfe.features.sets import (
     macros_ready,
     progress_available,
 )
+from htfe.training.config import ARTIFACTS, CAL_END, EVAL_MARKETS, HORIZONS, TRAIN_END
+from htfe.training.evaluate import _block, metrics_tables
 from htfe.training.run_experiment_a import (
     RANDOM_STATE,
     _assert_split,
     _eligible,
-    _fit_horizon,
-    _reuse_sarimax,
-    _tune,
 )
 
 OUT = ARTIFACTS / "experiment_b"
@@ -51,8 +48,6 @@ REPO = OUTPUTS
 DOC_PATH = OUTPUTS / "notes" / "Experiment-AB-Comparison-IT23415836.md"
 PROTECTED = (
     ARTIFACTS / "experiment_a",
-    ARTIFACTS / "latest",
-    ARTIFACTS / "methodology",
 )
 EXPECTED = (
     list(PRICE_HISTORY)
@@ -306,7 +301,7 @@ def _write_doc(comparison: pd.DataFrame, verdicts: list[str], crops: pd.DataFram
             "",
             "Test issue weeks are 2024-2025. Markets are Dambulla, Colombo, Meegoda, and Nuwara Eliya. Horizons are 1, 2, 4, 8, and 12 weeks. Scores use the same observed-price mask as Experiment A.",
             "",
-            "Experiment A is price lags and seasonal features. Experiment B adds origin-aligned historical weather, real as-of diesel, USD/LKR, and CCPI inflation, and lagged finished-season extent (`previous_season_extent`, `same_season_previous_year_extent`, `historical_mean_season_extent`, `extent_change_vs_previous_season`). Lagged extent is historical production, not current cultivation progress. `cultivation_progress_ratio` is null and is not a feature. The synthetic calendar is not a feature. Experiment C is unavailable. S was not run.",
+            "Experiment A is price lags and seasonal features. Experiment B adds origin-aligned historical weather, real as-of diesel, USD/LKR, and CCPI inflation, and lagged finished-season extent (`previous_season_extent`, `same_season_previous_year_extent`, `historical_mean_season_extent`, `extent_change_vs_previous_season`). Lagged extent is historical production, not current cultivation progress. `cultivation_progress_ratio` is null and is not a feature. The synthetic calendar is not a feature. Experiment C is a separate matched-row run and is not in this table. S was not run.",
             "",
             "MAE and RMSE percent change is (B − A) / A × 100. A negative percent is a lower error for B. PICP and width are the raw 0.05/0.95 intervals. PICP CQR and width CQR apply the 2023 split-conformal adjustment to the 2024-2025 test. SARIMAX interval columns stay blank.",
             "",
@@ -373,21 +368,6 @@ def _assert_inflation_rule(table: pd.DataFrame) -> str:
     return INFLATION_AVAILABLE_DATE_RULE
 
 
-def _aligned_sarimax(table: pd.DataFrame) -> tuple[pd.DataFrame, str]:
-    reused, note = _reuse_sarimax(table)
-    if not GAP_PATH.exists():
-        return reused, note
-    gaps = pd.read_csv(GAP_PATH)
-    gaps["forecast_issue_week"] = pd.to_datetime(gaps["forecast_issue_week"])
-    gaps["target_week"] = pd.to_datetime(gaps["target_week"])
-    both = pd.concat([reused, gaps], ignore_index=True)
-    both = both.drop_duplicates(["crop", "market", "forecast_issue_week", "horizon"], keep="first")
-    return both, (
-        f"{note} Added {len(gaps)} refit gap rows from artifacts/experiment_a/sarimax_gap_predictions.csv. "
-        "Matching rows stayed reused. artifacts/latest was not rewritten."
-    )
-
-
 def _test_identity(predictions: pd.DataFrame) -> dict:
     test = predictions[predictions["model"].eq("lightgbm") & predictions["split"].eq("test")].copy()
     test["forecast_issue_week"] = pd.to_datetime(test["forecast_issue_week"]).dt.strftime("%Y-%m-%d")
@@ -407,12 +387,29 @@ def _boundaries(table: pd.DataFrame) -> dict:
 
 
 def main() -> None:
+    global OUT
+    from htfe.training.publish import begin_staging, discard_staging, publish_staging
+
+    official = OUT
+    if official.resolve() in {path.resolve() for path in PROTECTED}:
+        raise RuntimeError("Experiment B output path collides with a protected artifact folder")
+    stage = begin_staging(official.name)
+    OUT = stage
+    published = False
+    try:
+        _train_experiment_b()
+        publish_staging(stage, official)
+        published = True
+    finally:
+        OUT = official
+        if not published:
+            discard_staging(stage)
+
+
+def _train_experiment_b() -> None:
     if OUT.resolve() in {path.resolve() for path in PROTECTED}:
         raise RuntimeError("Experiment B output path collides with a protected artifact folder")
     protected = {str(path.resolve()): _snapshot(path) for path in PROTECTED}
-    if OUT.exists():
-        print("discarding Experiment B artifacts fitted with CCPI reference month-end dates", flush=True)
-        shutil.rmtree(OUT)
     table = _prepare_table()
     _assert_split(table)
     inflation_rule = _assert_inflation_rule(table)
@@ -432,7 +429,7 @@ def main() -> None:
     if banned:
         raise RuntimeError(f"Experiment B includes forbidden columns: {banned}")
     if PROGRESS_FEATURE in table.columns and bool(table[PROGRESS_FEATURE].notna().any()):
-        raise RuntimeError("cultivation_progress_ratio is not all null; Experiment C was not trained and B will not use it until this is reviewed")
+        raise RuntimeError("cultivation_progress_ratio is not all null. Experiment B does not use that column. National cultivation progress is Experiment C.")
     used = _training_rows(table)
     try:
         nulls = _assert_macros(table, used)
@@ -441,31 +438,52 @@ def main() -> None:
         raise
     print(macro_reason, flush=True)
     print(f"training-row macro nulls {nulls}", flush=True)
-    print(f"cultivation progress available={progress_available(table)}; C and S are not trained", flush=True)
-    print("optuna horizon 4", flush=True)
-    tuned = _tune(table, columns)
-    print(tuned, flush=True)
-    parts = []
+    print("notebook protocol: fixed hyperparameters, 2022 early stop, 2023 only for qhat", flush=True)
+    from htfe.training.conformal import cqr_tables
+    from htfe.training.run_experiment_a import fit_quantile_trees
+
     for horizon in HORIZONS:
-        print(f"fitting horizon {horizon}", flush=True)
         subset = _eligible(table, horizon)
         for name in MACRO_FEATURES:
             train_nulls = int(subset.loc[subset["split"].eq("train"), name].isna().sum())
             if train_nulls:
                 raise AssertionError(f"{name} is null on {train_nulls} horizon-{horizon} training rows")
-        parts.append(_fit_horizon(subset, columns, tuned["lightgbm"], tuned["xgboost"]))
-    sarimax, sarimax_note = _aligned_sarimax(table)
+    tree_rows, records = fit_quantile_trees(table, columns, "B", model_dir=OUT / "models")
+    sarimax = pd.read_csv(A_DIR / "predictions.csv")
+    sarimax = sarimax[sarimax["model"].eq("sarimax")].copy()
+    sarimax_note = (
+        f"reused {len(sarimax)} Experiment A SARIMAX rows. "
+        "SARIMAX was not refit. Order is (1, 1, 1) x (1, 0, 0, 52)."
+    )
     print(sarimax_note, flush=True)
+    parts = [tree_rows]
     if not sarimax.empty:
         parts.append(sarimax)
     predictions = pd.concat(parts, ignore_index=True)
-    predictions.loc[predictions["model"].isin(["lightgbm", "xgboost"]), "feature_set"] = "B"
-    reused_mask = predictions["model"].eq("sarimax") & ~predictions["feature_set"].eq("sarimax_gap_refit")
-    predictions.loc[reused_mask, "feature_set"] = "reused_sarimax"
+    tuned = {
+        "used": False,
+        "reason": "Notebook 1 uses fixed LightGBM and XGBoost hyperparameters. Optuna is not run.",
+        "lightgbm": {
+            "learning_rate": 0.05,
+            "num_leaves": 31,
+            "min_child_samples": 20,
+            "subsample": 0.8,
+            "colsample_bytree": 0.8,
+            "n_estimators_cap": 500,
+        },
+        "xgboost": {
+            "learning_rate": 0.05,
+            "max_depth": 6,
+            "subsample": 0.8,
+            "colsample_bytree": 0.8,
+            "n_estimators_cap": 500,
+        },
+        "tree_count_records": len(records),
+    }
     OUT.mkdir(parents=True, exist_ok=True)
     predictions.to_csv(OUT / "predictions.csv", index=False)
     by_model, by_series = metrics_tables(predictions)
-    _b_cqr_rows, b_cqr = _cqr(predictions)
+    _b_cqr_rows, b_cqr = cqr_tables(predictions)
     (OUT / "cqr.json").write_text(json.dumps(b_cqr, indent=2), encoding="utf-8")
     by_model = by_model.merge(
         _b_cqr_rows[["model", "horizon", "qhat", "picp_cqr", "interval_width_cqr"]],
@@ -515,6 +533,7 @@ def main() -> None:
         "macro_nulls_on_training_rows": nulls,
         "macro_imputed": False,
         "extent_rows_dropped": False,
+        "protocol": "notebook_2022_early_stop",
         "optuna": tuned,
         "sarimax": sarimax_note,
         "ccpi_caveat": (
@@ -528,32 +547,36 @@ def main() -> None:
         **_test_identity(predictions),
     }
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    comparability = json.loads((A_DIR / "sarimax_comparability.json").read_text(encoding="utf-8"))
-    sarimax_doc = comparability["decision"]
+    from htfe.training.saved_inference import build_b_live_vectors
+
+    live = build_b_live_vectors(OUT / "models")
+    (OUT / "live_vectors.json").write_text(
+        json.dumps({"fit_called": False, "vectors": live, "source": "latest horizon-1 test rows from this Experiment B fit"}, indent=2),
+        encoding="utf-8",
+    )
+    sarimax_doc = sarimax_note
     _write_doc(comparison, verdicts, crops, sarimax_doc)
     identity = _test_identity(predictions)
     payload = {
         "observed_cultivation_data_available": False,
         "inflation_available_date_rule": inflation_rule,
         "A": {
-            "status": "already_trained",
-            "reason": "Not retrained. Quantile and CQR files were added beside the saved predictions.",
+            "status": "trained",
+            "reason": "Experiment A was fit with the notebook protocol before this Experiment B fit.",
         },
         "B": {
             "status": "trained",
-            "reason": "Experiment B trained on price lags, season, origin weather, real as-of macros, and lagged finished-season extent after the inflation publication lag.",
+            "reason": "Experiment B trained on price lags, season, origin weather, real as-of macros, and lagged finished-season extent. Tree count was selected on 2022. qhat uses 2023 only.",
         },
         "C": {
-            "status": "unavailable",
-            "reason": "observed_cultivation_data_available=false. dcs_highland_seasonal.csv and synthetic_proxy were not used as current progress.",
+            "status": "separate",
+            "reason": "Experiment C is the national matched-row run. It is not mixed into this full-sample table.",
         },
         "S": {"status": "not_run", "reason": "S was not run."},
         "features": columns,
         "date_boundaries": manifest["date_boundaries"],
         **identity,
         "sarimax": sarimax_note,
-        "sarimax_exact_match_before_gap_fill": comparability["exact_match_before_gap_fill"],
-        "sarimax_exact_match_after_gap_fill": comparability["exact_match_after_gap_fill"],
         "four_week_mae": verdicts,
         "artifacts": {
             "predictions": str(OUT / "predictions.csv"),

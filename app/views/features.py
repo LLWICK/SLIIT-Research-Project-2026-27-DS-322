@@ -6,6 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from lib.figures import show_figures
 from lib.load import title_case
 from lib.style import HARVEST, page_header, section_title, show_chart
 
@@ -46,8 +47,10 @@ def render(data: dict[str, Any]) -> None:
                 language="text",
             )
             st.caption(
-                "That monthly district table was not in the data folder, so this run does not treat "
-                "seasonal Census extent as cultivation progress."
+                "processed/doa_cultivation_progress.csv is the national progress file. "
+                "Experiment C uses a report only when the crop and official season match and the report date is on or before the forecast Monday. "
+                "District rows are audit-only. The dashboard model does not use this column. "
+                "Seasonal Census extent is lagged history, not current progress."
             )
 
     with bars:
@@ -69,10 +72,12 @@ def render(data: dict[str, Any]) -> None:
             for row in top:
                 st.caption(f"{row['feature']}  ·  {row['importance']:.2f}  ({100 * row['importance'] / peak:.0f}% of lag-1)")
             st.caption(
-                "These are SHAP values for the Experiment B 4-week median model. "
-                "Cultivation progress is not in this model, so a high rank here is not evidence for that novelty."
+                "The bars are the stored importance file. "
+                "The figure below, when present, is this run's LightGBM C horizon-4 SHAP. "
+                "SHAP does not replace the matched-row B* versus C MAE test."
             )
 
     with st.container(border=True):
         section_title("Generated dictionary", "Panel contract")
         st.dataframe(pd.DataFrame(dictionary), width="stretch", hide_index=True)
+    show_figures("Features")

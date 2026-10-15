@@ -175,7 +175,11 @@ def write_audit(table: pd.DataFrame, panel: pd.DataFrame) -> dict:
         )
     progress = coverage.loc[coverage["column"].eq("cultivation_progress_ratio"), "non_null_share"]
     if progress.empty or float(progress.iloc[0]) == 0:
-        cultivation_note = "Observed cultivation data unavailable. `cultivation_progress_ratio` is null. Experiment C is not trained."
+        cultivation_note = (
+            "The district-month column `cultivation_progress_ratio` is null on this panel. "
+            "Experiment C is the separate national matched-row run and reads "
+            "`doa_cultivation_progress.csv`, not this column."
+        )
     else:
         cultivation_note = "Observed cultivation progress is non-null on part of the table and was joined as-of without clipping at 1."
     DOCS.write_text(render_coverage_markdown(coverage, weather, macro_note, cultivation_note), encoding="utf-8")

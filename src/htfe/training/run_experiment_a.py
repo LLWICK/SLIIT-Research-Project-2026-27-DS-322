@@ -1,7 +1,7 @@
 """Train Experiment A on the primary training table.
 
-Usage from prototype/member2_ForecastingEngine:
-  python -u -m training.run_experiment_a
+From the repo root, in Command Prompt, after `set PYTHONPATH=src`:
+  python -u -m htfe.training.run_experiment_a
 """
 from __future__ import annotations
 
@@ -11,8 +11,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from htfe.training.config import ARTIFACTS, CAL_END, EVAL_MARKETS, HORIZONS, PANEL_PATH, TRAIN_END
-from htfe.training.coverage_audit import write_audit
+from htfe.training.config import ARTIFACTS, CAL_END, EVAL_MARKETS, HORIZONS, TRAIN_END
 from htfe.training.evaluate import metrics_tables
 from htfe.features.sets import (
     PRICE_HISTORY,
@@ -20,23 +19,18 @@ from htfe.features.sets import (
     feature_sets,
     historical_columns,
     macros_ready,
-    progress_available,
 )
-from htfe.models.trees import _fit_lgbm, _fit_xgb
+from htfe.models.trees import (
+    NOTEBOOK_TREE_PROTOCOL,
+    fit_selected_lightgbm,
+    fit_selected_xgboost,
+    selection_masks,
+)
 
 RANDOM_STATE = 42
-LGB_TRIALS = 15
-XGB_TRIALS = 8
 EVAL_IDS = {market.lower().replace(" ", "_") for market in EVAL_MARKETS}
 MARKET_NAME = {market.lower().replace(" ", "_"): market for market in EVAL_MARKETS}
 OUT = ARTIFACTS / "experiment_a"
-LATEST_PREDICTIONS = ARTIFACTS / "latest" / "predictions.csv"
-
-
-def _pinball(y_true: np.ndarray, y_pred: np.ndarray, alpha: float = 0.5) -> float:
-    residual = y_true - y_pred
-    loss = np.where(residual >= 0, alpha * residual, (alpha - 1.0) * residual)
-    return float(np.mean(loss))
 
 
 def _eligible(frame: pd.DataFrame, horizon: int) -> pd.DataFrame:
@@ -85,10 +79,22 @@ def _design(frame: pd.DataFrame, columns: list[str]) -> tuple[pd.DataFrame, list
     return pd.concat(pieces, axis=1), names
 
 
-def _score_frame(score: pd.DataFrame, point: np.ndarray, low: np.ndarray, high: np.ndarray, model: str) -> pd.DataFrame:
+def _score_frame(
+    score: pd.DataFrame,
+    point: np.ndarray,
+    low: np.ndarray,
+    high: np.ndarray,
+    model: str,
+    *,
+    raw_quantiles: bool = False,
+) -> pd.DataFrame:
     market = score["market_id"].map(MARKET_NAME).fillna(score["market_id"])
-    width_low = np.minimum(low, high)
-    width_high = np.maximum(low, high)
+    if raw_quantiles:
+        width_low = np.asarray(low, dtype=float)
+        width_high = np.asarray(high, dtype=float)
+    else:
+        width_low = np.minimum(low, high)
+        width_high = np.maximum(low, high)
     return pd.DataFrame(
         {
             "unique_id": score["crop_id"].astype(str) + "__" + market.astype(str),
@@ -109,182 +115,6 @@ def _score_frame(score: pd.DataFrame, point: np.ndarray, low: np.ndarray, high: 
             "feature_set": "A",
         }
     )
-
-
-def _fit_horizon(subset: pd.DataFrame, columns: list[str], lgb_params: dict, xgb_params: dict) -> pd.DataFrame:
-    design, _names = _design(subset, columns)
-    y = subset["y_logret"].to_numpy(dtype=float)
-    train = subset["split"].eq("train").to_numpy()
-    cal = subset["split"].eq("calibrate").to_numpy()
-    if int(train.sum()) < 50 or int(cal.sum()) < 20:
-        raise RuntimeError("not enough train or calibration rows")
-    x_train, y_train = design.iloc[np.flatnonzero(train)], y[train]
-    x_cal, y_cal = design.iloc[np.flatnonzero(cal)], y[cal]
-    score_mask = subset["market_id"].isin(EVAL_IDS) & subset["split"].isin(["calibrate", "test"])
-    score = subset.loc[score_mask]
-    x_score = design.loc[score_mask]
-    origin = score["last_observed_price_lkr_kg"].to_numpy(dtype=float)
-
-    def prices(model) -> np.ndarray:
-        raw = np.asarray(model.predict(x_score), dtype=float)
-        return np.maximum(origin * np.exp(raw), 0.01)
-
-    lgb = {}
-    for alpha, label in ((0.05, "q05"), (0.50, "q50"), (0.95, "q95")):
-        model, _curve = _fit_lgbm(x_train, y_train, x_cal, y_cal, alpha, lgb_params)
-        lgb[label] = prices(model)
-    xgb = {}
-    for alpha, label in ((0.05, "q05"), (0.50, "q50"), (0.95, "q95")):
-        model = _fit_xgb(x_train, y_train, x_cal, y_cal, alpha, xgb_params)
-        xgb[label] = prices(model)
-    return pd.concat(
-        [
-            _score_frame(score, lgb["q50"], lgb["q05"], lgb["q95"], "lightgbm"),
-            _score_frame(score, xgb["q50"], xgb["q05"], xgb["q95"], "xgboost"),
-        ],
-        ignore_index=True,
-    )
-
-
-def _tune(frame: pd.DataFrame, columns: list[str]) -> dict:
-    import optuna
-
-    optuna.logging.set_verbosity(optuna.logging.WARNING)
-    subset = _eligible(frame, 4)
-    design, _names = _design(subset, columns)
-    y = subset["y_logret"].to_numpy(dtype=float)
-    train = subset["split"].eq("train").to_numpy()
-    cal = subset["split"].eq("calibrate").to_numpy()
-    x_train, y_train = design.iloc[np.flatnonzero(train)], y[train]
-    x_cal, y_cal = design.iloc[np.flatnonzero(cal)], y[cal]
-    y_price = subset.loc[subset["split"].eq("calibrate"), "target_price_lkr_kg"].to_numpy(dtype=float)
-    origin = subset.loc[subset["split"].eq("calibrate"), "last_observed_price_lkr_kg"].to_numpy(dtype=float)
-
-    def objective_lgb(trial: optuna.Trial) -> float:
-        params = {
-            "num_leaves": trial.suggest_int("num_leaves", 16, 64),
-            "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.1, log=True),
-            "min_child_samples": trial.suggest_int("min_child_samples", 10, 50),
-            "subsample": trial.suggest_float("subsample", 0.6, 1.0),
-            "colsample_bytree": trial.suggest_float("colsample_bytree", 0.6, 1.0),
-        }
-        model, _curve = _fit_lgbm(x_train, y_train, x_cal, y_cal, 0.5, params)
-        price = np.maximum(origin * np.exp(np.asarray(model.predict(x_cal), dtype=float)), 0.01)
-        return _pinball(y_price, price)
-
-    def objective_xgb(trial: optuna.Trial) -> float:
-        params = {
-            "max_depth": trial.suggest_int("max_depth", 3, 8),
-            "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.1, log=True),
-            "min_child_weight": trial.suggest_float("min_child_weight", 1.0, 20.0),
-            "subsample": trial.suggest_float("subsample", 0.6, 1.0),
-            "colsample_bytree": trial.suggest_float("colsample_bytree", 0.6, 1.0),
-        }
-        model = _fit_xgb(x_train, y_train, x_cal, y_cal, 0.5, params)
-        price = np.maximum(origin * np.exp(np.asarray(model.predict(x_cal), dtype=float)), 0.01)
-        return _pinball(y_price, price)
-
-    sampler = optuna.samplers.TPESampler(seed=RANDOM_STATE)
-    lgb_study = optuna.create_study(direction="minimize", sampler=sampler)
-    lgb_study.optimize(objective_lgb, n_trials=LGB_TRIALS, show_progress_bar=False)
-    xgb_study = optuna.create_study(direction="minimize", sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE))
-    xgb_study.optimize(objective_xgb, n_trials=XGB_TRIALS, show_progress_bar=False)
-    return {
-        "lightgbm": dict(lgb_study.best_params),
-        "xgboost": dict(xgb_study.best_params),
-        "lightgbm_best_pinball": lgb_study.best_value,
-        "xgboost_best_pinball": xgb_study.best_value,
-        "lightgbm_trials": LGB_TRIALS,
-        "xgboost_trials": XGB_TRIALS,
-        "tuned_on": "horizon 4, q50 pinball on price, calibration issue weeks in 2023",
-    }
-
-
-def _fit_sarimax_cache() -> str:
-    """Fit the locked SARIMAX order when this branch has no saved prediction file."""
-    from htfe.config import OUTPUTS, built_file
-    from htfe.models.sarimax import DEFAULT_ORDER, DEFAULT_SEASONAL, predict
-
-    path = built_file("feature_frame.parquet")
-    if not path.exists():
-        from htfe.features.frame import build
-
-        frame = build()
-        path = OUTPUTS / "panel" / "feature_frame.parquet"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        frame.to_parquet(path, index=False)
-    else:
-        frame = pd.read_parquet(path)
-    print(f"fitting SARIMAX {DEFAULT_ORDER}x{DEFAULT_SEASONAL} from {path}", flush=True)
-    raw, meta = predict(frame, order=DEFAULT_ORDER, seasonal=DEFAULT_SEASONAL)
-    if raw.empty:
-        raise RuntimeError(f"SARIMAX fit produced no rows: {meta}")
-    LATEST_PREDICTIONS.parent.mkdir(parents=True, exist_ok=True)
-    raw.to_csv(LATEST_PREDICTIONS, index=False)
-    order_dir = LATEST_PREDICTIONS.parent / "models"
-    order_dir.mkdir(parents=True, exist_ok=True)
-    (order_dir / "sarima_order.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
-    return f"fitted {len(raw)} SARIMAX rows at fixed order {DEFAULT_ORDER}x{DEFAULT_SEASONAL}"
-
-
-def _reuse_sarimax(table: pd.DataFrame) -> tuple[pd.DataFrame, str]:
-    fitted_note = ""
-    if not LATEST_PREDICTIONS.exists():
-        fitted_note = _fit_sarimax_cache()
-    if not LATEST_PREDICTIONS.exists():
-        return pd.DataFrame(), "SARIMAX was not fit"
-    predictions = pd.read_csv(LATEST_PREDICTIONS)
-    sarimax = predictions[predictions["model"].eq("sarimax")].copy()
-    if sarimax.empty:
-        return pd.DataFrame(), "SARIMAX rows are missing from artifacts/latest/predictions.csv, and SARIMAX was not refit"
-    sarimax["forecast_issue_week"] = pd.to_datetime(sarimax["week_start"]).astype("datetime64[ns]")
-    sarimax["target_week"] = pd.to_datetime(sarimax["target_week"]).astype("datetime64[ns]")
-    sarimax["horizon"] = sarimax["horizon"].astype(int)
-    sarimax["crop"] = sarimax["crop"].astype(str)
-    sarimax["market"] = sarimax["market"].astype(str)
-    eligible = []
-    for horizon in HORIZONS:
-        part = _eligible(table, horizon)
-        part = part[part["market_id"].isin(EVAL_IDS) & part["split"].isin(["calibrate", "test"])].copy()
-        part["horizon"] = part["forecast_horizon_weeks"].astype(int)
-        part["crop_id"] = part["crop_id"].astype(str)
-        part["forecast_issue_week"] = pd.to_datetime(part["forecast_issue_week"]).astype("datetime64[ns]")
-        eligible.append(part)
-    keys = pd.concat(eligible, ignore_index=True)
-    keys["market_id"] = keys["market_id"].astype(str)
-    keys["market"] = keys["market_id"].map(MARKET_NAME)
-    keys["target_week"] = pd.to_datetime(keys["target_week"]).astype("datetime64[ns]")
-    merged = sarimax.merge(
-        keys,
-        left_on=["crop", "market", "forecast_issue_week", "horizon"],
-        right_on=["crop_id", "market", "forecast_issue_week", "horizon"],
-        how="inner",
-        suffixes=("", "_table"),
-    )
-    if merged.empty:
-        return pd.DataFrame(), "SARIMAX predictions do not match the training-table price target, and SARIMAX was not refit"
-    if "is_shock_table" in merged.columns:
-        merged["is_shock"] = merged["is_shock_table"]
-    if "season_table" in merged.columns:
-        merged["season"] = merged["season_table"]
-    gap = (merged["y_true"] - merged["target_price_lkr_kg"]).abs()
-    if float(gap.max()) > 1e-6:
-        return pd.DataFrame(), "SARIMAX y_true does not match target_price_lkr_kg, and SARIMAX was not refit"
-    week_gap = (pd.to_datetime(merged["target_week"]) - pd.to_datetime(merged["target_week_table"])).abs()
-    if bool(week_gap.dt.days.gt(0).any()):
-        return pd.DataFrame(), "SARIMAX target weeks do not match the training table, and SARIMAX was not refit"
-    kept = _score_frame(
-        merged,
-        merged["y_pred"].to_numpy(dtype=float),
-        np.full(len(merged), np.nan),
-        np.full(len(merged), np.nan),
-        "sarimax",
-    )
-    # _score_frame recomputes y_pred from arrays already in price space. Quantiles stay empty.
-    note = f"aligned {len(kept)} SARIMAX rows to the training-table price target and horizons"
-    if fitted_note:
-        note = f"{fitted_note}; {note}"
-    return kept, note
 
 
 def _status(trained_a: bool, a_reason: str, macro_reason: str, b_ready: bool, c_reason: str) -> dict:
@@ -309,18 +139,129 @@ def _status(trained_a: bool, a_reason: str, macro_reason: str, b_ready: bool, c_
     }
 
 
-def main() -> None:
-    from htfe.config import built_file
-    from htfe.training.build_training_table import main as rebuild
+def fit_quantile_trees(
+    frame: pd.DataFrame,
+    columns: list[str],
+    feature_set: str,
+    *,
+    model_dir: Path | None = None,
+) -> tuple[pd.DataFrame, list[dict]]:
+    """Notebook 1 tree fit: 2021 selector train, 2022 early stop, refit through 2022.
 
-    print("rebuilding training table with forecast identity columns and as-of macros", flush=True)
-    rebuild()
+    Fixed LightGBM and XGBoost defaults are used. Optuna is not run. 2023 is not
+    an early-stopping set. This is the fit the experiment entry points run, and
+    model_dir may be the experiment model folder the studio scores are built from.
+    """
+    if model_dir is not None:
+        model_dir.mkdir(parents=True, exist_ok=True)
+    import joblib
+
+    parts = []
+    records: list[dict] = []
+    for horizon in HORIZONS:
+        subset = _eligible(frame, horizon)
+        subset = subset.copy()
+        subset["crop_id"] = pd.Categorical(subset["crop_id"].astype(str))
+        subset["market_id"] = pd.Categorical(subset["market_id"].astype(str))
+        subset["season"] = pd.Categorical(subset["season"].astype(str), categories=["Maha", "Yala"])
+        design, names = _design(subset, columns)
+        categories = {
+            "crop_id": [str(value) for value in subset["crop_id"].cat.categories],
+            "market_id": [str(value) for value in subset["market_id"].cat.categories],
+            "season": [str(value) for value in subset["season"].cat.categories],
+        }
+        y = subset["y_logret"].to_numpy(dtype=float)
+        masks = selection_masks(subset)
+        score_mask = subset["market_id"].isin(EVAL_IDS) & subset["split"].isin(["calibrate", "test"])
+        score = subset.loc[score_mask]
+        x_score = design.loc[score_mask]
+        origin = score["last_observed_price_lkr_kg"].to_numpy(dtype=float)
+        fitted: dict[str, dict] = {"lightgbm": {}, "xgboost": {}}
+        for alpha, label in ((0.05, "q05"), (0.50, "q50"), (0.95, "q95")):
+            lgb_model, lgb_record = fit_selected_lightgbm(design, y, masks, alpha, None)
+            xgb_model, xgb_record = fit_selected_xgboost(design, y, masks, alpha, None)
+            fitted["lightgbm"][label] = lgb_model
+            fitted["xgboost"][label] = xgb_model
+            for record in (lgb_record, xgb_record):
+                record["feature_set"] = feature_set
+                record["horizon"] = int(horizon)
+                record["optuna_used"] = False
+                records.append(record)
+            if model_dir is not None:
+                for family, model in (("lightgbm", lgb_model), ("xgboost", xgb_model)):
+                    joblib.dump(
+                        {
+                            "model": model,
+                            "columns": names,
+                            "feature_columns": list(columns),
+                            "feature_set": feature_set,
+                            "horizon": int(horizon),
+                            "quantile": alpha,
+                            "label": label,
+                            "protocol": NOTEBOOK_TREE_PROTOCOL,
+                            "random_state": RANDOM_STATE,
+                            "categories": categories,
+                        },
+                        model_dir / f"{family}_{feature_set}_h{int(horizon)}_{label}.joblib",
+                    )
+
+        def _prices(family: str) -> dict[str, np.ndarray]:
+            out = {}
+            for label, model in fitted[family].items():
+                raw = np.asarray(model.predict(x_score), dtype=float)
+                out[label] = np.maximum(origin * np.exp(raw), 0.01)
+            return out
+
+        for family in ("lightgbm", "xgboost"):
+            prices = _prices(family)
+            scored = _score_frame(score, prices["q50"], prices["q05"], prices["q95"], family, raw_quantiles=True)
+            scored["feature_set"] = feature_set
+            parts.append(scored)
+    if model_dir is not None:
+        payload = {
+            "protocol": NOTEBOOK_TREE_PROTOCOL,
+            "selector_train": "eligible training targets through 2021-12-31",
+            "selector_validation": "eligible training targets in 2022",
+            "final_refit": "all eligible training targets through 2022-12-31",
+            "conformal_calibration": "2023 only; not used for model selection",
+            "optuna_used": False,
+            "saved_studio_cards": "produced when this function is called by the experiment entry points",
+            "records": records,
+        }
+        (model_dir / "training_protocol.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(), records
+
+
+def main() -> None:
+    global OUT
+    from htfe.training.publish import begin_staging, discard_staging, publish_staging
+
+    official = OUT
+    stage = begin_staging(official.name)
+    OUT = stage
+    published = False
+    try:
+        _train_experiment_a()
+        publish_staging(stage, official)
+        published = True
+    finally:
+        OUT = official
+        if not published:
+            discard_staging(stage)
+
+
+def _train_experiment_a() -> None:
+    from htfe.config import built_file
+    from htfe.models.sarimax import fit_notebook_from_table
+    from htfe.training.conformal import cqr_tables
+
     table_path = built_file("training_table.parquet")
+    if not table_path.is_file():
+        raise FileNotFoundError(table_path)
+    print(f"notebook protocol on {table_path}", flush=True)
+    print("fit through 2021, early-stop on 2022, refit through 2022, 2023 only for qhat", flush=True)
+    print("fixed LightGBM and XGBoost hyperparameters, seed 42, Optuna is not used", flush=True)
     table = pd.read_parquet(table_path)
-    table["crop_id"] = pd.Categorical(table["crop_id"])
-    table["market_id"] = pd.Categorical(table["market_id"])
-    table["season"] = pd.Categorical(table["season"], categories=["Maha", "Yala"])
-    panel = pd.read_parquet(PANEL_PATH)
     _assert_split(table)
     expected = list(PRICE_HISTORY) + list(SEASON_FEATURES)
     columns = historical_columns(table)
@@ -329,41 +270,60 @@ def main() -> None:
     sets = feature_sets(table)
     if sets["A"] != columns:
         raise RuntimeError("feature set A does not match the price-lag and season columns")
-    print("writing coverage audit", flush=True)
-    audit = write_audit(table, panel)
     ready, macro_reason = macros_ready(table)
-    c_reason = (
-        "Observed cultivation progress is non-null, but this task trains Experiment A only."
-        if progress_available(table)
-        else "observed cultivation data unavailable"
-    )
+    c_reason = "Experiment C is the national matched-row run in run_experiment_c. It is not fit inside Experiment A."
     print(macro_reason, flush=True)
     print(c_reason, flush=True)
-    print("optuna horizon 4", flush=True)
-    tuned = _tune(table, columns)
-    print(tuned, flush=True)
-    parts = []
-    for horizon in HORIZONS:
-        print(f"fitting horizon {horizon}", flush=True)
-        subset = _eligible(table, horizon)
-        parts.append(_fit_horizon(subset, columns, tuned["lightgbm"], tuned["xgboost"]))
-    sarimax, sarimax_note = _reuse_sarimax(table)
+    tree_rows, records = fit_quantile_trees(table, columns, "A", model_dir=OUT / "models")
+    print(f"tree rows {len(tree_rows)}", flush=True)
+    sarimax, sarimax_meta = fit_notebook_from_table(table, partial_path=OUT / "sarimax_partial.csv")
+    sarimax_note = f"fitted {len(sarimax)} SARIMAX rows at fixed order (1, 1, 1) x (1, 0, 0, 52)"
     print(sarimax_note, flush=True)
+    parts = [tree_rows]
     if not sarimax.empty:
         parts.append(sarimax)
     predictions = pd.concat(parts, ignore_index=True)
     by_model, by_series = metrics_tables(predictions)
     OUT.mkdir(parents=True, exist_ok=True)
     predictions.to_csv(OUT / "predictions.csv", index=False)
-    from htfe.training.align_experiment_a import _cqr
-
-    _cqr_rows, cqr_payload = _cqr(predictions)
+    cqr_rows, cqr_payload = cqr_tables(predictions)
     (OUT / "cqr.json").write_text(json.dumps(cqr_payload, indent=2), encoding="utf-8")
+    (OUT / "sarimax_order.json").write_text(json.dumps(sarimax_meta, indent=2), encoding="utf-8")
+    by_model = by_model.merge(
+        cqr_rows[["model", "horizon", "qhat", "picp_cqr", "interval_width_cqr"]],
+        on=["model", "horizon"],
+        how="left",
+    )
+    by_model.loc[~by_model["slice"].eq("test"), ["qhat", "picp_cqr", "interval_width_cqr"]] = np.nan
     by_model.to_csv(OUT / "metrics_by_model_horizon.csv", index=False)
     by_series.to_csv(OUT / "metrics_by_series.csv", index=False)
+    tuned = {
+        "used": False,
+        "reason": "Notebook 1 uses fixed LightGBM and XGBoost hyperparameters. Optuna is not run.",
+        "lightgbm": {
+            "learning_rate": 0.05,
+            "num_leaves": 31,
+            "min_child_samples": 20,
+            "subsample": 0.8,
+            "colsample_bytree": 0.8,
+            "n_estimators_cap": 500,
+            "early_stopping_rounds": 50,
+        },
+        "xgboost": {
+            "learning_rate": 0.05,
+            "max_depth": 6,
+            "subsample": 0.8,
+            "colsample_bytree": 0.8,
+            "n_estimators_cap": 500,
+            "early_stopping_rounds": 50,
+        },
+        "tree_count_records": len(records),
+    }
     manifest = {
         "experiment": "A",
         "description": "Price lags and seasonal features only. No weather, macros, cultivation progress, or lagged extent.",
+        "protocol": NOTEBOOK_TREE_PROTOCOL,
+        "executed": True,
         "features": columns,
         "identity_codes": ["crop_id", "market_id"],
         "season_code": "season",
@@ -371,9 +331,13 @@ def main() -> None:
         "model_target": "log(target_price / last_observed_price), inverted back to LKR/kg",
         "quantiles": [0.05, 0.50, 0.95],
         "random_state": RANDOM_STATE,
+        "direct_multi_horizon": True,
         "split": {
             "train_issue_through": TRAIN_END,
-            "calibrate": "2023",
+            "selector_train": "eligible training targets through 2021-12-31",
+            "selector_validation": "eligible training targets in 2022",
+            "final_refit": "eligible training targets through 2022-12-31",
+            "calibrate": "2023 issue weeks only, not used for early stopping",
             "test": "2024-2025",
             "shuffle": False,
         },
@@ -382,8 +346,9 @@ def main() -> None:
         "score_rule": "last observed price and target price both originally observed",
         "optuna": tuned,
         "sarimax": sarimax_note,
+        "sarimax_order": sarimax_meta,
+        "lstm": "not run",
         "feature_sets": {name: value if value is None else value for name, value in sets.items()},
-        "coverage": audit,
         "rows": int(len(table)),
     }
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
@@ -395,13 +360,11 @@ def main() -> None:
         c_reason,
     )
     payload["sarimax"] = sarimax_note
+    payload["protocol"] = NOTEBOOK_TREE_PROTOCOL
     payload["artifacts"] = {
         "predictions": str(OUT / "predictions.csv"),
         "metrics": str(OUT / "metrics_by_model_horizon.csv"),
         "manifest": str(OUT / "manifest.json"),
-        "coverage_md": audit["coverage_md"],
-        "coverage_csv": audit["coverage_csv"],
-        "weather_csv": audit["weather_csv"],
     }
     (OUT / "experiment_status.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
     test = by_model[by_model["slice"].eq("test")][["model", "horizon", "mae", "rmse", "mape", "pinball", "picp", "interval_width", "n_scored"]]

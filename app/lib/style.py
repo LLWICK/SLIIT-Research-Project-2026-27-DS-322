@@ -361,13 +361,22 @@ def fact(label: str, value: str, ready: bool = False) -> None:
     )
 
 
+def _b4_caption() -> str:
+    try:
+        from lib.scores import b4_coverage_sentence
+
+        return b4_coverage_sentence()
+    except Exception:
+        return "The intended interval level is 90%."
+
+
 def range_bar(low: float, mid: float, high: float) -> None:
     span = max(high - low, 1)
     pos = min(100.0, max(0.0, 100.0 * (mid - low) / span))
     st.markdown(
         f'<div class="range-track"><div class="range-fill"></div>'
         f'<div class="range-mark" style="left:{pos:.1f}%"></div></div>'
-        f'<p class="mist">Nominal 90% band. The Experiment B 4-week test covers 81.79% of prices, which is below that target.</p>',
+        f'<p class="mist">This interval is the runtime model, not Experiment B and not Experiment C. {_b4_caption()}</p>',
         unsafe_allow_html=True,
     )
 

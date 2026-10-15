@@ -21,6 +21,7 @@ from lib.live_match import ANCHOR
 from lib.load import load_studio
 from lib.nav import render_chain_nav, render_hero
 from lib.style import inject
+from lib.experiment_c import experiment_c
 from views import comparison, dashboard, data, features, novelty, results, training, uncertainty
 from views import member1
 
@@ -33,24 +34,31 @@ st.set_page_config(
 
 STUDIO_PAGES = {
     "Dashboard": dashboard.render,
+    "What we did": training.render,
     "Results": results.render,
+    "Which model": comparison.render,
+    "Cultivation proof": novelty.render,
+    "Uncertainty": uncertainty.render,
     "Data": data.render,
     "Features": features.render,
-    "Training": training.render,
-    "Comparison": comparison.render,
-    "Uncertainty": uncertainty.render,
-    "Novelty": novelty.render,
+}
+PAGE_ALIASES = {
+    "Training": "What we did",
+    "Comparison": "Which model",
+    "Novelty": "Cultivation proof",
 }
 
 if "dash_intensity_pct" not in st.session_state:
     st.session_state.dash_intensity_pct = int(ANCHOR * 100)
 
 names = list(STUDIO_PAGES)
-requested_page = st.query_params.get("page", "Dashboard")
+requested_page = PAGE_ALIASES.get(st.query_params.get("page", "Dashboard"), st.query_params.get("page", "Dashboard"))
 if requested_page not in STUDIO_PAGES:
     requested_page = "Dashboard"
 if "nav" not in st.session_state:
     st.session_state.nav = requested_page
+elif st.session_state.nav in PAGE_ALIASES:
+    st.session_state.nav = PAGE_ALIASES[st.session_state.nav]
 
 
 def _sync_page() -> None:
@@ -79,7 +87,14 @@ else:
         st.title("Price Forecast")
         st.caption("Weekly vegetable prices with a confidence range")
         st.radio("Navigate", names, key="nav", on_change=_sync_page, label_visibility="collapsed")
-        st.caption("Scores are the 2024–2025 test. The split is chronological. Experiment C was not trained.")
+        run = experiment_c()
+        if run.get("trained"):
+            st.caption(
+                "Walk the pages in order: what we did, the full-sample results, which model is best, then the matched-row cultivation proof. "
+                "The dashboard forecast is the runtime model. It is not the Experiment B or Experiment C accuracy result."
+            )
+        else:
+            st.caption("Scores are the 2024–2025 test. The split is chronological. Experiment C has not been trained in this run.")
     try:
         studio = load_studio()
     except FileNotFoundError as exc:
