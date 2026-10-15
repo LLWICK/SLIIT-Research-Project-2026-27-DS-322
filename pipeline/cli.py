@@ -67,18 +67,33 @@ def run_price_pipeline(args: argparse.Namespace) -> int:
                 print(f"  {link['date']}: {link['full_url']}")
             return 0
 
+        include_prev = getattr(args, "include_prev", False)
         if args.file:
-            logger.info(f"Ingesting offline HARTI bulletin from: {args.file}")
-            pdf_bytes, manifest = extractor.ingest_offline_bulletin(args.file, report_date=args.date)
-            print(f"Recorded offline HARTI manifest with SHA-256: {manifest.get('raw_sha256')}")
-            return 0
+            logger.info(f"Extracting HARTI prices from local bulletin: {args.file}")
+            raw_records = extractor.extract_from_file(
+                file_path=args.file,
+                report_date=args.date,
+                include_previous_day=include_prev,
+            )
+            if not raw_records:
+                # If automated table extraction is unavailable (e.g. non-standard font encoding), record offline manifest
+                pdf_bytes, manifest = extractor.ingest_offline_bulletin(args.file, report_date=args.date)
+                print(f"Recorded offline HARTI manifest with SHA-256: {manifest.get('raw_sha256')}")
+                print("Notice: No tabular DEC vegetable records could be extracted from this PDF format. Fallback manifest recorded.")
+                return 0
 
         elif args.date:
             logger.info(f"Attempting live fetch for HARTI bulletin on date: {args.date}")
             try:
                 pdf_bytes, manifest = extractor.fetch_bulletin(args.date, save_raw=True)
                 print(f"Successfully downloaded HARTI bulletin. SHA-256: {manifest.get('raw_sha256')}")
-                return 0
+                raw_records = extractor.extract_from_bytes(
+                    pdf_bytes=pdf_bytes,
+                    report_date=args.date,
+                    source_url=manifest.get("source_url", ""),
+                    sha256_hash=manifest.get("raw_sha256", ""),
+                    include_previous_day=include_prev,
+                )
             except Exception as exc:
                 logger.error(f"Live HARTI fetch failed: {exc}")
                 logger.info(
@@ -200,6 +215,7 @@ def main() -> None:
     price_parser.add_argument("--file", type=str, default=None, help="Local PDF/bulletin file path for offline processing")
     price_parser.add_argument("--discover", action="store_true", help="Scrape portal to list available bulletin links (HARTI)")
     price_parser.add_argument("--all-crops", action="store_true", help="Retain all food commodities rather than filtering to 5 target crops")
+    price_parser.add_argument("--include-prev", action="store_true", help="Include observations flagged from previous business day")
     price_parser.add_argument("--force-save", action="store_true", help="Save processed output even if warnings occur")
     price_parser.add_argument("--ledger-path", type=str, default=None, help="Custom destination path for the JSON Lines audit ledger")
 

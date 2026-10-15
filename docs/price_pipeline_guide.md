@@ -36,14 +36,15 @@ This pipeline forms the factual economic observation layer for:
 
 ### B. Hector Kobbekaduwa Agrarian Research & Training Institute (HARTI)
 - **Portal:** [https://www.harti.gov.lk/daily-price.php](https://www.harti.gov.lk/daily-price.php)
-- **Format:** 11-page Daily Food Price Bulletins covering terminal and regional dedicated economic centres.
-- **Markets Covered:** Pettah, Dambulla, Kandy, Keppetipola, Norochcholai, Meegoda, Nuwara Eliya, etc.
-- **Reported Metrics:** Price distributions including **Minimum**, **Maximum**, and **Modal** prices for wholesale and retail markets.
+- **Format:** 9 to 11-page Daily Food Price Bulletins covering terminal and regional dedicated economic centres.
+- **Markets Covered:** Peliyagoda, Kandy, Dambulla, Meegoda, Norochcholai, Thambuththegama, Keppetipola, Nuwara Eliya, Bandarawela, Veyangoda.
+- **Reported Metrics:** Price distributions including **Minimum**, **Maximum**, and representative midpoint prices for wholesale dedicated economic centres.
 - **Target Crop Coverage:** All 5 research crops (Carrot, Cabbage, Leek, Big onion, Tomato) are covered.
-- **Source Limitations Confirmed:**
-  1. *Automated Crawler Fragility:* Many recent bulletin links (e.g. October 2026) on `harti.gov.lk` return `HTTP 404` or point to non-PDF filenames.
-  2. *Font Subset Encoding:* HARTI PDF streams use embedded subset glyph IDs (`BCDGEE+Iskoola`, `BCDFEE+NirmalaUI-Bold`) with sparse `/ToUnicode` CMaps, causing direct text extraction to yield glyph indices.
-  3. *Tested Ingestion Fallback:* The pipeline implements an explicit offline fallback (`ingest_offline_bulletin` and `ingest_tabular_records`) that computes cryptographic SHA-256 hashes and captures full provenance manifests for verified official bulletins.
+- **Automated PDF Extraction & Font Encoding Findings:**
+  1. *Stream Architecture:* While Sinhala summary pages use custom subset fonts (`Iskoola Pota`, `Nirmala UI`) with sparse `/ToUnicode` CMaps, Page 2 embeds the complete wholesale vegetable DEC matrix in standard Latin-1 `[ (...) ] TJ` kerning blocks.
+  2. *Automated Extraction Engine:* `HartiPriceExtractor` locates the DEC table stream via `zlib`, clusters rows by vertical `y` coordinates, derives dynamic column intervals centered around table delimiter dashes (`-`), and cleanly extracts 450+ raw market commodity observations across 10 economic centres.
+  3. *Zero Fabrication:* Untraded commodity cells published with dashes (`-`) are strictly preserved as null (`None`), preventing any synthetic substitution or zero fabrication.
+  4. *Dual Ingestion Modes:* The extractor provides both automated PDF parsing (`extract_from_file`, `extract_from_bytes`) and verified offline fallback (`ingest_offline_bulletin`, `ingest_tabular_records`), guaranteeing cryptographic SHA-256 provenance in all modes.
 
 ---
 
@@ -203,17 +204,17 @@ python -m unittest discover tests
 
 Expected output:
 ```text
-Ran 40 tests in ~2.5s
+Ran 46 tests in ~10s
 OK
 ```
 
 Test coverage includes:
 - `tests/test_cbsl_price_extractor.py`: PDF token decompression, table parsing, market mappings, Leek absence.
-- `tests/test_harti_price_extractor.py`: Scraper URL discovery, modern/archive date patterns, offline fallback ingestion.
-- `tests/test_price_cleaner.py`: Crop aliases, district enrichment, coordinate lookups, missing-value null preservation.
+- `tests/test_harti_price_extractor.py`: Dynamic portal link scraping, DEC table stream detection, coordinate parsing, Min/Max extraction, untraded null preservation, and offline fallback.
+- `tests/test_price_cleaner.py`: Crop aliases (including HARTI cabbage & onion varieties), district enrichment, coordinate lookups, missing-value null preservation.
 - `tests/test_price_validator.py`: Schema enforcement, economic bounds (5-5000 Rs./kg), duplicate checks on variety identities.
 - `tests/test_dri_calculator.py`: Completeness, recency decay, consistency, small-sample penalty (0.7x), ledger append/preservation.
-- `tests/test_price_pipeline_e2e.py`: End-to-end execution of CBSL sample PDF through extraction, cleaning, validation, DRI scoring, and CLI execution.
+- `tests/test_price_pipeline_e2e.py`: End-to-end execution of CBSL and HARTI genuine PDF fixtures through extraction, cleaning, validation, DRI scoring, and CLI execution.
 
 ---
 

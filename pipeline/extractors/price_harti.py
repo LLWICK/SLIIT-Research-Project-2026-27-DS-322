@@ -21,6 +21,9 @@ from __future__ import annotations
 
 import logging
 import re
+import urllib.parse
+import zlib
+from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
@@ -155,31 +158,50 @@ class HartiPriceExtractor(BaseExtractor):
     ) -> tuple[bytes, dict[str, Any]]:
         """Attempt to download official HARTI daily bulletin from web portal.
 
+        Resolves either discovered dynamic portal link or canonical archive URL pattern.
+
         Raises:
-            FileNotFoundError: If the remote file returns HTTP 404 (known limitation on harti.gov.lk).
+            FileNotFoundError: If the remote file returns HTTP 404 or non-PDF payload.
         """
         iso_date, harti_token, year, month = self.format_date_tokens(date_input)
-        url = self.build_pdf_url(year, month, harti_token)
-        self.logger.info(f"Attempting live fetch of HARTI bulletin for {iso_date} from {url}")
 
+        # 1. Check if the portal published a modern bulletin under a specific filename
+        target_url = None
+        discovered_links = self.scrape_available_bulletin_links()
+        for link in discovered_links:
+            if link.get("iso_date") == iso_date or link.get("date") == harti_token:
+                target_url = link.get("full_url")
+                self.logger.info(f"Resolved dynamic portal bulletin URL for {iso_date}: {target_url}")
+                break
+
+        if not target_url:
+            target_url = self.build_pdf_url(year, month, harti_token)
+            self.logger.info(f"Attempting live fetch of HARTI bulletin for {iso_date} from canonical URL: {target_url}")
+
+        encoded_url = urllib.parse.quote(target_url, safe=":/?#[]@!$&'()*+,;=")
         try:
-            response = self.session.get(url, timeout=self.timeout)
+            response = self.session.get(encoded_url, timeout=self.timeout)
         except Exception as exc:
             raise ConnectionError(
-                f"Failed to connect to HARTI server at {url}. Error: {exc}. "
+                f"Failed to connect to HARTI server at {target_url}. Error: {exc}. "
                 "Consider using ingest_offline_bulletin() fallback."
             ) from exc
 
         if response.status_code == 404:
             raise FileNotFoundError(
-                f"HARTI Daily Price Bulletin for {iso_date} not found at {url} (HTTP 404). "
+                f"HARTI Daily Price Bulletin for {iso_date} not found at {target_url} (HTTP 404). "
                 "Limitation Notice: Recent HARTI daily bulletin URLs frequently return 404 or have broken links on the portal. "
-                "Use ingest_offline_bulletin() or ingest_tabular_bulletin() fallback for offline bulletins."
+                "Use ingest_offline_bulletin() or ingest_tabular_records() fallback for offline bulletins."
             )
         response.raise_for_status()
 
         pdf_bytes = response.content
-        sha256_hash = self.compute_sha256(pdf_bytes)
+        if not pdf_bytes.startswith(b"%PDF"):
+            raise FileNotFoundError(
+                f"HARTI server returned non-PDF content (HTTP {response.status_code}) for {target_url}. "
+                f"Magic bytes: {pdf_bytes[:20]!r}. "
+                "Portal may require offline bulletin ingestion fallback."
+            )
 
         manifest = {}
         if save_raw:
@@ -191,7 +213,7 @@ class HartiPriceExtractor(BaseExtractor):
 
             manifest = self.record_manifest(
                 manifest_path=manifest_path,
-                source_url=url,
+                source_url=target_url,
                 parameters={"date": iso_date, "harti_token": harti_token},
                 raw_payload_bytes=pdf_bytes,
                 extra_metadata={
@@ -318,3 +340,302 @@ class HartiPriceExtractor(BaseExtractor):
             standardized_records.append(record)
 
         return standardized_records
+
+    def find_dec_vegetable_stream(self, pdf_bytes: bytes) -> Optional[bytes]:
+        """Locate and decompress the PDF stream containing the English DEC wholesale vegetable table.
+
+        Returns:
+            Decompressed stream bytes, or None if no matching stream is found (e.g. scanned or corrupt PDF).
+        """
+        if not pdf_bytes.startswith(b"%PDF"):
+            return None
+
+        stream_pattern = re.compile(rb"stream[\r\n]+(.*?)[\r\n]+endstream", re.DOTALL)
+        for sm in stream_pattern.finditer(pdf_bytes):
+            try:
+                d = zlib.decompress(sm.group(1))
+                tjs = re.findall(rb"\[(.*?)\]\s*TJ", d)
+                if not tjs:
+                    continue
+                words = []
+                for tj in tjs:
+                    parts = re.findall(rb"(?<!\\)\(((?:\\.|[^()\\])*)\)", tj)
+                    joined = "".join(p.decode("latin1", errors="ignore") for p in parts).strip()
+                    if joined:
+                        words.append(joined.lower())
+
+                # Table signature: Contains 'variety' and 'peliyagoda'
+                if any("variety" in w for w in words) and any("peliyagoda" in w for w in words):
+                    return d
+            except Exception:
+                continue
+        return None
+
+    def parse_dec_vegetable_table(
+        self,
+        decompressed_stream: bytes,
+        default_date: Optional[str] = None,
+    ) -> list[dict[str, Any]]:
+        """Extract structured commodity rows from the English wholesale DEC table stream."""
+        d_str = decompressed_stream.decode("latin1", errors="ignore")
+
+        # Match 1 0 0 1 x y Tm ... [ ... ] TJ text elements
+        pattern = re.compile(
+            r"1\s+0\s+0\s+1\s+([-\d.]+)\s+([-\d.]+)\s+Tm(?:(?!ET).)*?\[(.*?)\]\s*TJ",
+            re.DOTALL,
+        )
+        elements: list[tuple[float, float, str]] = []
+        for m in pattern.finditer(d_str):
+            x = float(m.group(1))
+            y = float(m.group(2))
+            tj = m.group(3)
+            parts = re.findall(r"(?<!\\)\(((?:\\.|[^()\\])*)\)", tj)
+            txt = "".join(parts).strip()
+            txt = re.sub(r"\\([()])", r"\1", txt).strip()
+            if txt:
+                elements.append((x, y, txt))
+
+        if not elements:
+            return []
+
+        # Cluster elements by vertical y-coordinate (tolerance 1.5 pt)
+        rows: dict[float, list[tuple[float, str]]] = defaultdict(list)
+        for x, y, text in elements:
+            matched_y = None
+            for ey in rows:
+                if abs(ey - y) < 1.5:
+                    matched_y = ey
+                    break
+            if matched_y is None:
+                matched_y = y
+            rows[matched_y].append((x, text))
+
+        sorted_y = sorted(rows.keys(), reverse=True)
+
+        # 1. Locate Market header row
+        mkt_row_y = None
+        for y in sorted_y:
+            txts = [t[1].lower() for t in rows[y]]
+            if any("variety" in t for t in txts) and any("peliyagoda" in t for t in txts):
+                mkt_row_y = y
+                break
+
+        if mkt_row_y is None:
+            self.logger.warning("Could not identify Market header row in HARTI DEC table stream.")
+            return []
+
+        mkt_elems = sorted(rows[mkt_row_y], key=lambda t: t[0])
+        markets = [(x, txt) for x, txt in mkt_elems if "variety" not in txt.lower()]
+        if not markets:
+            return []
+
+        # 2. Locate Date row (row with YYYY.MM.DD)
+        date_row_y = None
+        for y in sorted_y:
+            if y != mkt_row_y:
+                txts = [t[1] for t in rows[y]]
+                if any(re.search(r"\d{4}\.\d{2}\.\d{2}", t) for t in txts):
+                    date_row_y = y
+                    break
+
+        col_dates: dict[str, str] = {}
+        if date_row_y:
+            date_elems = sorted(rows[date_row_y], key=lambda t: t[0])
+            for x_d, dt_str in date_elems:
+                m = re.search(r"(\d{4}\.\d{2}\.\d{2})", dt_str)
+                if m:
+                    closest_mkt = min(markets, key=lambda m: abs(m[0] - x_d))[1]
+                    col_dates[closest_mkt] = m.group(1).replace(".", "-")
+
+        # 3. Determine column boundaries
+        # Look for dash '-' positions in sample vegetable rows (e.g. Carrot or Beans)
+        sample_dashes: list[float] = []
+        for y in sorted_y:
+            if y < mkt_row_y - 5:
+                row_txts = [t[1].lower() for t in rows[y] if t[0] < 90.0]
+                if any("carrot" in t or "beans" in t for t in row_txts):
+                    dashes = sorted([t[0] for t in rows[y] if t[1] == "-"])
+                    if len(dashes) == len(markets):
+                        sample_dashes = dashes
+                        break
+
+        col_intervals: list[tuple[str, float, float]] = []
+        if len(sample_dashes) == len(markets):
+            midpoints = [(sample_dashes[i] + sample_dashes[i+1]) / 2.0 for i in range(len(sample_dashes) - 1)]
+            edges = [90.0] + midpoints + [600.0]
+            for i in range(len(markets)):
+                col_intervals.append((markets[i][1], edges[i], edges[i+1]))
+        else:
+            # Fallback to market header midpoints
+            for i in range(len(markets)):
+                m_name, x_c = markets[i][1], markets[i][0]
+                left = (markets[i-1][0] + x_c) / 2.0 if i > 0 else 85.0
+                right = (x_c + markets[i+1][0]) / 2.0 if i < len(markets) - 1 else 595.0
+                col_intervals.append((m_name, left, right))
+
+        # 4. Extract commodity price rows
+        extracted_rows: list[dict[str, Any]] = []
+        non_commodity_names = {
+            "up country vegetable",
+            "low country vegetable",
+            "hector kobbekaduwa agrarian research and training institute",
+            "data management division",
+            "market",
+            "variety",
+            "banana",
+            "other fruits (rs/fruit)",
+        }
+
+        for y in sorted_y:
+            if y >= mkt_row_y - 5:
+                continue
+            row_elems = sorted(rows[y], key=lambda t: t[0])
+            if not row_elems:
+                continue
+
+            name_elems = [t[1] for t in row_elems if t[0] < 90.0]
+            if not name_elems:
+                continue
+            crop_name = " ".join(name_elems).strip().rstrip("\\").strip()
+            if not crop_name or crop_name.lower() in non_commodity_names:
+                continue
+
+            for m_name, lb, rb in col_intervals:
+                col_tokens = [t[1] for t in row_elems if lb <= t[0] < rb]
+                nums: list[float] = []
+                for tok in col_tokens:
+                    cleaned = tok.replace(",", "").strip()
+                    if cleaned.replace(".", "", 1).isdigit():
+                        try:
+                            nums.append(float(cleaned))
+                        except ValueError:
+                            pass
+
+                min_p: Optional[float] = None
+                max_p: Optional[float] = None
+
+                if len(nums) >= 2:
+                    min_p = min(nums)
+                    max_p = max(nums)
+                elif len(nums) == 1:
+                    min_p = nums[0]
+                    max_p = nums[0]
+
+                obs_date = col_dates.get(m_name, default_date or "unknown")
+                raw_price_str = "-".join(str(n) for n in nums) if nums else "-"
+
+                extracted_rows.append(
+                    {
+                        "crop_name": crop_name,
+                        "market_name": m_name,
+                        "price_date": obs_date,
+                        "price_type": "wholesale",
+                        "unit": "Rs./kg",
+                        "min_price": min_p,
+                        "max_price": max_p,
+                        "modal_price": None,
+                        "raw_price_str": raw_price_str,
+                    }
+                )
+
+        return extracted_rows
+
+    def extract_from_bytes(
+        self,
+        pdf_bytes: bytes,
+        report_date: Optional[str] = None,
+        source_url: str = "",
+        sha256_hash: str = "",
+        include_previous_day: bool = True,
+    ) -> list[dict[str, Any]]:
+        """Extract standardized vegetable price observations from HARTI bulletin PDF bytes.
+
+        Args:
+            pdf_bytes: Raw bytes of the HARTI daily bulletin PDF.
+            report_date: Optional ISO date (YYYY-MM-DD). If omitted, inferred from PDF content or tokens.
+            source_url: Provenance source URL.
+            sha256_hash: Cryptographic SHA-256 hash of the input document.
+            include_previous_day: Whether to retain records whose column date indicates previous day.
+
+        Returns:
+            List of standardized price observation dictionaries adhering to warehouse schema.
+        """
+        if not sha256_hash:
+            sha256_hash = self.compute_sha256(pdf_bytes)
+
+        if not pdf_bytes.startswith(b"%PDF"):
+            raise ValueError(
+                f"Payload does not start with valid PDF magic bytes (%PDF). "
+                f"First 50 bytes: {pdf_bytes[:50]!r}"
+            )
+
+        dec_stream = self.find_dec_vegetable_stream(pdf_bytes)
+        if dec_stream is None:
+            self.logger.warning(
+                "HARTI PDF font-encoding limitation: Could not detect standard English DEC wholesale table stream. "
+                "The PDF may use custom subset glyphs without standard mappings or may be scanned. "
+                "Preserved without fabricating records."
+            )
+            return []
+
+        raw_rows = self.parse_dec_vegetable_table(dec_stream, default_date=report_date)
+        if not raw_rows:
+            self.logger.warning("No commodity rows extracted from HARTI DEC vegetable table stream.")
+            return []
+
+        self.logger.info(f"Parsed {len(raw_rows)} raw market commodity observations from HARTI PDF.")
+
+        # Determine reference bulletin report date
+        if not report_date:
+            dates_found = [r["price_date"] for r in raw_rows if r["price_date"] != "unknown"]
+            if dates_found:
+                report_date = max(dates_found)
+            else:
+                report_date = datetime.now().strftime("%Y-%m-%d")
+
+        norm_records = self.ingest_tabular_records(
+            raw_records=raw_rows,
+            report_date=report_date,
+            source_reference=source_url or "HARTI_PDF_STREAM",
+            provenance_sha256=sha256_hash,
+        )
+
+        final_records: list[dict[str, Any]] = []
+        for r in norm_records:
+            is_prev = r["price_date"] != report_date
+            r["is_previous_day"] = is_prev
+            if is_prev and not include_previous_day:
+                continue
+            final_records.append(r)
+
+        return final_records
+
+    def extract_from_file(
+        self,
+        file_path: Path | str,
+        report_date: Optional[str] = None,
+        include_previous_day: bool = True,
+    ) -> list[dict[str, Any]]:
+        """Extract price observation records from a local HARTI PDF bulletin file."""
+        path = Path(file_path)
+        if not path.is_file():
+            raise FileNotFoundError(f"HARTI bulletin file not found at {path}")
+
+        with open(path, "rb") as f:
+            pdf_bytes = f.read()
+
+        if not report_date:
+            dt = self.parse_date_from_filename(path.name)
+            if dt:
+                report_date = dt.strftime("%Y-%m-%d")
+
+        sha256_hash = self.compute_sha256(pdf_bytes)
+        source_url = f"file:///{path.resolve().as_posix()}"
+
+        return self.extract_from_bytes(
+            pdf_bytes=pdf_bytes,
+            report_date=report_date,
+            source_url=source_url,
+            sha256_hash=sha256_hash,
+            include_previous_day=include_previous_day,
+        )

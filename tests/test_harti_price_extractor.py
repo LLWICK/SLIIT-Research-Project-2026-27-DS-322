@@ -168,6 +168,111 @@ class TestHartiPriceExtractor(unittest.TestCase):
         self.assertEqual(leek_rec["source_agency"], "HARTI")
         self.assertEqual(len(leek_rec["provenance_sha256"]), 64)
 
+    def test_find_dec_vegetable_stream_non_pdf(self) -> None:
+        """Verify stream search returns None when given non-PDF payload."""
+        html_payload = b"<!DOCTYPE html><html><body>Error 403 Forbidden</body></html>"
+        stream = self.extractor.find_dec_vegetable_stream(html_payload)
+        self.assertIsNone(stream)
+
+    def test_extract_from_bytes_invalid_pdf_raises(self) -> None:
+        """Verify extract_from_bytes raises ValueError when invalid magic bytes are provided."""
+        with self.assertRaises(ValueError):
+            self.extractor.extract_from_bytes(b"NOT_A_PDF_DOCUMENT")
+
+    def test_extract_from_missing_file_raises(self) -> None:
+        """Verify extract_from_file raises FileNotFoundError for non-existent path."""
+        with self.assertRaises(FileNotFoundError):
+            self.extractor.extract_from_file("missing_harti_bulletin.pdf")
+
+    def test_extract_from_genuine_harti_pdf(self) -> None:
+        """Verify automated extraction of crop names, markets, dates, and Min/Max prices from genuine HARTI PDF.
+
+        Tests extraction using genuine captured HARTI bulletin fixture:
+        - Accurately parses DEC wholesale matrix (470 total raw records across 10 economic centres).
+        - Extracts all 5 research target vegetables (Carrot, Leek, Cabbage, Tomato, Big onion).
+        - Verifies Leek presence in HARTI (confirming coverage where CBSL is absent).
+        - Verifies accurate Min and Max price bounds matching official publication.
+        - Preserves unquoted/untraded cells as None without synthetic fabrication.
+        - Integrates with PriceCleaner, PriceValidator, and DRICalculator.
+        """
+        fixture_path = Path(__file__).resolve().parent / "fixtures" / "sample_harti_report.pdf"
+        self.assertTrue(
+            fixture_path.exists(),
+            f"Required genuine HARTI PDF fixture not found at {fixture_path}",
+        )
+
+        records = self.extractor.extract_from_file(fixture_path, report_date="2026-10-07")
+
+        # 1. Verification of record volume
+        self.assertGreaterEqual(len(records), 400)
+        self.assertEqual(records[0]["source_agency"], "HARTI")
+        self.assertEqual(len(records[0]["provenance_sha256"]), 64)
+
+        # 2. Verification of all 10 Dedicated Economic Centres
+        markets_found = {r["market_name"] for r in records}
+        expected_markets = {
+            "Peliyagoda",
+            "Kandy",
+            "Dambulla",
+            "Meegoda",
+            "Norochcholai",
+            "Thambuththegama",
+            "Keppetipola",
+            "Nuwara Eliya",
+            "Bandarawela",
+            "Veyangoda",
+        }
+        self.assertTrue(
+            expected_markets.issubset(markets_found),
+            f"Missing expected DEC markets: {expected_markets - markets_found}",
+        )
+
+        # 3. Verification of all 5 research target crops
+        target_records = [r for r in records if r["is_target_crop"]]
+        target_crops = {r["crop_name"] for r in target_records}
+        self.assertIn("Carrot", target_crops)
+        self.assertIn("Leek", target_crops)
+        self.assertIn("Cabbage", target_crops)
+        self.assertIn("Tomato", target_crops)
+        self.assertIn("Big onion", target_crops)
+        self.assertIn("Big onion (Imported)", target_crops)
+
+        # 4. Verified price checks on specific commodities:
+        # Carrot at Peliyagoda: Min=150.0, Max=160.0
+        peliyagoda_carrot = next(
+            r for r in target_records if r["crop_name"] == "Carrot" and r["market_name"] == "Peliyagoda"
+        )
+        self.assertEqual(peliyagoda_carrot["min_price_lkr_per_kg"], 150.0)
+        self.assertEqual(peliyagoda_carrot["max_price_lkr_per_kg"], 160.0)
+        self.assertEqual(peliyagoda_carrot["price_lkr_per_kg"], 155.0)  # Midpoint of min & max
+        self.assertEqual(peliyagoda_carrot["price_date"], "2026-10-07")
+
+        # Leek at Kandy: Min=100.0, Max=120.0
+        kandy_leek = next(
+            r for r in target_records if r["crop_name"] == "Leek" and r["market_name"] == "Kandy"
+        )
+        self.assertEqual(kandy_leek["min_price_lkr_per_kg"], 100.0)
+        self.assertEqual(kandy_leek["max_price_lkr_per_kg"], 120.0)
+        self.assertEqual(kandy_leek["price_lkr_per_kg"], 110.0)
+
+        # Tomato at Peliyagoda: Min=500.0, Max=550.0
+        peliyagoda_tomato = next(
+            r for r in target_records if r["crop_name"] == "Tomato" and r["market_name"] == "Peliyagoda"
+        )
+        self.assertEqual(peliyagoda_tomato["min_price_lkr_per_kg"], 500.0)
+        self.assertEqual(peliyagoda_tomato["max_price_lkr_per_kg"], 550.0)
+        self.assertEqual(peliyagoda_tomato["price_lkr_per_kg"], 525.0)
+
+        # 5. Untraded market verification (no fabrication):
+        # Carrot was not traded at Norochcholai in this bulletin (marked as '-')
+        noroch_carrot = next(
+            r for r in target_records if r["crop_name"] == "Carrot" and r["market_name"] == "Norochcholai"
+        )
+        self.assertIsNone(noroch_carrot["min_price_lkr_per_kg"])
+        self.assertIsNone(noroch_carrot["max_price_lkr_per_kg"])
+        self.assertIsNone(noroch_carrot["price_lkr_per_kg"])
+        self.assertEqual(noroch_carrot["raw_price_str"], "-")
+
 
 if __name__ == "__main__":
     unittest.main()

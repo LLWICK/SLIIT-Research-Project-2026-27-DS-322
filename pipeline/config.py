@@ -41,6 +41,8 @@ CROP_NAME_MAPPINGS = {
     # Cabbage
     "cabbage": "Cabbage",
     "cabbages": "Cabbage",
+    "cabbage (n'eliya)": "Cabbage",
+    "cabbage (kandy)": "Cabbage",
     # Leek
     "leek": "Leek",
     "leeks": "Leek",
@@ -51,6 +53,9 @@ CROP_NAME_MAPPINGS = {
     "big onion (imp)": "Big onion (Imported)",
     "big onion (imported)": "Big onion (Imported)",
     "onion (big)": "Big onion",
+    "b'onion imported": "Big onion (Imported)",
+    "big-onion local": "Big onion",
+    "big-onion": "Big onion",
     # Tomato
     "tomato": "Tomato",
     "tomatoes": "Tomato",
@@ -114,6 +119,48 @@ MARKET_CENTERS = {
         "district": "Puttalam",
         "latitude": 8.1633,
         "longitude": 79.7428,
+    },
+    "Norochchole": {
+        "market_name": "Norochcholai",
+        "market_type": "Dedicated Economic Centre",
+        "district": "Puttalam",
+        "latitude": 8.1633,
+        "longitude": 79.7428,
+    },
+    "Thambuththegama": {
+        "market_name": "Thambuththegama",
+        "market_type": "Dedicated Economic Centre",
+        "district": "Anuradhapura",
+        "latitude": 8.1558,
+        "longitude": 80.2970,
+    },
+    "Nuwaraeliya": {
+        "market_name": "Nuwara Eliya",
+        "market_type": "Dedicated Economic Centre",
+        "district": "Nuwara Eliya",
+        "latitude": 6.9698,
+        "longitude": 80.7681,
+    },
+    "Nuwara Eliya": {
+        "market_name": "Nuwara Eliya",
+        "market_type": "Dedicated Economic Centre",
+        "district": "Nuwara Eliya",
+        "latitude": 6.9698,
+        "longitude": 80.7681,
+    },
+    "Bandarawela": {
+        "market_name": "Bandarawela",
+        "market_type": "Regional Wholesale Market",
+        "district": "Badulla",
+        "latitude": 6.8299,
+        "longitude": 80.9858,
+    },
+    "Veyangoda": {
+        "market_name": "Veyangoda",
+        "market_type": "Dedicated Economic Centre",
+        "district": "Gampaha",
+        "latitude": 7.1550,
+        "longitude": 80.0575,
     },
 }
 
