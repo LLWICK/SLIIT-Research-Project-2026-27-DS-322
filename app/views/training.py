@@ -65,6 +65,20 @@ def render(data: dict[str, Any]) -> None:
     )
 
     with st.container(border=True):
+        section_title("Two functions", "What this forecast component does")
+        st.markdown(
+            """
+**Issue-week row.**
+Input: wholesale price, origin weather, published macros, and lagged extent. A value is used only when it was already public that week. Experiment C also takes the national achieved/target ratio when the report date is on or before that Monday.
+Output: one row for each crop, market, issue week, and horizon.
+
+**Horizon score.**
+Input: those rows, split by the week the forecast is issued.
+Output: MAE, MAPE, and calibrated coverage for Experiment A, Experiment B, and SARIMAX. Experiment C is scored on its own matched rows. The lowest MAE is stated one horizon at a time.
+            """
+        )
+
+    with st.container(border=True):
         section_title("Question and design", "One chronological protocol")
         st.markdown(
             f"""

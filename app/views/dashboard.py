@@ -1,22 +1,47 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import Any
 
 import streamlit as st
 
 from lib.cultivation_status import render_cultivation_status
-from lib.scores import coverage_words, b4_row
+from lib.scores import b4_row, coverage_words, find_row
 from lib.live_match import handoff_packet, handoff_request, match_forecast
 from lib.load import lkr, title_case, write_forecast_packet
 from lib.nav import go_member
-from lib.style import fact, page_header, pick, range_bar, section_title, stage_row
+from lib.style import fact, facts, page_header, pick, range_bar, section_title
 
-STAGES = [
-    {"role": "01", "title": "Data fusion", "body": "Weekly panel and reliability."},
-    {"role": "02", "title": "Price forecast", "body": "Calibrated interval for the week.", "active": True},
-    {"role": "03", "title": "Crop viability", "body": "Uses this forecast with weather."},
-    {"role": "04", "title": "Season simulation", "body": "Tests advice at market scale."},
-]
+
+def _horizon_label(match: dict[str, Any]) -> str:
+    issue = str(match.get("forecast_issue_week") or "")[:10]
+    target = str(match.get("forecast_week") or "")[:10]
+    try:
+        days = (date.fromisoformat(target) - date.fromisoformat(issue)).days
+    except ValueError:
+        return "1 week"
+    if days == 7:
+        return "1 week"
+    if days > 0 and days % 7 == 0:
+        weeks = days // 7
+        return "1 week" if weeks == 1 else f"{weeks} weeks"
+    if days > 0:
+        return f"{days} days"
+    return "1 week"
+
+
+def _saved_test(evaluation: dict[str, Any]) -> None:
+    rows: list[tuple[str, str]] = []
+    sarimax = find_row(evaluation, "B", "sarimax", 1)
+    xgb = find_row(evaluation, "B", "xgboost", 4)
+    if sarimax is not None:
+        rows.append(("1 week", f"SARIMAX, MAE {float(sarimax['mae']):.2f}"))
+    if xgb is not None:
+        rows.append(("4 weeks", f"XGBoost, MAE {float(xgb['mae']):.2f}"))
+    if not rows:
+        return
+    st.caption("Saved full-sample test. The lowest model changes with the horizon. Not this runtime price.")
+    facts(rows, ready=True)
 
 
 def render(data: dict[str, Any]) -> None:
@@ -24,14 +49,19 @@ def render(data: dict[str, Any]) -> None:
     crops = sorted({row["crop"] for row in live})
 
     page_header(
-        "Cobweb decision support",
-        "Price Forecast",
-        "Choose a crop and market. The interval comes from the saved runtime model. "
-        "This forecast is the runtime model. It is not Experiment B and it is not Experiment C. "
-        "The cultivation control writes achieved hectares over target hectares and scores that runtime model again.",
+        "Member 2",
+        "Price forecast",
+        "Choose a crop and market. This interval is the saved runtime model. "
+        "It is not the Experiment B score and it is not the Experiment C score.",
     )
-    stage_row(STAGES)
+    _saved_test(data["evaluation"])
     render_cultivation_status(compact=True)
+
+    if not crops:
+        st.caption("No runtime forecast is on disk for this studio.")
+        if st.button("Continue to Member 3", type="primary", key="dash_to_m3_empty"):
+            go_member("3")
+        return
 
     if "dash_intensity_pct" not in st.session_state:
         st.session_state.dash_intensity_pct = 85
@@ -49,40 +79,45 @@ def render(data: dict[str, Any]) -> None:
     if request and packet:
         write_forecast_packet(request, packet)
 
-    st.markdown('<div id="dash-trio"></div>', unsafe_allow_html=True)
-    inputs, forecast, inbox = st.columns(3, gap="medium", vertical_alignment="top")
+    inputs, forecast, inbox = st.columns(3, gap="small", vertical_alignment="top")
     with inputs:
-        section_title("Inputs", "Market")
-        crop = pick("Crop", crops, key="dash_crop", preferred="carrot", format_func=title_case)
-        markets = sorted({row["market"] for row in live if row["crop"] == crop})
-        market = pick("Market", markets, key="dash_market", preferred="colombo", format_func=title_case)
-        progress_in_model = bool(match and match.get("progress_in_model"))
-        intensity_pct = st.slider(
-            "Cultivation progress" if progress_in_model else "Cultivation progress (not in this model)",
-            min_value=25,
-            max_value=150,
-            step=5,
-            format="%d%%",
-            key="dash_intensity_pct",
-            help="Achieved hectares divided by target hectares. Ignored unless that column was in the trained model.",
-            disabled=not progress_in_model,
-        )
-        intensity = intensity_pct / 100.0
-        st.markdown('<div class="slider-ends"><span>Low</span><span>Crowded</span></div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            section_title("Inputs", "Market")
+            crop = pick("Crop", crops, key="dash_crop", preferred="carrot", format_func=title_case)
+            markets = sorted({row["market"] for row in live if row["crop"] == crop})
+            market = pick("Market", markets, key="dash_market", preferred="colombo", format_func=title_case)
+            progress_in_model = bool(match and match.get("progress_in_model"))
+            intensity_pct = st.slider(
+                "Cultivation progress" if progress_in_model else "Cultivation progress (not in this model)",
+                min_value=25,
+                max_value=150,
+                step=5,
+                format="%d%%",
+                key="dash_intensity_pct",
+                help="Achieved hectares divided by target hectares. Ignored unless that column was in the trained model.",
+                disabled=not progress_in_model,
+            )
+            intensity = intensity_pct / 100.0
 
     with forecast:
-        section_title("Forecast", "Expected wholesale price")
-        if not match:
-            st.warning("No live interval for this crop and market.")
-        else:
-            expected = int(match["predicted_price"])
-            low = int(match["lower_price"])
-            high = int(match["upper_price"])
-            st.caption(
-                f"{title_case(match['crop'])} · {title_case(match['market'])} · week of {match['forecast_week']}"
-            )
-            st.markdown(
-                f"""
+        with st.container(border=True):
+            section_title("Forecast", "Expected wholesale price")
+            if not match:
+                st.caption("No live interval for this crop and market.")
+            else:
+                expected = int(match["predicted_price"])
+                low = int(match["lower_price"])
+                high = int(match["upper_price"])
+                facts(
+                    [
+                        ("Crop", title_case(match["crop"])),
+                        ("Market", title_case(match["market"])),
+                        ("Horizon", _horizon_label(match)),
+                        ("Week", str(match["forecast_week"])),
+                    ]
+                )
+                st.markdown(
+                    f"""
 <div class="price-row">
   <div class="price-tile">
     <div class="price-label">Low</div>
@@ -97,31 +132,33 @@ def render(data: dict[str, Any]) -> None:
     <div class="price-value">{lkr(high)}</div>
   </div>
 </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            range_bar(low, expected, high)
-            fact(
-                "Saved B horizon-4 coverage, not this forecast",
-                coverage_words(None if b4_row() is None else b4_row().get("picp_cqr")),
-            )
-            fact("Cultivation update applied", "Yes" if match.get("applied_cultivation_update") else "No")
-            fact("Progress source", str(match.get("commitment_source") or "not available"))
-            st.caption(match.get("note") or "")
+                    """,
+                    unsafe_allow_html=True,
+                )
+                range_bar(low, expected, high)
+                fact(
+                    "Saved B horizon-4 coverage, not this forecast",
+                    coverage_words(None if b4_row() is None else b4_row().get("picp_cqr")),
+                )
+                fact("Cultivation update applied", "Yes" if match.get("applied_cultivation_update") else "No")
+                fact("Progress source", str(match.get("commitment_source") or "not available"))
+                st.caption(match.get("note") or "")
 
     with inbox:
-        section_title("Next stage", "Crop viability")
-        st.caption("This forecast is ready for the viability component.")
-        if packet:
-            fact("Crop", title_case(packet["crop"]))
-            fact("Market", title_case(packet["market"]))
-            fact("Expected price", lkr(packet["predicted_price"]))
-            fact("Range", f"{lkr(packet['lower_price'])} – {lkr(packet['upper_price'])}")
-            fact("Status", "Ready", ready=True)
-            st.markdown(
-                "<p class='mist'>Viability scoring will combine this range with weather. "
-                "The season simulation can reuse the same forecast at market scale.</p>",
-                unsafe_allow_html=True,
-            )
-            if st.button("Open Member 3’s DSS →", type="primary", key="dash_to_m3"):
+        with st.container(border=True):
+            section_title("Next stage", "Crop viability")
+            st.caption("Member 3 would read this range. This button opens the note on this page. It does not start Member 3's app.")
+            if packet:
+                fact("Crop", title_case(packet["crop"]))
+                fact("Market", title_case(packet["market"]))
+                fact("Expected price", lkr(packet["predicted_price"]))
+                fact("Range", f"{lkr(packet['lower_price'])} – {lkr(packet['upper_price'])}")
+                fact("Status", "Ready", ready=True)
+                st.markdown(
+                    "<p class='mist'>Member 4 can reuse the same weekly price. That simulator is not started here.</p>",
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.caption("No runtime forecast is stored for this crop and market.")
+            if st.button("Continue to Member 3", type="primary", key="dash_to_m3", use_container_width=True):
                 go_member("3")

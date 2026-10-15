@@ -15,21 +15,25 @@ from lib.style import AMBER, HARVEST, page_header, pick, show_chart
 def render(data: dict[str, Any]) -> None:
     models = data["models"]
     comparison = data["comparison"]
-    lgb = next(row for row in comparison if row["id"] == "lightgbm")
+    lgb = next((row for row in comparison if row.get("id") == "lightgbm"), None)
+    if lgb is None:
+        page_header("Forecast intervals", "4-week test interval", "The LightGBM row is not in the saved comparison file.")
+        return
     qhat_by_horizon = models["lightgbm"].get("qhat_by_horizon") or {}
     qhat = qhat_by_horizon.get("4", models["lightgbm"].get("qhat"))
     qhat_1 = qhat_by_horizon.get("1", models["lightgbm"].get("qhat"))
     page_header(
         "Forecast intervals",
-        "Raw 5% and 95% quantiles" if qhat is None else "90% targeted coverage, empirically evaluated",
-        "These bands are the LightGBM 5th and 95th percentiles on the 1-week-ahead test weeks. "
-        "They are not conformal yet, so the coverage is descriptive rather than a calibrated 90% guarantee."
-        if qhat is None
+        "4-week test interval" if qhat is not None else "Raw 5% and 95% quantiles",
+        (
+            "The chart is Experiment B LightGBM on the 4-week test. "
+            f"The quantiles were adjusted on 2023 only (1-week q̂ = {qhat_1}; 4-week adjustment = {qhat}). "
+            f"Measured calibrated coverage is {coverage_words(lgb.get('picp'))}."
+        )
+        if qhat is not None
         else (
-            "We do not claim an i.i.d. mathematical guarantee on agricultural prices. "
-            "The chart is the Experiment B LightGBM 4-week test. "
-            f"The quantiles were conformalized on 2023 only (1-week q̂ = {qhat_1}; the 4-week adjustment is {qhat}). "
-            f"The measured calibrated 4-week PICP is {coverage_words(lgb.get('picp'))}."
+            "These bands are the LightGBM 5th and 95th percentiles on the test weeks. "
+            "The 2023 adjustment has not been applied, so this is not a calibrated 90% interval."
         ),
     )
     try:
@@ -38,13 +42,25 @@ def render(data: dict[str, Any]) -> None:
         loaded = []
     preds = pd.DataFrame(loaded) if loaded else pd.DataFrame()
 
+    picp = lgb.get("picp")
+    if picp is None:
+        picp_delta = "not scored"
+    elif float(picp) >= 90:
+        picp_delta = "at or above the 90% intended level"
+    else:
+        picp_delta = "below the 90% intended level"
     c1, c2, c3 = st.columns(3)
-    c1.metric("Empirical PICP", f"{lgb['picp']}%", "90% is the intended level")
-    c2.metric("Mean width (Rs.)", f"{lgb['interval_width']:.0f}", "Sharpness half of the result")
-    c3.metric("CQR q-hat", "not run" if qhat is None else str(qhat), "Raw quantiles only" if qhat is None else "Added to both tails")
+    c1.metric("Calibrated PICP", "not scored" if picp is None else f"{float(picp):.2f}%", picp_delta, delta_color="off")
+    c2.metric("Mean width", f"{lgb['interval_width']:.0f}", "LKR per kg", delta_color="off")
+    c3.metric(
+        "4-week q-hat",
+        "not run" if qhat is None else str(qhat),
+        "Raw quantiles only" if qhat is None else "Added on 2023 only",
+        delta_color="off",
+    )
 
     if preds.empty:
-        st.info("The interval chart is written when Experiment B is trained. The scores above are the saved 4-week test.")
+        st.caption("The interval chart is written when Experiment B is trained. The scores above are the saved 4-week test.")
         return
     with st.container(border=True):
         crops = sorted(preds["crop"].unique())
@@ -64,7 +80,7 @@ def render(data: dict[str, Any]) -> None:
                 y=slice_df["lower"],
                 mode="lines",
                 fill="tonexty",
-                fillcolor="rgba(37,99,235,0.16)",
+                fillcolor="rgba(47,107,79,0.16)",
                 line=dict(width=0),
                 name="Calibrated interval",
             )
@@ -74,7 +90,11 @@ def render(data: dict[str, Any]) -> None:
         fig.update_layout(yaxis_title="Rs. / kg")
         show_chart(fig, 420)
         st.caption(
-            "Amber = realised wholesale price. Blue = median forecast. "
-            + ("Band = split conformal interval around the LightGBM quantiles." if qhat is not None else "Band = raw 5% to 95% quantile, not conformal.")
+            "Realised wholesale price and the median forecast. "
+            + (
+                "Band: 5% to 95% after the 2023 adjustment."
+                if qhat is not None
+                else "Band: raw 5% to 95%. The 2023 adjustment is not applied."
+            )
         )
     show_figures("Uncertainty")

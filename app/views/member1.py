@@ -12,14 +12,7 @@ from lib.scores import b4_row, coverage_words
 from lib.experiment_c import experiment_c
 from lib.load import member1_status, title_case
 from lib.nav import go_member
-from lib.style import page_header, section_title, stage_row
-
-STAGES = [
-    {"role": "01", "title": "Data fusion", "body": "Weekly panel and reliability.", "active": True},
-    {"role": "02", "title": "Price forecast", "body": "Calibrated interval for the week."},
-    {"role": "03", "title": "Crop viability", "body": "Uses this forecast with weather."},
-    {"role": "04", "title": "Season simulation", "body": "Tests advice at market scale."},
-]
+from lib.style import page_header, section_title
 
 
 def render(data: dict[str, Any]) -> None:
@@ -29,12 +22,11 @@ def render(data: dict[str, Any]) -> None:
     upstream = member1_status()
 
     page_header(
-        "Member 1 · data fusion",
-        "The weekly panel Member 2 inherits",
+        "Member 1",
+        "Weekly panel passed to the forecast",
         "Member 1 prepares HARTI wholesale prices, seasonal commitments, and NASA POWER weather. "
-        "Member 2 does not re-clean those files — it scores only originally observed wholesale weeks.",
+        "Member 2 scores originally observed wholesale weeks and does not re-clean those files.",
     )
-    stage_row(STAGES)
 
     k1, k2, k3, k4 = st.columns(4)
     if upstream.get("found"):
@@ -42,17 +34,15 @@ def render(data: dict[str, Any]) -> None:
         k2.metric("Wholesale rows", f"{upstream['wholesale_rows']:,}")
         k3.metric("Scoped model rows", f"{upstream['scoped_rows']:,}", "Carrot / Leek / Tomato")
         k4.metric("Commitment rows", f"{upstream['commitment_rows']:,}")
-        st.markdown(
-            '<div class="safe-alert"><b>✅ Member 1 extract detected</b><br>'
-            f"Reading <code>{upstream['price_path']}</code>. "
-            f"Weather file {'present' if upstream['has_weather'] else 'missing'}.</div>",
-            unsafe_allow_html=True,
+        st.caption(
+            f"Member 1 extract detected at {upstream['price_path']}. "
+            f"Weather file {'present' if upstream['has_weather'] else 'missing'}."
         )
     else:
         k1.metric("Frozen demo panel", f"{meta['n_panel']:,}")
         k2.metric("Scored test weeks", f"{meta['n_scored_test']:,}")
         measured = None if b4_row(data["evaluation"]) is None else b4_row(data["evaluation"]).get("picp_cqr")
-        k3.metric("4-week interval", coverage_words(measured), "Intended level is 90%")
+        k3.metric("4-week calibrated PICP", "not scored" if measured is None else f"{float(measured):.2f}%")
         cultivation = load_cultivation_status()
         run = experiment_c()
         if run.get("trained"):
@@ -61,17 +51,16 @@ def render(data: dict[str, Any]) -> None:
             k4.metric("DOA progress file", f"{cultivation['n_rows']} rows", "National rows scored. District rows audit-only.")
         else:
             k4.metric("District-month file", "Not on disk", "Experiment C has not been trained")
-        st.markdown(
-            '<div class="warn-alert"><b>⚠️ Live extract not on this path</b><br>'
-            "Charts still use the frozen scored panel so metrics stay reproducible. "
-            "Place <code>data/v1/analysis_ready_price.csv</code> at the repo root to light up the live count.</div>",
-            unsafe_allow_html=True,
+        st.caption(
+            "The Member 1 extract is not on this path. Counts are the frozen scored panel. "
+            + coverage_words(measured)
+            + "."
         )
 
     left, right = st.columns(2)
     with left:
         with st.container(border=True):
-            section_title("Chronological split", "Time order only — never random")
+            section_title("Issue-week split", "Train, calibration, then the 2024–2025 test")
             table = pd.DataFrame(
                 [
                     {
@@ -112,5 +101,5 @@ def render(data: dict[str, Any]) -> None:
             """
         )
 
-    if st.button("Continue to Member 2 · Price forecast", type="primary"):
+    if st.button("Continue to Member 2", type="primary", key="cont_m2_from_m1"):
         go_member("2")

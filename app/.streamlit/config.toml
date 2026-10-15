@@ -1,10 +1,37 @@
 [theme]
-base = "dark"
-primaryColor = "#3b82f6"
-backgroundColor = "#07110e"
-secondaryBackgroundColor = "#10211b"
-textColor = "#eaf3ec"
-font = "sans serif"
+base = "light"
+primaryColor = "#2F6B4F"
+backgroundColor = "#16352B"
+secondaryBackgroundColor = "#F7F4EE"
+textColor = "#1C1915"
+linkColor = "#2F6B4F"
+borderColor = "#E4DDD2"
+dataframeBorderColor = "#E4DDD2"
+dataframeHeaderBackgroundColor = "#EFEBE1"
+showWidgetBorder = true
+showSidebarBorder = false
+baseRadius = "2px"
+buttonRadius = "2px"
+font = "sans-serif"
+headingFont = "sans-serif"
+headingFontSizes = ["1.35rem", "1.08rem", "1rem", "0.96rem", "0.92rem", "0.9rem"]
+headingFontWeights = [600, 600, 600, 600, 600, 600]
+baseFontSize = 16
+metricValueFontSize = "1.45rem"
+metricValueFontWeight = 600
+chartCategoricalColors = ["#2F6B4F", "#1C1915", "#8C5A3C", "#3F6B56", "#3F3A34"]
+codeBackgroundColor = "#EFEBE1"
+
+[theme.sidebar]
+backgroundColor = "#122A22"
+secondaryBackgroundColor = "#16352B"
+textColor = "#F4F0E6"
+primaryColor = "#2F6B4F"
+linkColor = "#D5E8C4"
+borderColor = "#1C3A30"
+headingFont = "sans-serif"
+headingFontSizes = ["1.12rem", "1rem", "0.95rem"]
+headingFontWeights = [600, 600, 600]
 
 [browser]
 gatherUsageStats = false

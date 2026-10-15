@@ -8,7 +8,13 @@ import pandas as pd
 import streamlit as st
 
 from lib.cultivation_status import load_cultivation_status
-from lib.experiment_c import render_c_diagnostics, render_experiment_c_scores, render_reforecast, render_saved_model_use
+from lib.experiment_c import (
+    render_c_diagnostics,
+    render_experiment_c_scores,
+    render_member3_handoff,
+    render_reforecast,
+    render_saved_model_use,
+)
 from lib.figures import show_figures
 from lib.scores import b4_coverage_sentence
 from lib.style import page_header, section_title
@@ -25,6 +31,7 @@ def render(data: dict[str, Any]) -> None:
         "B* and C share the same eligible rows. District rows were not features. "
         "The dashboard forecast is the runtime model and is not this accuracy result.",
     )
+    render_member3_handoff()
     render_experiment_c_scores()
     shock_path = REPO / "outputs" / "figures" / "shock_note.json"
     if shock_path.is_file():

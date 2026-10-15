@@ -8,13 +8,21 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from lib.load import call_cached, title_case
 from lib.style import section_title
 
 OUT = Path(__file__).resolve().parents[2] / "outputs" / "experiment_c"
 EVAL_ROOT = OUT.parent / "evaluation"
 
 
-def _stamp() -> float:
+def _file_token(path: Path) -> tuple[str, int, int]:
+    if not path.is_file():
+        return (str(path), 0, 0)
+    stat = path.stat()
+    return (str(path), int(stat.st_mtime_ns), int(stat.st_size))
+
+
+def _stamp() -> tuple[tuple[str, int, int], ...]:
     names = (
         "status.json",
         "audit_summary.json",
@@ -23,8 +31,7 @@ def _stamp() -> float:
         "dynamic_reforecast_note.json",
         "member3_packet.json",
     )
-    stamps = [ (OUT / name).stat().st_mtime for name in names if (OUT / name).is_file() ]
-    return max(stamps) if stamps else 0.0
+    return tuple(_file_token(OUT / name) for name in names)
 
 
 def _read_json(path: Path) -> dict:
@@ -33,8 +40,32 @@ def _read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _paint() -> int | None:
+    try:
+        value = st.session_state.get("_paint")
+    except Exception:
+        return None
+    return value if isinstance(value, int) else None
+
+
+def _reuse(fn: object) -> dict | None:
+    paint = _paint()
+    pack = getattr(fn, "_pack", None)
+    if paint is None or getattr(fn, "_paint", None) != paint or not isinstance(pack, dict):
+        return None
+    return pack
+
+
+def _keep(fn: object, pack: dict) -> dict:
+    paint = _paint()
+    if paint is not None:
+        fn._paint = paint  # type: ignore[attr-defined]
+        fn._pack = pack  # type: ignore[attr-defined]
+    return pack
+
+
 @st.cache_data(show_spinner=False)
-def load_experiment_c(stamp: float) -> dict:
+def load_experiment_c(stamp: tuple[tuple[str, int, int], ...]) -> dict:
     del stamp
     status = _read_json(OUT / "status.json")
     audit = _read_json(OUT / "audit_summary.json")
@@ -58,7 +89,11 @@ def load_experiment_c(stamp: float) -> dict:
 
 
 def experiment_c() -> dict:
-    return load_experiment_c(_stamp())
+    saved = _reuse(experiment_c)
+    if saved is not None:
+        return saved
+    pack = call_cached(load_experiment_c, (_stamp(),), "Opening the cultivation scores")
+    return _keep(experiment_c, pack)
 
 
 def _read_csv(path: Path) -> pd.DataFrame:
@@ -67,7 +102,7 @@ def _read_csv(path: Path) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
-def _parity_stamp() -> float:
+def _parity_stamp() -> tuple[tuple[str, int, int], ...]:
     names = (
         "protocol_difference.json",
         "inference/saved_c_example.json",
@@ -94,7 +129,7 @@ def _parity_stamp() -> float:
         "evaluation/conditional_interval_note.txt",
         "inference/sensitivity_note.txt",
     )
-    stamps = [(OUT / name).stat().st_mtime for name in names if (OUT / name).is_file()]
+    tokens = [_file_token(OUT / name) for name in names]
     extra = (
         "common_key_benchmark.csv",
         "seasonal_naive_benchmark.csv",
@@ -103,12 +138,12 @@ def _parity_stamp() -> float:
         "benchmark_note.txt",
         "inference/saved_b_example.json",
     )
-    stamps.extend((EVAL_ROOT / name).stat().st_mtime for name in extra if (EVAL_ROOT / name).is_file())
-    return max(stamps) if stamps else 0.0
+    tokens.extend(_file_token(EVAL_ROOT / name) for name in extra)
+    return tuple(tokens)
 
 
 @st.cache_data(show_spinner=False)
-def load_parity(stamp: float) -> dict:
+def load_parity(stamp: tuple[tuple[str, int, int], ...]) -> dict:
     del stamp
     return {
         "protocol": _read_json(OUT / "protocol_difference.json"),
@@ -135,6 +170,7 @@ def load_parity(stamp: float) -> dict:
         "seasonal": _read_csv(EVAL_ROOT / "seasonal_naive_benchmark.csv"),
         "naive_bootstrap": _read_csv(EVAL_ROOT / "model_vs_naive_block_bootstrap.csv"),
         "benchmark_note": _read_text(EVAL_ROOT / "benchmark_note.txt"),
+        "best": _read_csv(EVAL_ROOT / "best_model_by_horizon.csv"),
         "probabilistic": _read_csv(OUT / "evaluation" / "final_probabilistic_evaluation_c.csv"),
         "crossing_diagnostic": _read_csv(OUT / "evaluation" / "quantile_crossing_diagnostic_c.csv"),
         "conditional_interval": _read_csv(OUT / "evaluation" / "conditional_interval_evaluation_c.csv"),
@@ -156,7 +192,11 @@ def _true_flag(series: pd.Series) -> pd.Series:
 
 
 def parity() -> dict:
-    return load_parity(_parity_stamp())
+    saved = _reuse(parity)
+    if saved is not None:
+        return saved
+    pack = call_cached(load_parity, (_parity_stamp(),), "Opening the score tables")
+    return _keep(parity, pack)
 
 
 def render_cultivation_audit(*, compact: bool = False) -> None:
@@ -175,13 +215,16 @@ def render_cultivation_audit(*, compact: bool = False) -> None:
                 + " District rows stay in the audit. This page is the runtime model."
             )
         else:
-            st.info(file_status["headline"])
+            st.caption(file_status["headline"])
         return
 
     with st.container(border=True):
         section_title("Cultivation file", "National rows are scored. District rows stay in the audit.")
-        for sentence in file_status["sentences"]:
-            st.markdown(sentence)
+        if not file_status.get("doa_present"):
+            st.caption(file_status.get("headline") or "The cultivation file is not on disk.")
+        else:
+            for sentence in file_status["sentences"]:
+                st.markdown(sentence)
         counts = file_status.get("counts") or []
         if counts:
             st.dataframe(pd.DataFrame(counts), width="stretch", hide_index=True)
@@ -195,7 +238,7 @@ def render_cultivation_audit(*, compact: bool = False) -> None:
             if not yearly.empty:
                 st.dataframe(yearly, width="stretch", hide_index=True)
         if run.get("trained"):
-            st.caption("Matched-row B* and C scores are on the Results page. They are not added to the full-sample A/B table.")
+            st.caption("Matched-row B* and C scores are on Cultivation proof. They are not in the full-sample A/B table.")
         else:
             st.caption("outputs/experiment_c does not contain a trained run.")
 
@@ -206,16 +249,15 @@ def render_experiment_c_scores() -> None:
         section_title("Experiment C", "Matched-row national cultivation test")
         st.caption(
             "B* and C use the same eligible rows. B* does not see current progress. "
-            "C adds the national as-of ratio. These rows are not mixed into the full-sample A/B table. "
-            "Spatial scope is national, which is not district supply progress. "
-            "The dashboard remains the runtime model."
+            "C adds the national as-of ratio. These rows are not in the full-sample A/B table. "
+            "District rows are not features. The dashboard is the runtime model."
         )
         if not run.get("trained"):
-            st.info("Experiment C has not been trained in this run. No score from a notebook is shown here.")
+            st.caption("Experiment C has not been trained in this run. No score from a notebook is shown here.")
             return
         comparison = run["comparison"]
         if comparison.empty:
-            st.warning("outputs/experiment_c/b_star_vs_c.csv is missing.")
+            st.caption("outputs/experiment_c/b_star_vs_c.csv is missing.")
             return
         show = comparison.copy()
         if "model" in show.columns:
@@ -277,13 +319,13 @@ def render_reforecast() -> None:
     with st.container(border=True):
         section_title("Dynamic reforecast", "One target week, earlier issue dates, saved C model")
         if not run.get("trained"):
-            st.info("The saved C model is not on disk, so this panel has no reforecast rows.")
+            st.caption("The saved C model is not on disk, so this panel has no reforecast rows.")
             return
         note = run.get("note") or {}
         st.markdown(note.get("note") or "No reforecast note was written.")
         walk = run.get("walk")
         if walk is None or walk.empty:
-            st.warning("No real rows were scored for the reforecast.")
+            st.caption("No real rows were scored for the reforecast.")
             return
         label = (
             f"{note.get('crop', '')} · {note.get('market', '')} · target week {note.get('target_week', '')}"
@@ -329,10 +371,65 @@ def render_protocol_note() -> None:
         note = parity().get("protocol") or {}
         sentences = list(note.get("sentences") or [])
         if not sentences:
-            st.info("The protocol note has not been written yet.")
+            st.caption("The protocol note has not been written yet.")
             return
         for sentence in sentences:
             st.markdown(sentence)
+
+
+def render_member3_handoff() -> None:
+    packet = parity().get("member3") or {}
+    with st.container(border=True):
+        section_title("Given to Member 3", "Experiment C forecast packet from this run")
+        if not packet:
+            st.caption("The Member 3 forecast file is not on disk.")
+            return
+        measured = packet.get("measured_picp_pct_by_horizon") or {}
+        if not measured:
+            st.caption("The Member 3 file has no measured PICP values.")
+        else:
+            rows = []
+            below = []
+            for key, value in measured.items():
+                number = float(value)
+                note = "below the intended level of 90" if number < 90 else ""
+                rows.append({"horizon weeks": int(key), "measured PICP %": f"{number:.2f}", "note": note})
+                if number < 90:
+                    below.append(f"Horizon {int(key)} is {number:.2f}")
+            st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+            if below:
+                st.markdown(
+                    "The intended level is 90. " + ". ".join(below) + ". That is below the intended level."
+                )
+            note = packet.get("coverage_level_note")
+            if note:
+                st.caption(note)
+        forecasts = packet.get("forecasts") or []
+        if not forecasts:
+            st.caption("The Member 3 file has no forecast rows.")
+            return
+        show = pd.DataFrame(forecasts)
+        display = pd.DataFrame(
+            {
+                "crop": show["crop"].map(title_case) if "crop" in show.columns else [],
+                "market": show["market"].map(title_case) if "market" in show.columns else [],
+                "horizon weeks": show["horizon_weeks"] if "horizon_weeks" in show.columns else [],
+                "issue week": show["forecast_issue_week"] if "forecast_issue_week" in show.columns else [],
+                "forecast week": show["forecast_week"] if "forecast_week" in show.columns else [],
+                "lower": show["lower_price"] if "lower_price" in show.columns else [],
+                "predicted": show["predicted_price"] if "predicted_price" in show.columns else [],
+                "upper": show["upper_price"] if "upper_price" in show.columns else [],
+                "progress": show["cultivation_progress"].map(lambda value: f"{float(value):.3f}")
+                if "cultivation_progress" in show.columns
+                else [],
+                "report date": show["cultivation_report_date"] if "cultivation_report_date" in show.columns else [],
+            }
+        )
+        st.dataframe(display, width="stretch", hide_index=True)
+        st.caption(
+            "These rows are the forecast fields in the file given to Member 3. "
+            "They are not the dashboard runtime price. Progress is national achieved hectares divided by target hectares."
+        )
 
 
 def render_saved_model_use() -> None:
@@ -341,7 +438,7 @@ def render_saved_model_use() -> None:
     with st.container(border=True):
         section_title("Saved model, no refit", "One horizon-4 forecast reproduced from the frozen C model")
         if not example:
-            st.info("The reproduction check has not been written yet.")
+            st.caption("The reproduction check has not been written yet.")
             return
         st.markdown(
             f"{example.get('crop')} at {example.get('market')}, issued {example.get('forecast_issue_week')}, "
@@ -361,9 +458,8 @@ def render_saved_model_use() -> None:
     with st.container(border=True):
         section_title("Twelve one-week forecasts", "3 crops × 4 score markets, frozen horizon-1 model")
         forecasts = pack.get("forecasts")
-        member3 = pack.get("member3") or {}
         if forecasts is None or forecasts.empty:
-            st.info("The twelve-forecast file has not been written yet.")
+            st.caption("The twelve-forecast file has not been written yet.")
         else:
             show = forecasts[
                 [
@@ -379,19 +475,15 @@ def render_saved_model_use() -> None:
                 ]
             ]
             st.dataframe(show, width="stretch", hide_index=True)
-            measured = member3.get("measured_picp_pct_by_horizon") or {}
-            st.caption(member3.get("coverage_level_note") or "Measured PICP is taken from this run.")
-            if measured:
-                st.markdown(
-                    "Member 3 packet PICP from this run, by horizon: "
-                    + ", ".join(f"h{key} {value}%" for key, value in measured.items())
-                    + "."
-                )
+            st.caption(
+                "These rows include a historical actual for the reproduction check. "
+                "The packet given to Member 3, including measured PICP, is in Given to Member 3 above."
+            )
         manifest = pack.get("manifest") or {}
         missing = manifest.get("missing_required") or []
         if manifest:
             if missing:
-                st.warning("Missing required artifacts: " + ", ".join(missing))
+                st.caption("Missing required artifacts: " + ", ".join(missing))
             else:
                 st.caption(
                     f"Manifest check: {manifest.get('required_count', 0)} required artifacts are on disk. "
@@ -445,17 +537,14 @@ def render_c_diagnostics() -> None:
         if residual is not None and not residual.empty:
             st.dataframe(residual, width="stretch", hide_index=True)
             st.caption("Residual is actual price minus predicted price. A negative mean means the median forecast is high on average.")
-        columns = st.columns(3)
-        blocks = (
-            (columns[0], "By crop", pack.get("by_crop")),
-            (columns[1], "By market", pack.get("by_market")),
-            (columns[2], "By season", pack.get("by_season")),
-        )
-        for column, title, frame in blocks:
-            with column:
-                st.markdown(f"**{title}**")
-                if frame is not None and not frame.empty:
-                    st.dataframe(frame, width="stretch", hide_index=True)
+        for title, frame in (
+            ("By crop", pack.get("by_crop")),
+            ("By market", pack.get("by_market")),
+            ("By season", pack.get("by_season")),
+        ):
+            st.markdown(f"**{title}**")
+            if frame is not None and not frame.empty:
+                st.dataframe(frame, width="stretch", hide_index=True)
         shock_note = pack.get("shock_note") or ""
         if shock_note:
             st.markdown(shock_note)
@@ -547,9 +636,13 @@ def render_common_key_benchmark() -> None:
         "mase_52w",
         "mae_skill_vs_naive_pct",
     ]
+    show_cols = [column for column in columns if column in benchmark.columns]
+    if not show_cols:
+        st.caption("The common-key benchmark table is missing its score columns.")
+        return
     with st.container(border=True):
-        section_title("Common-key benchmark, this run", "Same crop, market, issue week, and horizon")
-        st.dataframe(benchmark[columns], width="stretch", hide_index=True)
+        section_title("Common-key benchmark", "Same crop, market, issue week, and horizon")
+        st.dataframe(benchmark[show_cols], width="stretch", hide_index=True)
         st.caption(
             pack.get("benchmark_note")
             or "This table is the identical-key subset of the saved Experiment B predictions. It does not replace the full-sample cards above."
@@ -573,7 +666,7 @@ def render_saved_b() -> None:
     with st.container(border=True):
         section_title("Saved Experiment B, no refit", "One frozen forecast")
         if not example:
-            st.info("The Experiment B reproduction check has not been written yet.")
+            st.caption("The Experiment B reproduction check has not been written yet.")
             return
         st.markdown(
             f"{example.get('crop')} at {example.get('market')}, horizon {example.get('horizon_weeks')}, "

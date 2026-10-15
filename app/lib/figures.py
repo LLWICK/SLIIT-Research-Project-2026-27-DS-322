@@ -5,6 +5,8 @@ from pathlib import Path
 
 import streamlit as st
 
+from lib.load import call_cached
+
 FIGURES = Path(__file__).resolve().parents[2] / "outputs" / "figures"
 
 PAGES = {
@@ -53,11 +55,45 @@ PAGES = {
 }
 
 
-def show_figures(page: str) -> None:
-    items = [(FIGURES / name, caption) for name, caption in PAGES.get(page, ()) if (FIGURES / name).is_file()]
-    if not items:
+def _figure_token(page: str) -> tuple[tuple[str, int, int], ...]:
+    rows = []
+    for name, _caption in PAGES.get(page, ()):
+        path = FIGURES / name
+        if path.is_file():
+            stat = path.stat()
+            rows.append((name, int(stat.st_mtime_ns), int(stat.st_size)))
+        else:
+            rows.append((name, 0, 0))
+    return tuple(rows)
+
+
+@st.cache_data(show_spinner=False)
+def _figure_payload(
+    page: str,
+    token: tuple[tuple[str, int, int], ...],
+    skip: tuple[str, ...] = (),
+) -> list[tuple[bytes, str]]:
+    del token
+    hidden = set(skip)
+    payload = []
+    for name, caption in PAGES.get(page, ()):
+        if name in hidden:
+            continue
+        path = FIGURES / name
+        if path.is_file():
+            payload.append((path.read_bytes(), caption))
+    return payload
+
+
+def show_figures(page: str, skip: tuple[str, ...] = ()) -> None:
+    if not PAGES.get(page):
         return
-    with st.container(border=True):
-        st.caption("Figures from this run.")
-        for path, caption in items:
-            st.image(str(path), caption=caption)
+    payload = call_cached(
+        _figure_payload,
+        (page, _figure_token(page), tuple(skip)),
+        "Opening the figures",
+    )
+    if not payload:
+        return
+    for raw, caption in payload:
+        st.image(raw, caption=caption, width="stretch")

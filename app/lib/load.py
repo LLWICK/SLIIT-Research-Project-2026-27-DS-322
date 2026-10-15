@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -44,12 +43,51 @@ def find_repo_root(start: Path | None = None) -> Path | None:
 def _read_json(name: str) -> Any:
     path = DATA_DIR / f"{name}.json"
     if not path.exists():
-        raise FileNotFoundError(f"Missing demo artifact: {path}")
+        raise FileNotFoundError(f"{path.name} is not in app/data.")
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _file_token(path: Path) -> tuple[str, int, int]:
+    if not path.is_file():
+        return (str(path), 0, 0)
+    stat = path.stat()
+    return (str(path), int(stat.st_mtime_ns), int(stat.st_size))
+
+
+def _studio_token() -> tuple[tuple[str, int, int], ...]:
+    return tuple(_file_token(DATA_DIR / f"{name}.json") for name in STUDIO_FILES)
+
+
+def _prediction_token() -> tuple[str, int, int]:
+    return _file_token(DATA_DIR / "predictions.json")
+
+
+def _member1_token() -> tuple[tuple[str, int, int], ...]:
+    root = find_repo_root()
+    if root is None:
+        return tuple()
+    folder = root / "data" / "v1"
+    names = ("analysis_ready_price.csv", "analysis_ready_commitment.csv", "weather_data.json")
+    return tuple(_file_token(folder / name) for name in names)
+
+
+_WARMED: set[tuple[Any, ...]] = set()
+
+
+def call_cached(fn: Any, args: tuple[Any, ...], message: str) -> Any:
+    """Run a cached reader. Spinner only when this process has not loaded that key."""
+    marker = (getattr(fn, "__name__", "cache"), args)
+    if marker in _WARMED:
+        return fn(*args)
+    with st.spinner(message):
+        value = fn(*args)
+    _WARMED.add(marker)
+    return value
+
+
 @st.cache_data(show_spinner=False)
-def load_studio() -> dict[str, Any]:
+def _load_studio(token: tuple[tuple[str, int, int], ...]) -> dict[str, Any]:
+    del token
     data = {key: _read_json(key) for key in STUDIO_FILES}
     data["dictionary"] = data.pop("data_dictionary")
     data["originMap"] = data.pop("origin_map")
@@ -58,16 +96,26 @@ def load_studio() -> dict[str, Any]:
     return data
 
 
+def load_studio() -> dict[str, Any]:
+    return call_cached(_load_studio, (_studio_token(),), "Opening the studio files")
+
+
 @st.cache_data(show_spinner=False)
-def load_predictions() -> list[dict[str, Any]]:
+def _load_predictions(token: tuple[str, int, int]) -> list[dict[str, Any]]:
+    del token
     payload = _read_json("predictions")
     if isinstance(payload, dict):
         return list(payload.get("lightgbm") or [])
     return list(payload)
 
 
+def load_predictions() -> list[dict[str, Any]]:
+    return call_cached(_load_predictions, (_prediction_token(),), "Opening the interval file")
+
+
 @st.cache_data(show_spinner=False)
-def member1_status() -> dict[str, Any]:
+def _member1_status(token: tuple[tuple[str, int, int], ...]) -> dict[str, Any]:
+    del token
     root = find_repo_root()
     if root is None:
         return {"found": False}
@@ -99,6 +147,10 @@ def member1_status() -> dict[str, Any]:
         "has_weather": weather_path.exists(),
         "price_path": str(price_path if price_path.exists() else commit_path),
     }
+
+
+def member1_status() -> dict[str, Any]:
+    return call_cached(_member1_status, (_member1_token(),), "Opening the Member 1 extract")
 
 
 def write_forecast_packet(request: dict[str, Any], packet: dict[str, Any]) -> Path:
