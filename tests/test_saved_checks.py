@@ -5,7 +5,14 @@ import numpy as np
 import pandas as pd
 
 from htfe.training.evaluate_saved_c import moving_block_ci, shock_slice
-from htfe.training.saved_inference import exceeded_flag, interval_from_prices
+from htfe.training.saved_inference import (
+    CROPS,
+    HORIZONS,
+    SCORE_MARKETS,
+    complete_issue_weeks,
+    exceeded_flag,
+    interval_from_prices,
+)
 
 
 def test_exceeded_flag_keeps_a_ratio_above_one() -> None:
@@ -23,6 +30,27 @@ def test_moving_block_interval_is_the_constant_when_values_do_not_vary() -> None
     low, high = moving_block_ci(np.ones(12), block_length=4, reps=40, seed=1)
     assert low == 1.0
     assert high == 1.0
+
+
+def test_packet_issue_week_is_the_latest_complete_monday() -> None:
+    held_out = "nuwara_eliya"
+    assert held_out in SCORE_MARKETS
+    rows = []
+    for issue in ("2025-09-22", "2025-09-29"):
+        for crop in CROPS:
+            for market in SCORE_MARKETS:
+                for horizon in HORIZONS:
+                    if issue == "2025-09-29" and market == held_out and int(horizon) == 4:
+                        continue
+                    rows.append(
+                        {
+                            "crop_key": crop,
+                            "market_key": market,
+                            "horizon": int(horizon),
+                            "issue": issue,
+                        }
+                    )
+    assert complete_issue_weeks(pd.DataFrame(rows)) == ["2025-09-22"]
 
 
 def test_empty_shock_window_is_not_evaluable() -> None:

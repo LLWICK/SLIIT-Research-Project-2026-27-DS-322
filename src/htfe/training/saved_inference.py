@@ -2,8 +2,9 @@
 
 The checks reproduce one saved Experiment C median, score twelve horizon-1
 rows (3 crops x 4 markets), and swap one frozen vector's cultivation progress
-for observed national quantiles. Dynamic same-target reforecasting stays in
-reforecast_c.py.
+for observed national quantiles. The Member 3 packet is a separate file:
+one issue week and horizons 1, 2, 4, 8, and 12. Dynamic same-target
+reforecasting stays in reforecast_c.py.
 """
 from __future__ import annotations
 
@@ -14,7 +15,7 @@ import numpy as np
 import pandas as pd
 
 from htfe.config import OUTPUTS
-from htfe.data.build.scope import CROPS, EVAL_MARKETS
+from htfe.data.build.scope import CROPS, HORIZONS
 from htfe.training.reforecast_c import apply_categories
 from htfe.training.run_experiment_a import EVAL_IDS, _design
 
@@ -280,7 +281,11 @@ def sensitivity(reproduced: dict) -> pd.DataFrame:
 
 
 def twelve_forecasts(bundle: dict) -> tuple[pd.DataFrame, list[dict]]:
-    """One horizon-1 test row for each crop and score market. Medians must match the file."""
+    """One horizon-1 test row for each crop and score market. Medians must match the file.
+
+    This is the horizon-1 reproduction file only. The Member 3 packet uses
+    member3_forecasts, which keeps all five horizons.
+    """
     pool = _lightgbm_c(bundle["predictions"], 1, "test")
     pool = pool[pool["crop_key"].isin(CROPS) & pool["market_key"].isin(SCORE_MARKETS)]
     if pool.empty:
@@ -336,10 +341,109 @@ def twelve_forecasts(bundle: dict) -> tuple[pd.DataFrame, list[dict]]:
     return pd.DataFrame(forecasts), checks
 
 
+def _packet_pool(predictions: pd.DataFrame) -> pd.DataFrame:
+    """Saved LightGBM C test rows for the score crops, markets, and five horizons."""
+    parts = [_lightgbm_c(predictions, int(horizon), "test") for horizon in HORIZONS]
+    pool = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame()
+    if pool.empty:
+        return pool
+    return pool[pool["crop_key"].isin(CROPS) & pool["market_key"].isin(SCORE_MARKETS)].copy()
+
+
+def complete_issue_weeks(pool: pd.DataFrame) -> list[str]:
+    """Issue weeks that have every crop, score market, and horizon. Oldest first."""
+    if pool.empty:
+        return []
+    expected = {
+        (crop, market, int(horizon))
+        for crop in CROPS
+        for market in SCORE_MARKETS
+        for horizon in HORIZONS
+    }
+    weeks = []
+    for issue, group in pool.groupby("issue", sort=True):
+        keys = set(zip(group["crop_key"], group["market_key"], group["horizon"].astype(int), strict=False))
+        if expected <= keys:
+            weeks.append(str(issue))
+    return weeks
+
+
+def _forecast_record(row: pd.Series, scored: dict) -> dict:
+    source = scored["source"].iloc[0]
+    actual = float(row["y_true"])
+    horizon = int(row["horizon"])
+    return {
+        "crop": str(row["crop_key"]),
+        "market": str(row["market_key"]),
+        "forecast_issue_week": str(row["issue"]),
+        "forecast_week": str(row["target"]),
+        "horizon_weeks": horizon,
+        "cultivation_report_date": _date_or_none(source["cultivation_report_date"]),
+        "cultivation_progress": float(source[PROGRESS]),
+        "target_exceeded": int(float(source[EXCEEDED])),
+        "last_observed_price": round(float(source["last_observed_price_lkr_kg"]), 2),
+        "lower_price": round(scored["lower"], 2),
+        "predicted_price": round(scored["median"], 2),
+        "upper_price": round(scored["upper"], 2),
+        "actual_price_historical_demo": round(actual, 2),
+        "inside_interval_historical_demo": bool(scored["lower"] <= actual <= scored["upper"]),
+        "model": "lightgbm",
+        "feature_set": "C",
+        "model_version": "experiment_c",
+        "reproduction_absolute_difference": scored["absolute_difference"],
+    }
+
+
+def member3_forecasts(bundle: dict) -> tuple[pd.DataFrame, list[dict]]:
+    """One issue week and all five horizons for each crop and score market.
+
+    The week is the latest test Monday with a saved Experiment C row for every
+    combination. A horizon-1-only week is not used when a longer horizon is missing.
+    Each median is the frozen model prediction and must match predictions_c.csv.
+    """
+    pool = _packet_pool(bundle["predictions"])
+    weeks = complete_issue_weeks(pool)
+    if not weeks:
+        raise RuntimeError(
+            "No issue week has a saved Experiment C test forecast for every crop, market, and horizon."
+        )
+    issue = weeks[-1]
+    chosen = pool[pool["issue"].eq(issue)].sort_values(["crop_key", "market_key", "horizon", "target"])
+    duplicated = chosen.duplicated(["crop_key", "market_key", "horizon"], keep=False)
+    if bool(duplicated.any()):
+        raise RuntimeError(f"Issue week {issue} has more than one saved row for a crop, market, and horizon.")
+    expected_n = len(CROPS) * len(SCORE_MARKETS) * len(HORIZONS)
+    if len(chosen) != expected_n:
+        raise RuntimeError(f"Expected {expected_n} forecasts at {issue}, found {len(chosen)}.")
+    models = {int(horizon): load_bundles(OUT / "models", "C", int(horizon)) for horizon in HORIZONS}
+    forecasts = []
+    checks = []
+    for _, row in chosen.sort_values(["crop_key", "market_key", "horizon"]).iterrows():
+        horizon = int(row["horizon"])
+        qhat = float(bundle["qhats"][str(horizon)])
+        scored = _score_row(row, bundle["eligible"], models[horizon], bundle["spec"], qhat)
+        if scored["absolute_difference"] > REPRODUCTION_TOLERANCE:
+            raise RuntimeError(
+                f"Saved C horizon-{horizon} median differs for {row['crop_key']}/{row['market_key']} "
+                f"at {issue} by {scored['absolute_difference']}."
+            )
+        checks.append(
+            {
+                "crop": str(row["crop_key"]),
+                "market": str(row["market_key"]),
+                "horizon_weeks": horizon,
+                "forecast_issue_week": issue,
+                "absolute_difference": scored["absolute_difference"],
+            }
+        )
+        forecasts.append(_forecast_record(row, scored))
+    return pd.DataFrame(forecasts), checks
+
+
 def member3_packet(forecasts: list[dict], metrics: pd.DataFrame, status: dict) -> dict:
     light = metrics[metrics["model"].astype(str).str.lower().eq("lightgbm")]
     measured = {
-        str(int(row.horizon)): None if pd.isna(row.picp_cqr) else float(row.picp_cqr)
+        str(int(row.horizon)): None if pd.isna(row.picp_cqr) else round(float(row.picp_cqr), 2)
         for row in light.itertuples(index=False)
     }
     below = [horizon for horizon, picp in measured.items() if picp is not None and picp < 90]
@@ -686,9 +790,10 @@ def write_inference() -> dict:
     reproduced = reproduce_one(bundle)
     ratios = sensitivity(reproduced)
     forecast_frame, checks = twelve_forecasts(bundle)
+    packet_frame, packet_checks = member3_forecasts(bundle)
     metrics = pd.read_csv(OUT / "metrics_c.csv")
     status = load_json(OUT / "status.json")
-    packet = member3_packet(forecast_frame.to_dict(orient="records"), metrics, status)
+    packet = member3_packet(packet_frame.to_dict(orient="records"), metrics, status)
     INFERENCE.mkdir(parents=True, exist_ok=True)
     write_json(INFERENCE / "saved_c_example.json", reproduced["payload"])
     ratios.to_csv(INFERENCE / "c_observed_ratio_sensitivity.csv", index=False)
@@ -718,16 +823,25 @@ def write_inference() -> dict:
     write_json(INFERENCE / "member3_forecast_c.json", packet)
     n_vectors = write_c_live_vectors(bundle)
     worst = max(item["absolute_difference"] for item in checks)
+    packet_worst = max(item["absolute_difference"] for item in packet_checks)
+    issue = str(packet_frame["forecast_issue_week"].iloc[0])
     print(
         f"reproduced h4 median difference {reproduced['payload']['reproduction_absolute_difference']}",
         flush=True,
     )
     print(f"12 horizon-1 forecasts, max median difference {worst}", flush=True)
+    print(
+        f"{len(packet_frame)} Member 3 forecasts at {issue}, horizons 1, 2, 4, 8, and 12, "
+        f"max median difference {packet_worst}",
+        flush=True,
+    )
     print(f"C live vectors with issue week: {n_vectors}", flush=True)
     return {
         "reproduce_difference": reproduced["payload"]["reproduction_absolute_difference"],
-        "n_forecasts": len(forecast_frame),
-        "max_forecast_difference": worst,
+        "n_forecasts": len(packet_frame),
+        "packet_issue_week": issue,
+        "max_forecast_difference": packet_worst,
+        "n_horizon1_checks": len(forecast_frame),
         "measured_picp": packet["measured_picp_pct_by_horizon"],
         "b_reproduction_difference": b_example["reproduction_absolute_difference"],
         "b_horizon": b_example["horizon_weeks"],

@@ -377,10 +377,34 @@ def render_protocol_note() -> None:
             st.markdown(sentence)
 
 
+def _member3_table(show: pd.DataFrame) -> pd.DataFrame:
+    """Forecast columns for Member 3. Horizon stays visible beside each crop and market."""
+    return pd.DataFrame(
+        {
+            "crop": show["crop"].map(title_case) if "crop" in show.columns else [],
+            "market": show["market"].map(title_case) if "market" in show.columns else [],
+            "horizon weeks": show["horizon_weeks"] if "horizon_weeks" in show.columns else [],
+            "issue week": show["forecast_issue_week"] if "forecast_issue_week" in show.columns else [],
+            "forecast week": show["forecast_week"] if "forecast_week" in show.columns else [],
+            "lower": show["lower_price"] if "lower_price" in show.columns else [],
+            "predicted": show["predicted_price"] if "predicted_price" in show.columns else [],
+            "upper": show["upper_price"] if "upper_price" in show.columns else [],
+            "progress": show["cultivation_progress"].map(lambda value: f"{float(value):.3f}")
+            if "cultivation_progress" in show.columns
+            else [],
+            "report date": show["cultivation_report_date"] if "cultivation_report_date" in show.columns else [],
+        }
+    )
+
+
+def _table_height(n_rows: int) -> int:
+    return 38 + 35 * max(int(n_rows), 1)
+
+
 def render_member3_handoff() -> None:
     packet = parity().get("member3") or {}
     with st.container(border=True):
-        section_title("Given to Member 3", "Experiment C forecast packet from this run")
+        section_title("Given to Member 3", "One issue week, horizons 1, 2, 4, 8, and 12")
         if not packet:
             st.caption("The Member 3 forecast file is not on disk.")
             return
@@ -390,13 +414,13 @@ def render_member3_handoff() -> None:
         else:
             rows = []
             below = []
-            for key, value in measured.items():
+            for key, value in sorted(measured.items(), key=lambda item: int(item[0])):
                 number = float(value)
                 note = "below the intended level of 90" if number < 90 else ""
                 rows.append({"horizon weeks": int(key), "measured PICP %": f"{number:.2f}", "note": note})
                 if number < 90:
                     below.append(f"Horizon {int(key)} is {number:.2f}")
-            st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+            st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True, height=_table_height(len(rows)))
             if below:
                 st.markdown(
                     "The intended level is 90. " + ". ".join(below) + ". That is below the intended level."
@@ -409,25 +433,37 @@ def render_member3_handoff() -> None:
             st.caption("The Member 3 file has no forecast rows.")
             return
         show = pd.DataFrame(forecasts)
-        display = pd.DataFrame(
-            {
-                "crop": show["crop"].map(title_case) if "crop" in show.columns else [],
-                "market": show["market"].map(title_case) if "market" in show.columns else [],
-                "horizon weeks": show["horizon_weeks"] if "horizon_weeks" in show.columns else [],
-                "issue week": show["forecast_issue_week"] if "forecast_issue_week" in show.columns else [],
-                "forecast week": show["forecast_week"] if "forecast_week" in show.columns else [],
-                "lower": show["lower_price"] if "lower_price" in show.columns else [],
-                "predicted": show["predicted_price"] if "predicted_price" in show.columns else [],
-                "upper": show["upper_price"] if "upper_price" in show.columns else [],
-                "progress": show["cultivation_progress"].map(lambda value: f"{float(value):.3f}")
-                if "cultivation_progress" in show.columns
-                else [],
-                "report date": show["cultivation_report_date"] if "cultivation_report_date" in show.columns else [],
-            }
+        issues = sorted({str(value) for value in show.get("forecast_issue_week", [])})
+        issue_text = ", ".join(issues) if issues else "missing"
+        st.markdown(
+            f"{len(show)} forecasts for carrot, leeks, and tomato at Colombo, Dambulla, Meegoda, and Nuwara Eliya. "
+            f"Each crop and market has horizons 1, 2, 4, 8, and 12. Issue week: {issue_text}. "
+            "That week is the latest Monday with a saved Experiment C forecast at all five horizons."
         )
-        st.dataframe(display, width="stretch", hide_index=True)
+        crop_order = ["carrot", "leeks", "tomato"]
+        market_order = ["colombo", "dambulla", "meegoda", "nuwara_eliya"]
+        market_rank = {name: index for index, name in enumerate(market_order)}
+        present = [crop for crop in crop_order if "crop" in show.columns and bool(show["crop"].eq(crop).any())]
+        extras = [str(crop) for crop in show["crop"].astype(str).unique() if crop not in present] if "crop" in show.columns else []
+        for crop in present + extras:
+            part = show[show["crop"].astype(str).eq(crop)].copy()
+            if "market" in part.columns:
+                part["_market"] = part["market"].astype(str).map(lambda name: market_rank.get(name, 99))
+            else:
+                part["_market"] = 0
+            if "horizon_weeks" in part.columns:
+                part["_horizon"] = pd.to_numeric(part["horizon_weeks"], errors="coerce")
+            else:
+                part["_horizon"] = 0
+            part = part.sort_values(["_market", "_horizon"])
+            st.markdown(f"**{title_case(crop)}**")
+            display = _member3_table(part)
+            st.dataframe(display, width="stretch", hide_index=True, height=_table_height(len(display)))
         st.caption(
             "These rows are the forecast fields in the file given to Member 3. "
+            "They are the saved Experiment C prices for this issue week. "
+            "Lower and upper use the saved 5% and 95% prices plus that horizon's 2023 adjustment, "
+            "so a long horizon can sit below zero. "
             "They are not the dashboard runtime price. Progress is national achieved hectares divided by target hectares."
         )
 
@@ -476,8 +512,8 @@ def render_saved_model_use() -> None:
             ]
             st.dataframe(show, width="stretch", hide_index=True)
             st.caption(
-                "These rows include a historical actual for the reproduction check. "
-                "The packet given to Member 3, including measured PICP, is in Given to Member 3 above."
+                "These twelve rows are the horizon-1 reproduction check, with a historical actual. "
+                "The packet given to Member 3 is in Given to Member 3 above, with horizons 1, 2, 4, 8, and 12."
             )
         manifest = pack.get("manifest") or {}
         missing = manifest.get("missing_required") or []
