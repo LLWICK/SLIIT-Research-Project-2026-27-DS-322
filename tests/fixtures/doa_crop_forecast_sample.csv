@@ -1,0 +1,8 @@
+# [SYNTHETIC TEST FIXTURE - FOR UNIT TESTING ONLY]
+# Schema modeled after DOA Socio Economics & Planning Centre (SEPC) Crop Forecast Monthly Reports
+crop,district,season,year,target_extent_ha,cultivated_extent_ha,expected_production_mt,provenance_source
+Big Onion,Anuradhapura,Yala,2024,2500.0,2200.0,33000.0,DOA_SEPC_CROP_FORECAST_YALA_2024
+Big Onion,Matale,Yala,2024,3000.0,2850.0,42750.0,DOA_SEPC_CROP_FORECAST_YALA_2024
+Potato,Nuwara Eliya,Maha,2024,1200.0,1150.0,23000.0,DOA_SEPC_CROP_FORECAST_MAHA_2024
+Potato,Badulla,Maha,2024,3500.0,3400.0,51000.0,DOA_SEPC_CROP_FORECAST_MAHA_2024
+Green Chilli,Puttalam,Yala,2024,800.0,750.0,4500.0,DOA_SEPC_CROP_FORECAST_YALA_2024
