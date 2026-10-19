@@ -1,0 +1,8 @@
+# Member 1 Geo-Spatial Decision Support System Dashboard Requirements
+# SLIIT Research Project 2026/27 (DS-322)
+
+streamlit>=1.30.0
+pandas>=2.0.0
+numpy>=1.24.0
+plotly>=5.15.0
+pytest>=7.4.0
