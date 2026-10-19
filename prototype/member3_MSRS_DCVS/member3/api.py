@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from dataclasses import asdict
 from datetime import date
 from pathlib import Path
 
@@ -12,6 +13,7 @@ from pydantic import BaseModel, Field, field_validator
 from .forecast_adapter import ForecastAdapter, canonical_crop
 from .repository import CommitmentRepository
 from .service import RecommendationService
+from .suitability import PLANTING_AREAS, calculate_suitability, get_area_suitability_map
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "Member3Data"
@@ -25,11 +27,13 @@ class AssessmentRequest(BaseModel):
     season: str = Field(pattern="^(Maha|Yala)$")
     proposed_area_ha: float = Field(gt=0)
     horizon_weeks: int = Field(default=4, ge=1)
-    suitability: dict[str, float]
+    suitability: dict[str, float] = Field(default_factory=dict)
 
     @field_validator("suitability")
     @classmethod
     def validate_suitability(cls, values: dict[str, float]) -> dict[str, float]:
+        if not values:
+            return {}
         normalized = {canonical_crop(crop): value for crop, value in values.items()}
         if any(not 0 <= value <= 1 for value in normalized.values()):
             raise ValueError("suitability values must be in [0, 1]")
@@ -52,11 +56,45 @@ def build_app(database_path: Path = DB_PATH) -> FastAPI:
     repository = CommitmentRepository(database_path)
     adapter = ForecastAdapter(DATA_DIR / "member3_forecast_c.json")
     service = RecommendationService(repository, adapter)
-    app = FastAPI(title="Member 3 Crowding-Aware Crop Recommendation Prototype", version="0.1.0")
+    app = FastAPI(title="Member 3 Crowding-Aware Crop Recommendation Prototype", version="0.2.0")
 
     @app.get("/health")
     def health() -> dict:
-        return {"status": "ok", "forecast_source": "Member3Data/member3_forecast_c.json"}
+        return {
+            "status": "ok",
+            "forecast_source": "Member3Data/member3_forecast_c.json",
+            "supported_approaches": [
+                "baseline_dcvs",
+                "topsis_mcdm",
+                "bpr_similarity",
+                "portfolio_hedging",
+                "softmax_load_balancing",
+            ],
+        }
+
+    @app.get("/planting-areas")
+    def list_planting_areas() -> dict:
+        """List all planting areas with environmental profiles and crop suitabilities."""
+        areas = {}
+        for key, profile in PLANTING_AREAS.items():
+            area_dict = asdict(profile)
+            area_dict["crop_suitabilities"] = get_area_suitability_map(key)
+            areas[key] = area_dict
+        return {"planting_areas": areas}
+
+    @app.get("/planting-areas/{district}")
+    def get_planting_area(district: str) -> dict:
+        """Get environmental profile and crop suitability breakdown for a specific district."""
+        key = district.strip().lower().replace(" ", "_")
+        profile = PLANTING_AREAS.get(key)
+        if not profile:
+            raise HTTPException(status_code=404, detail=f"Planting area '{district}' not found")
+        crops = adapter.supported_crops()
+        breakdown = {crop: calculate_suitability(crop, key) for crop in crops}
+        return {
+            "profile": asdict(profile),
+            "suitability_breakdown": breakdown,
+        }
 
     @app.post("/recommendations/assess")
     def assess(request: AssessmentRequest) -> dict:
@@ -76,8 +114,8 @@ def build_app(database_path: Path = DB_PATH) -> FastAPI:
         payload["status"] = "confirmed"
         payload["area_ha"] = payload.pop("proposed_area_ha")
         payload.pop("confirmed")
-        payload.pop("suitability")
-        payload.pop("horizon_weeks")
+        payload.pop("suitability", None)
+        payload.pop("horizon_weeks", None)
         return repository.create(payload)
 
     @app.patch("/commitments/{commitment_id}")
