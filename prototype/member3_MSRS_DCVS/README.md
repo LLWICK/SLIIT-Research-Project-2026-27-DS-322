@@ -16,6 +16,14 @@ claiming a validated market-oversupply model.
   3. **Non-Linear BPR & Crop Profile Similarity**: Traffic-routing congestion curves combined with operational feature vector matching.
   4. **Markowitz Portfolio Land-Splitting**: Optimal acreage division between primary and hedging crops.
   5. **Softmax Load Balancing**: Game-theoretic probabilistic allocation to prevent the Herding Effect.
+- **Data-Driven Weight Calibration Engine**:
+  - Ingests empirical wholesale weekly price records (17,000+ observations from `Member3Data/Vegetable Prices.xlsx`).
+  - Trains data-driven weights via:
+    * **Supervised Profit (LTR)**: Maximizes correlation with ex-post seasonal net profit.
+    * **Shannon Entropy**: Objective weighting based on information dispersion.
+    * **CRITIC**: Balances contrast intensity (stdev) and inter-criteria conflict.
+    * **Cobweb Policy Simulator**: Minimizes price crash volatility across multi-season cycles.
+    * **Econometric BPR Fitting**: Estimates $\alpha$ and $\beta$ congestion parameters.
 
 ## Important research limitations
 

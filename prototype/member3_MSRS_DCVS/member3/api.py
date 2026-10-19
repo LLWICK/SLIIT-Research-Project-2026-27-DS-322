@@ -10,10 +10,12 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
+from .config import ScoringConfig
 from .forecast_adapter import ForecastAdapter, canonical_crop
 from .repository import CommitmentRepository
 from .service import RecommendationService
 from .suitability import PLANTING_AREAS, calculate_suitability, get_area_suitability_map
+from .weight_trainer import train_all_models
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "Member3Data"
@@ -52,17 +54,28 @@ class AreaUpdate(BaseModel):
     area_ha: float = Field(gt=0)
 
 
+class ApplyWeightsRequest(BaseModel):
+    price_weight: float = Field(ge=0, le=1)
+    suitability_weight: float = Field(ge=0, le=1)
+    pressure_weight: float = Field(ge=0, le=1)
+
+
 def build_app(database_path: Path = DB_PATH) -> FastAPI:
     repository = CommitmentRepository(database_path)
     adapter = ForecastAdapter(DATA_DIR / "member3_forecast_c.json")
     service = RecommendationService(repository, adapter)
-    app = FastAPI(title="Member 3 Crowding-Aware Crop Recommendation Prototype", version="0.2.0")
+    app = FastAPI(title="Member 3 Crowding-Aware Crop Recommendation Prototype", version="0.3.0")
 
     @app.get("/health")
     def health() -> dict:
         return {
             "status": "ok",
             "forecast_source": "Member3Data/member3_forecast_c.json",
+            "active_weights": {
+                "price_weight": service.config.price_weight,
+                "suitability_weight": service.config.suitability_weight,
+                "pressure_weight": service.config.pressure_weight,
+            },
             "supported_approaches": [
                 "baseline_dcvs",
                 "topsis_mcdm",
@@ -71,6 +84,22 @@ def build_app(database_path: Path = DB_PATH) -> FastAPI:
                 "softmax_load_balancing",
             ],
         }
+
+    @app.get("/weights/trained")
+    def get_trained_weights() -> dict:
+        """Run all data-driven weight models and return derived parameter weights."""
+        return train_all_models()
+
+    @app.post("/weights/apply")
+    def apply_weights(req: ApplyWeightsRequest) -> dict:
+        """Dynamically update active scoring configuration with trained weights."""
+        new_config = ScoringConfig(
+            price_weight=req.price_weight,
+            suitability_weight=req.suitability_weight,
+            pressure_weight=req.pressure_weight,
+        )
+        service.update_config(new_config)
+        return {"status": "updated", "active_config": asdict(new_config)}
 
     @app.get("/planting-areas")
     def list_planting_areas() -> dict:

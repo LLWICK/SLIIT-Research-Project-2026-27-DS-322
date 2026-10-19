@@ -25,6 +25,9 @@ class RecommendationService:
         self.forecasts = forecasts
         self.config = config
 
+    def update_config(self, config: ScoringConfig) -> None:
+        self.config = config
+
     def assess(self, request: dict) -> dict:
         requested_crop = canonical_crop(request["crop"])
         market, horizon = request["market"], request["horizon_weeks"]

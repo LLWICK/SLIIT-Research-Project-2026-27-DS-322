@@ -6,6 +6,11 @@ Implements:
 3. Non-Linear Congestion (BPR Function) + Crop Profile Vector Similarity
 4. Markowitz-Inspired Portfolio Hedging (Land-Splitting Strategy)
 5. Probabilistic / Softmax Load Balancing (Systemic Herding Prevention)
+6. Data-Driven Weight Calibration Engine
+   - Supervised Profit (LTR)
+   - Shannon Entropy
+   - CRITIC
+   - Cobweb Policy Simulator
 """
 
 from __future__ import annotations
