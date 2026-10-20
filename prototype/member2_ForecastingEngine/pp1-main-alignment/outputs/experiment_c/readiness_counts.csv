@@ -1,0 +1,16 @@
+forecast_horizon_weeks,split,rows
+1,train,1089
+1,calibrate,684
+1,test,798
+2,train,1077
+2,calibrate,684
+2,test,792
+4,train,1041
+4,calibrate,684
+4,test,786
+8,train,999
+8,calibrate,690
+8,test,777
+12,train,957
+12,calibrate,690
+12,test,783

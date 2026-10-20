@@ -1,0 +1,352 @@
+{
+  "status": "trained_real_experiment_c",
+  "experiment_c_trained": true,
+  "spatial_scope": "national",
+  "district_rows_used_for_scoring": false,
+  "exact_season_matching": true,
+  "report_age_cutoff_days": null,
+  "no_synthetic_values": true,
+  "excluded_issue_years": [
+    2016,
+    2017,
+    2020,
+    2021
+  ],
+  "required_horizons": [
+    1,
+    2,
+    4,
+    8,
+    12
+  ],
+  "readiness_rule": "Every horizon must contain at least one real national-progress row in train, 2023 calibration, and the 2024-2025 test.",
+  "readiness": [
+    {
+      "forecast_horizon_weeks": 1,
+      "split": "train",
+      "rows": 1089
+    },
+    {
+      "forecast_horizon_weeks": 1,
+      "split": "calibrate",
+      "rows": 684
+    },
+    {
+      "forecast_horizon_weeks": 1,
+      "split": "test",
+      "rows": 798
+    },
+    {
+      "forecast_horizon_weeks": 2,
+      "split": "train",
+      "rows": 1077
+    },
+    {
+      "forecast_horizon_weeks": 2,
+      "split": "calibrate",
+      "rows": 684
+    },
+    {
+      "forecast_horizon_weeks": 2,
+      "split": "test",
+      "rows": 792
+    },
+    {
+      "forecast_horizon_weeks": 4,
+      "split": "train",
+      "rows": 1041
+    },
+    {
+      "forecast_horizon_weeks": 4,
+      "split": "calibrate",
+      "rows": 684
+    },
+    {
+      "forecast_horizon_weeks": 4,
+      "split": "test",
+      "rows": 786
+    },
+    {
+      "forecast_horizon_weeks": 8,
+      "split": "train",
+      "rows": 999
+    },
+    {
+      "forecast_horizon_weeks": 8,
+      "split": "calibrate",
+      "rows": 690
+    },
+    {
+      "forecast_horizon_weeks": 8,
+      "split": "test",
+      "rows": 777
+    },
+    {
+      "forecast_horizon_weeks": 12,
+      "split": "train",
+      "rows": 957
+    },
+    {
+      "forecast_horizon_weeks": 12,
+      "split": "calibrate",
+      "rows": 690
+    },
+    {
+      "forecast_horizon_weeks": 12,
+      "split": "test",
+      "rows": 783
+    }
+  ],
+  "audit": {
+    "source_path": "D:\\SLIIT\\4th Year\\Reaserch\\data sets\\processed\\doa_cultivation_progress.csv",
+    "spatial_scope_for_scoring": "national",
+    "spatial_scope_note": "National cultivation progress is not district supply progress. District rows stay in the audit and are not features.",
+    "district_rows_used_for_scoring": false,
+    "ratio_rule": "achieved_ha / target_ha when target_ha > 0. Ratios above 1 are kept. target_ha <= 0 is not replaced with 1.",
+    "asof_rule": "same crop, official source season equals the forecast Monday operational season, available_date <= forecast Monday",
+    "report_age_cutoff_days": null,
+    "allowed_issue_years": [
+      2018,
+      2019,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "excluded_issue_years": [
+      2016,
+      2017,
+      2020,
+      2021
+    ],
+    "n_source_rows_after_crop_filter": 172,
+    "n_national_rows": 72,
+    "n_district_rows": 100,
+    "n_valid_national_rows": 72,
+    "n_nonpositive_target_rows": 70,
+    "n_national_ratios_above_one": 5,
+    "n_source_date_season_mismatches": 0,
+    "asof_rows": 10941,
+    "asof_rows_with_national_signal": 2688,
+    "coverage_by_issue_year": [
+      {
+        "issue_year": 2016,
+        "rows": 1092,
+        "rows_with_progress": 0,
+        "coverage_pct": 0.0
+      },
+      {
+        "issue_year": 2017,
+        "rows": 1092,
+        "rows_with_progress": 0,
+        "coverage_pct": 0.0
+      },
+      {
+        "issue_year": 2018,
+        "rows": 1113,
+        "rows_with_progress": 546,
+        "coverage_pct": 49.06
+      },
+      {
+        "issue_year": 2019,
+        "rows": 1092,
+        "rows_with_progress": 63,
+        "coverage_pct": 5.77
+      },
+      {
+        "issue_year": 2020,
+        "rows": 1092,
+        "rows_with_progress": 0,
+        "coverage_pct": 0.0
+      },
+      {
+        "issue_year": 2021,
+        "rows": 1092,
+        "rows_with_progress": 0,
+        "coverage_pct": 0.0
+      },
+      {
+        "issue_year": 2022,
+        "rows": 1092,
+        "rows_with_progress": 567,
+        "coverage_pct": 51.92
+      },
+      {
+        "issue_year": 2023,
+        "rows": 1092,
+        "rows_with_progress": 693,
+        "coverage_pct": 63.46
+      },
+      {
+        "issue_year": 2024,
+        "rows": 1113,
+        "rows_with_progress": 336,
+        "coverage_pct": 30.19
+      },
+      {
+        "issue_year": 2025,
+        "rows": 1071,
+        "rows_with_progress": 483,
+        "coverage_pct": 45.1
+      }
+    ],
+    "coverage_by_exact_season": [
+      {
+        "cultivation_exact_season_id": "Maha 2017",
+        "rows_with_progress": 231,
+        "report_dates": 3
+      },
+      {
+        "cultivation_exact_season_id": "Maha 2019",
+        "rows_with_progress": 63,
+        "report_dates": 1
+      },
+      {
+        "cultivation_exact_season_id": "Maha 2021",
+        "rows_with_progress": 126,
+        "report_dates": 2
+      },
+      {
+        "cultivation_exact_season_id": "Maha 2022",
+        "rows_with_progress": 399,
+        "report_dates": 1
+      },
+      {
+        "cultivation_exact_season_id": "Maha 2024",
+        "rows_with_progress": 147,
+        "report_dates": 1
+      },
+      {
+        "cultivation_exact_season_id": "Yala 2018",
+        "rows_with_progress": 315,
+        "report_dates": 3
+      },
+      {
+        "cultivation_exact_season_id": "Yala 2022",
+        "rows_with_progress": 315,
+        "report_dates": 2
+      },
+      {
+        "cultivation_exact_season_id": "Yala 2023",
+        "rows_with_progress": 420,
+        "report_dates": 1
+      },
+      {
+        "cultivation_exact_season_id": "Yala 2024",
+        "rows_with_progress": 336,
+        "report_dates": 4
+      },
+      {
+        "cultivation_exact_season_id": "Yala 2025",
+        "rows_with_progress": 336,
+        "report_dates": 2
+      }
+    ],
+    "wired_through_district_month_loader": false,
+    "renamed_to_cultivation_monthly": false,
+    "b_features": [
+      "price_lag_1w",
+      "price_lag_2w",
+      "price_lag_4w",
+      "price_lag_8w",
+      "price_lag_52w",
+      "price_mean_4w",
+      "price_mean_8w",
+      "price_change_4w_pct",
+      "season",
+      "season_transition",
+      "forecast_week_of_year",
+      "week_within_season",
+      "origin_rainfall_1w_mm",
+      "origin_rainfall_sum_4w_mm",
+      "origin_rainfall_sum_8w_mm",
+      "origin_mean_temp_4w_c",
+      "origin_rainfall_anomaly_4w_mm",
+      "diesel_price_lkr_litre",
+      "usd_lkr_rate",
+      "inflation_rate_pct",
+      "previous_season_extent",
+      "same_season_previous_year_extent",
+      "historical_mean_season_extent",
+      "extent_change_vs_previous_season"
+    ],
+    "lightgbm_params_source": "notebook fixed hyperparameters; Optuna was not run"
+  },
+  "runtime_model_note": "The dashboard forecast is the runtime model. It is not Experiment B and it is not Experiment C.",
+  "eligible_rows": 12531,
+  "score_market_gaps": [],
+  "final_status": "TRAINED",
+  "model_version": "experiment_c_lightgbm_frozen_b_seed42",
+  "primary_model": "LightGBM quantile",
+  "robustness_model": "XGBoost quantile",
+  "shock_2024q1_h4_rows": 0,
+  "calibration": "2023 only",
+  "test": "2024-2025 only",
+  "comparison": "B* and C use the exact same national-progress rows",
+  "statements": [
+    "B* and C use the same eligible rows. B* does not see current cultivation progress. C adds the national as-of ratio and the target-exceeded flag.",
+    "Spatial scope is national. National cultivation progress is not district supply progress. District rows were not used as features.",
+    "The full-sample Experiment A and Experiment B table is a different row set and is not mixed with these rows.",
+    "Horizon 1 MAE: B* 57.88, C 59.75, on 462 matched test rows.",
+    "Horizon 1 MAPE: B* 29.02%, C 29.78%.",
+    "At horizon 1, C MAE is higher than B* by 3.23% on this matched-row test.",
+    "Horizon 1 calibrated PICP for C is 85.71%. That is below 90%.",
+    "Horizon 1 MAE: B* 55.08, C 55.96, on 462 matched test rows.",
+    "Horizon 1 MAPE: B* 27.77%, C 28.27%.",
+    "At horizon 1, C MAE is higher than B* by 1.60% on this matched-row test.",
+    "Horizon 1 calibrated PICP for C is 83.77%. That is below 90%.",
+    "Horizon 2 MAE: B* 58.33, C 60.05, on 459 matched test rows.",
+    "Horizon 2 MAPE: B* 31.31%, C 32.06%.",
+    "At horizon 2, C MAE is higher than B* by 2.95% on this matched-row test.",
+    "Horizon 2 calibrated PICP for C is 87.36%. That is below 90%.",
+    "Horizon 2 MAE: B* 65.90, C 64.94, on 459 matched test rows.",
+    "Horizon 2 MAPE: B* 35.40%, C 34.85%.",
+    "At horizon 2, C MAE is lower than B* by 1.46% on this matched-row test.",
+    "Horizon 2 calibrated PICP for C is 91.29%. The nominal interval is 90%. This is the measured share of test prices inside the interval.",
+    "Horizon 4 MAE: B* 74.40, C 71.81, on 453 matched test rows.",
+    "Horizon 4 MAPE: B* 41.50%, C 39.86%.",
+    "At horizon 4, C MAE is lower than B* by 3.48% on this matched-row test.",
+    "Horizon 4 calibrated PICP for C is 89.40%. That is below 90%.",
+    "Horizon 4 MAE: B* 83.58, C 80.04, on 453 matched test rows.",
+    "Horizon 4 MAPE: B* 46.38%, C 44.27%.",
+    "At horizon 4, C MAE is lower than B* by 4.24% on this matched-row test.",
+    "Horizon 4 calibrated PICP for C is 91.17%. The nominal interval is 90%. This is the measured share of test prices inside the interval.",
+    "Horizon 8 MAE: B* 131.02, C 118.40, on 447 matched test rows.",
+    "Horizon 8 MAPE: B* 77.28%, C 69.23%.",
+    "At horizon 8, C MAE is lower than B* by 9.63% on this matched-row test.",
+    "Horizon 8 calibrated PICP for C is 93.74%. The nominal interval is 90%. This is the measured share of test prices inside the interval.",
+    "Horizon 8 MAE: B* 122.69, C 105.93, on 447 matched test rows.",
+    "Horizon 8 MAPE: B* 72.40%, C 61.69%.",
+    "At horizon 8, C MAE is lower than B* by 13.66% on this matched-row test.",
+    "Horizon 8 calibrated PICP for C is 89.71%. That is below 90%.",
+    "Horizon 12 MAE: B* 171.62, C 166.88, on 450 matched test rows.",
+    "Horizon 12 MAPE: B* 107.14%, C 103.86%.",
+    "At horizon 12, C MAE is lower than B* by 2.76% on this matched-row test.",
+    "Horizon 12 calibrated PICP for C is 93.56%. The nominal interval is 90%. This is the measured share of test prices inside the interval.",
+    "Horizon 12 MAE: B* 168.87, C 157.27, on 450 matched test rows.",
+    "Horizon 12 MAPE: B* 104.32%, C 95.63%.",
+    "At horizon 12, C MAE is lower than B* by 6.87% on this matched-row test.",
+    "Horizon 12 calibrated PICP for C is 91.56%. The nominal interval is 90%. This is the measured share of test prices inside the interval.",
+    "2024 Q1 shock at horizon 4 is not evaluable: this run has zero Experiment C horizon-4 rows in that window."
+  ],
+  "lightgbm_mae_change_pct_c_vs_b_star": {
+    "1": 1.6,
+    "2": -1.46,
+    "4": -4.24,
+    "8": -13.66,
+    "12": -6.87
+  },
+  "reforecast": {
+    "found": true,
+    "multiple_real_reports": true,
+    "note": "This target week has at least two issue dates and at least two different real national report dates. Each row is scored with the horizon model for that issue date.",
+    "crop": "carrot",
+    "market": "colombo",
+    "target_week": "2024-09-23",
+    "information_states": 5,
+    "distinct_real_reports": 4,
+    "checked": 5,
+    "max_abs_median_difference": 0.0
+  },
+  "interpretation": "A negative MAE change means C has a lower MAE than B* on that horizon. A positive change means C is worse."
+}

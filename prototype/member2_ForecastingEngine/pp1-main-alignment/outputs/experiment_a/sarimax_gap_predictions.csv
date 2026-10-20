@@ -1,0 +1,247 @@
+unique_id,crop,market,forecast_issue_week,target_week,horizon,y_true,y_pred,y_pred_q05,y_pred_q95,model,split,is_shock,season,target_form,feature_set
+carrot__Colombo,carrot,Colombo,2024-12-30,2025-01-06,1,244.4444444,150.8830194325593,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Colombo,carrot,Colombo,2024-12-30,2025-01-13,2,179.0,180.48717147972835,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Colombo,carrot,Colombo,2024-12-30,2025-01-27,4,246.0,173.91242013265781,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Colombo,carrot,Colombo,2024-12-30,2025-02-24,8,678.0,138.83979708928308,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Colombo,carrot,Colombo,2024-12-30,2025-03-24,12,431.0,133.63122165068557,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2024-12-30,2025-01-06,1,190.0,145.559600281046,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2024-12-30,2025-01-13,2,190.0,195.5681914680632,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2024-12-30,2025-01-27,4,250.0,180.83707255422365,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2024-12-30,2025-02-24,8,760.0,115.88177883632363,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2024-12-30,2025-03-24,12,606.0,111.4344132664515,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-02-17,2025-02-24,1,760.0,529.1171177002752,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-02-17,2025-03-03,2,680.0,523.6964949763033,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-02-17,2025-03-17,4,620.0,523.6045885115801,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-02-17,2025-04-14,8,550.0,521.7749890132358,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-02-17,2025-05-12,12,790.0,513.8042017108454,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-06-02,2025-06-09,1,590.0,605.5586201026946,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-06-02,2025-06-16,2,490.0,615.0851984556787,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-06-02,2025-06-30,4,194.0,614.8490919682916,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-06-02,2025-07-28,8,238.0,609.4341860355379,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Dambulla,carrot,Dambulla,2025-06-02,2025-08-25,12,268.0,599.8491599838942,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-03,2023-07-17,2,412.0,392.4692255067635,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-03,2023-07-31,4,434.0,392.1488212760593,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-03,2023-08-28,8,334.0,396.03581853528567,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-03,2023-09-25,12,150.0,397.9100669788695,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-10,2023-07-17,1,412.0,404.82013298996753,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-10,2023-07-24,2,434.0,406.8428077019892,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-10,2023-08-07,4,446.0,407.6269916176151,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-10,2023-09-04,8,225.0,408.9134442538004,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2023-07-10,2023-10-02,12,204.0,411.041208027012,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2024-12-30,2025-01-06,1,214.0,183.4176506134526,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2024-12-30,2025-01-13,2,266.0,250.89492880637886,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2024-12-30,2025-01-27,4,292.0,208.94635857615324,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2024-12-30,2025-02-24,8,758.0,137.54931769818808,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2024-12-30,2025-03-24,12,600.0,128.60290257591757,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2025-04-14,2025-04-21,1,428.0,337.65435979961984,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2025-04-14,2025-04-28,2,434.0,336.7742662500388,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2025-04-14,2025-05-12,4,798.0,334.214289748657,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2025-04-14,2025-06-09,8,644.0,347.2896228829095,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Meegoda,carrot,Meegoda,2025-04-14,2025-07-07,12,288.0,349.4220674925078,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2023-06-19,2023-06-26,1,374.0,302.1530514419991,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2023-06-19,2023-07-03,2,408.0,300.6477098567011,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2023-06-19,2023-07-17,4,414.0,300.7664925118388,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2023-06-19,2023-08-14,8,394.0,303.79055603922967,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2023-06-19,2023-09-11,12,174.0,304.68540990398964,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-02-26,2024-03-04,1,306.0,400.35233083936146,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-02-26,2024-03-11,2,356.0,440.1131687540124,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-02-26,2024-03-25,4,254.0,433.2399119773294,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-02-26,2024-04-22,8,184.0,426.97498971738315,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-02-26,2024-05-20,12,94.0,429.60042602291435,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-09-23,2024-09-30,1,84.0,147.16814428431687,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-09-23,2024-10-07,2,94.0,141.72304007250324,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-09-23,2024-10-21,4,84.0,144.66760369605802,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-09-23,2024-11-18,8,94.0,147.71103158206694,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-09-23,2024-12-16,12,154.0,151.84137656963975,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-12-30,2025-01-06,1,194.0,143.18062570943786,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-12-30,2025-01-27,4,264.0,161.99541044265834,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-12-30,2025-02-24,8,818.0,125.98870530041998,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2024-12-30,2025-03-24,12,614.0,122.5330242558442,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-01-13,2025-01-20,1,244.0,206.4158737297091,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-01-13,2025-01-27,2,264.0,211.86616747704554,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-01-13,2025-02-10,4,664.0,186.54810295087398,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-01-13,2025-03-10,8,616.0,176.50041791501872,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-01-13,2025-04-07,12,318.0,173.12631267809184,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-04-21,2025-04-28,1,444.0,378.9822076491248,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-04-21,2025-05-05,2,628.0,378.2579951620401,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-04-21,2025-05-19,4,734.0,377.68785095496156,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-04-21,2025-06-16,8,474.0,387.7668921134254,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-04-21,2025-07-14,12,294.0,388.2026870287524,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-08-18,2025-08-25,1,298.0,448.2234804335795,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-08-18,2025-09-01,2,230.0,442.90585146960245,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-08-18,2025-09-15,4,194.0,441.4424587397399,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-08-18,2025-10-13,8,104.0,439.88178274275845,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-10-27,2025-11-24,4,154.0,131.39203096982558,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-10-27,2025-12-22,8,226.0,132.59005105312784,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-11-03,2025-11-17,2,144.0,137.75995518871773,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-11-03,2025-12-29,8,258.0,139.74084138545112,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-11-10,2025-11-17,1,144.0,134.26870264967982,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-11-10,2025-11-24,2,154.0,133.91091157672858,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-11-10,2025-12-08,4,180.0,136.01754451793607,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-12-01,2025-12-08,1,180.0,155.96053104346137,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-12-01,2025-12-15,2,218.0,155.67669333037136,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+carrot__Nuwara Eliya,carrot,Nuwara Eliya,2025-12-01,2025-12-29,4,258.0,156.02404234681848,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Colombo,leeks,Colombo,2024-12-30,2025-01-06,1,238.0,208.8755896629267,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Colombo,leeks,Colombo,2024-12-30,2025-01-13,2,169.0,213.44695491470515,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Colombo,leeks,Colombo,2024-12-30,2025-01-27,4,216.0,216.3021758252586,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Colombo,leeks,Colombo,2024-12-30,2025-02-24,8,212.0,210.79895830172472,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Colombo,leeks,Colombo,2024-12-30,2025-03-24,12,157.0,207.77892275871065,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2024-12-30,2025-01-06,1,210.0,193.87412467349145,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2024-12-30,2025-01-13,2,162.0,195.15109430179965,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2024-12-30,2025-01-27,4,194.0,196.230537070604,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2024-12-30,2025-02-24,8,198.0,192.87196152536788,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2024-12-30,2025-03-24,12,150.0,191.98433799728076,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-02-17,2025-02-24,1,198.0,251.562949127111,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-02-17,2025-03-03,2,174.0,251.3711359832649,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-02-17,2025-03-17,4,174.0,251.34714425613447,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-02-17,2025-04-14,8,132.5,250.96330705415716,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-02-17,2025-05-12,12,200.0,251.37113408057556,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-06-02,2025-06-09,1,332.0,205.55692196640348,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-06-02,2025-06-16,2,286.0,204.71676572446518,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-06-02,2025-06-30,4,154.0,204.21298863884533,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-06-02,2025-07-28,8,110.0,204.2369784670496,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Dambulla,leeks,Dambulla,2025-06-02,2025-08-25,12,114.0,202.34178228545818,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-03,2023-07-17,2,170.0,244.61177442703092,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-03,2023-07-31,4,150.0,241.9815064438425,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-03,2023-08-28,8,120.0,239.4856754695373,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-03,2023-09-25,12,72.0,239.01654085179638,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-10,2023-07-17,1,170.0,220.8402907400849,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-10,2023-07-24,2,156.0,220.54662965787034,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-10,2023-08-07,4,142.0,219.98283415405098,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-10,2023-09-04,8,106.0,220.6142442548424,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2023-07-10,2023-10-02,12,94.0,222.0663633404317,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2024-12-30,2025-01-06,1,198.0,229.5720667618399,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2024-12-30,2025-01-13,2,224.0,239.05156841304418,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2024-12-30,2025-01-27,4,204.0,236.29351529256795,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2024-12-30,2025-02-24,8,302.0,231.07754848416442,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2024-12-30,2025-03-24,12,192.0,229.3696268108454,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2025-04-14,2025-04-21,1,144.0,137.7329987134362,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2025-04-14,2025-04-28,2,158.0,140.42641426836965,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2025-04-14,2025-05-12,4,216.0,148.7670088243618,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2025-04-14,2025-06-09,8,342.0,170.60099609798073,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Meegoda,leeks,Meegoda,2025-04-14,2025-07-07,12,188.0,175.36796624346664,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2023-06-19,2023-06-26,1,194.0,233.37049387179368,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2023-06-19,2023-07-03,2,184.0,231.79502536896308,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2023-06-19,2023-07-17,4,136.0,232.2860596676068,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2023-06-19,2023-08-14,8,104.0,231.99371688975455,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2023-06-19,2023-09-11,12,59.0,231.40150343823504,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-02-26,2024-03-04,1,189.0,310.7612751335211,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-02-26,2024-03-11,2,186.0,310.81554027411636,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-02-26,2024-03-25,4,166.0,309.919494378741,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-02-26,2024-04-22,8,156.0,310.3255530937706,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-02-26,2024-05-20,12,190.0,309.02780183772495,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-09-23,2024-09-30,1,164.0,195.5398692959785,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-09-23,2024-10-07,2,144.0,195.56764836774022,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-09-23,2024-10-21,4,136.0,195.5693798638718,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-09-23,2024-11-18,8,96.0,194.62656449223024,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-09-23,2024-12-16,12,264.0,193.18543756409974,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-12-30,2025-01-06,1,164.0,216.71922383045356,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-12-30,2025-01-27,4,166.0,214.02327519150833,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-12-30,2025-02-24,8,214.0,216.77921992470343,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2024-12-30,2025-03-24,12,166.0,218.1287710070821,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-01-13,2025-01-20,1,166.0,160.77977255119438,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-01-13,2025-01-27,2,166.0,161.0741836494745,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-01-13,2025-02-10,4,216.0,162.80816165534094,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-01-13,2025-03-10,8,166.0,164.90174330212034,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-01-13,2025-04-07,12,108.0,165.22974362394612,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-04-21,2025-04-28,1,164.0,109.99248153900275,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-04-21,2025-05-05,2,134.0,108.92571091595957,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-04-21,2025-05-19,4,218.0,109.03173106243642,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-04-21,2025-06-16,8,254.0,103.05307127429644,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-04-21,2025-07-14,12,164.0,106.26817192592708,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-08-18,2025-08-25,1,124.0,126.7018528775436,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-08-18,2025-09-01,2,94.0,126.90098740341719,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-08-18,2025-09-15,4,98.0,126.89660682857071,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-08-18,2025-10-13,8,84.0,127.90857878707149,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-10-27,2025-11-24,4,116.0,94.90998264734067,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-10-27,2025-12-22,8,224.0,93.54787476193454,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-11-03,2025-11-17,2,104.0,94.26246823445612,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-11-03,2025-12-29,8,306.0,92.89321030506413,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-11-10,2025-11-17,1,104.0,94.66002416898573,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-11-10,2025-11-24,2,116.0,94.27257651115379,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-11-10,2025-12-08,4,176.0,92.64147110078076,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-12-01,2025-12-08,1,176.0,114.42561636603264,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-12-01,2025-12-15,2,216.0,113.94258720621511,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+leeks__Nuwara Eliya,leeks,Nuwara Eliya,2025-12-01,2025-12-29,4,306.0,115.1308363427621,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Colombo,tomato,Colombo,2024-12-30,2025-01-06,1,367.0,367.64658140479986,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Colombo,tomato,Colombo,2024-12-30,2025-01-13,2,221.0,367.2475259829262,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Colombo,tomato,Colombo,2024-12-30,2025-01-27,4,263.0,365.0218223769463,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Colombo,tomato,Colombo,2024-12-30,2025-02-24,8,106.0,365.28982635581707,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Colombo,tomato,Colombo,2024-12-30,2025-03-24,12,188.0,370.81212755525115,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2024-12-30,2025-01-06,1,310.0,335.4032884274951,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2024-12-30,2025-01-13,2,214.0,336.2075277305088,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2024-12-30,2025-01-27,4,160.0,318.4746458257946,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2024-12-30,2025-02-24,8,103.0,327.64153031149675,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2024-12-30,2025-03-24,12,142.0,342.4056710648025,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-02-17,2025-02-24,1,103.0,124.74021900173842,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-02-17,2025-03-03,2,174.0,131.39640986240389,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-02-17,2025-03-17,4,264.0,138.79371757011535,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-02-17,2025-04-14,8,188.0,142.41293331809078,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-02-17,2025-05-12,12,500.0,140.6705525744125,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-06-02,2025-06-09,1,316.0,491.77245100914837,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-06-02,2025-06-16,2,254.0,484.2929695141992,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-06-02,2025-06-30,4,98.0,484.7910964436002,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-06-02,2025-07-28,8,96.0,498.16540581581535,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Dambulla,tomato,Dambulla,2025-06-02,2025-08-25,12,164.0,499.9076420107852,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-03,2023-07-17,2,446.0,206.9693385547859,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-03,2023-07-31,4,232.0,210.9800444105592,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-03,2023-08-28,8,116.0,206.07520222630203,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-03,2023-09-25,12,128.0,207.3197031024712,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-10,2023-07-17,1,446.0,267.479021397002,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-10,2023-07-24,2,266.0,261.0747105998398,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-10,2023-08-07,4,166.0,251.31722480909946,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-10,2023-09-04,8,90.0,233.69605421585214,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2023-07-10,2023-10-02,12,102.0,225.96322555653992,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2024-12-30,2025-01-06,1,300.0,349.5749937511964,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2024-12-30,2025-01-13,2,200.0,338.05433803437836,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2024-12-30,2025-01-27,4,256.0,327.4394439192807,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2024-12-30,2025-02-24,8,106.0,304.10285616130284,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2024-12-30,2025-03-24,12,198.0,284.4111990967559,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2025-04-14,2025-04-21,1,584.0,310.2888881764578,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2025-04-14,2025-04-28,2,590.0,301.81102030546344,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2025-04-14,2025-05-12,4,710.0,290.6898553105309,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2025-04-14,2025-06-09,8,512.0,282.10384164167425,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Meegoda,tomato,Meegoda,2025-04-14,2025-07-07,12,84.0,270.15982424027504,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2023-06-19,2023-06-26,1,148.0,187.59876907659705,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2023-06-19,2023-07-03,2,286.0,188.66478012887347,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2023-06-19,2023-07-17,4,322.0,185.73910873651565,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2023-06-19,2023-08-14,8,150.0,179.04386782035516,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2023-06-19,2023-09-11,12,106.0,182.6007602715764,,,sarimax,calibrate,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-02-26,2024-03-04,1,348.0,796.5138255393614,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-02-26,2024-03-11,2,330.0,796.3342099703268,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-02-26,2024-03-25,4,88.0,797.4135385829871,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-02-26,2024-04-22,8,38.0,799.2450991474582,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-02-26,2024-05-20,12,96.0,794.4328334111552,,,sarimax,test,True,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-09-23,2024-09-30,1,196.0,166.36653753422206,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-09-23,2024-10-07,2,184.0,165.138344489676,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-09-23,2024-10-21,4,180.0,166.29393913296053,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-09-23,2024-11-18,8,192.0,158.97104297150946,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-09-23,2024-12-16,12,414.0,148.40498031222486,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-12-30,2025-01-06,1,264.0,329.68624610400764,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-12-30,2025-01-27,4,200.0,314.734002197331,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-12-30,2025-02-24,8,120.0,318.1859238412242,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2024-12-30,2025-03-24,12,188.0,343.1887849414588,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-01-13,2025-01-20,1,200.0,250.75081869014585,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-01-13,2025-01-27,2,200.0,245.87255193789815,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-01-13,2025-02-10,4,124.0,245.02389486514295,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-01-13,2025-03-10,8,204.0,261.65731199297045,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-01-13,2025-04-07,12,296.0,275.98949592500844,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-04-21,2025-04-28,1,496.0,248.9138173918269,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-04-21,2025-05-05,2,696.0,249.28192004048208,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-04-21,2025-05-19,4,560.0,245.40222620448424,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-04-21,2025-06-16,8,220.0,226.88524493085256,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-04-21,2025-07-14,12,38.0,234.52210202543006,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-08-18,2025-08-25,1,184.0,79.49423650319501,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-08-18,2025-09-01,2,104.0,85.5385440124842,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-08-18,2025-09-15,4,188.0,81.55904293456774,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-08-18,2025-10-13,8,102.0,80.72202611744932,,,sarimax,test,False,Yala,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-10-27,2025-11-24,4,112.0,85.3058988052716,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-10-27,2025-12-22,8,672.5,78.9243266517384,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-11-03,2025-11-17,2,74.0,88.3863042266126,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-11-03,2025-12-29,8,395.0,82.7893112369976,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-11-10,2025-11-17,1,74.0,88.41534660851799,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-11-10,2025-11-24,2,112.0,87.36913773656151,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-11-10,2025-12-08,4,210.0,88.41527116708932,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-12-01,2025-12-08,1,210.0,115.45087071766982,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-12-01,2025-12-15,2,395.0,103.88816528924364,,,sarimax,test,False,Maha,price,sarimax_gap_refit
+tomato__Nuwara Eliya,tomato,Nuwara Eliya,2025-12-01,2025-12-29,4,395.0,109.91230424173094,,,sarimax,test,False,Maha,price,sarimax_gap_refit

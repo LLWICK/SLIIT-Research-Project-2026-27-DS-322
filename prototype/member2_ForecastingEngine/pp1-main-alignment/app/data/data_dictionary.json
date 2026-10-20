@@ -1,0 +1,50 @@
+[
+  {
+    "column": "crop",
+    "dtype": "str",
+    "role": "key",
+    "notes": "carrot / leeks / tomato"
+  },
+  {
+    "column": "market",
+    "dtype": "str",
+    "role": "key",
+    "notes": "Wholesale observation market"
+  },
+  {
+    "column": "week_start",
+    "dtype": "date",
+    "role": "key",
+    "notes": "Monday on or after 1 January starts week 1"
+  },
+  {
+    "column": "price",
+    "dtype": "float LKR/kg",
+    "role": "target",
+    "notes": "Null when HARTI did not publish a price"
+  },
+  {
+    "column": "is_observed",
+    "dtype": "bool",
+    "role": "quality",
+    "notes": "Metrics use this filter"
+  },
+  {
+    "column": "cultivation_intensity",
+    "dtype": "float",
+    "role": "feature",
+    "notes": "Not the methodology feature. Seasonal extent ratio is kept out of feature sets A/B/C."
+  },
+  {
+    "column": "commitment_source",
+    "dtype": "str",
+    "role": "feature",
+    "notes": "unavailable_no_district_monthly_series"
+  },
+  {
+    "column": "cultivation_progress",
+    "dtype": "float",
+    "role": "feature",
+    "notes": "achieved hectares / target hectares, as-of. Missing when no district-month table exists."
+  }
+]

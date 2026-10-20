@@ -1,0 +1,38 @@
+{
+  "missing_required": [],
+  "required_count": 61,
+  "notebooks_imported": false,
+  "fit_called": false,
+  "still_only_in_notebook": [
+    "Colab Drive mount and the notebook cell printouts."
+  ],
+  "common_key_horizons": 5,
+  "studio_json": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\outputs\\evaluation\\studio_json",
+  "reforecast": {
+    "found": true,
+    "multiple_real_reports": true,
+    "note": "This target week has at least two issue dates and at least two different real national report dates. Each row is scored with the horizon model for that issue date.",
+    "crop": "carrot",
+    "market": "colombo",
+    "target_week": "2024-09-23",
+    "information_states": 5,
+    "distinct_real_reports": 4,
+    "checked": 5,
+    "max_abs_median_difference": 0.0
+  },
+  "inference": {
+    "reproduce_difference": 1.4210854715202004e-14,
+    "n_forecasts": 12,
+    "max_forecast_difference": 2.842170943040401e-14,
+    "measured_picp": {
+      "1": 85.71,
+      "2": 91.29,
+      "4": 91.17,
+      "8": 93.74,
+      "12": 93.56
+    },
+    "b_reproduction_difference": 2.842170943040401e-14,
+    "b_horizon": 1,
+    "c_live_vectors": 60
+  }
+}

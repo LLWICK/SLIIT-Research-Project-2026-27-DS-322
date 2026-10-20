@@ -1,0 +1,16 @@
+model,horizon,n_matched_rows,n_target_weeks,mean_mae_difference_model_minus_naive,bootstrap_95_ci_low,bootstrap_95_ci_high,ci_entirely_below_zero,ci_entirely_above_zero
+lightgbm,1,1200,103,-8.2711,-13.1651,-3.7162,True,False
+sarimax,1,1200,103,-24.7205,-34.1602,-15.5919,True,False
+xgboost,1,1200,103,-8.871,-13.8333,-4.3396,True,False
+lightgbm,2,1188,102,-16.1198,-32.2494,-2.3227,True,False
+sarimax,2,1188,102,-26.151,-37.3652,-16.4504,True,False
+xgboost,2,1188,102,-20.6377,-36.0177,-7.8839,True,False
+lightgbm,4,1164,100,-32.7742,-59.8239,-7.3462,True,False
+sarimax,4,1164,100,-21.429,-31.2854,-10.2104,True,False
+xgboost,4,1164,100,-35.3527,-61.9057,-11.4821,True,False
+lightgbm,8,1116,96,-68.9632,-106.6578,-34.5634,True,False
+sarimax,8,1116,96,-13.0251,-26.0391,-0.4015,True,False
+xgboost,8,1116,96,-66.8951,-106.2618,-34.9491,True,False
+lightgbm,12,1071,92,-83.2647,-135.6434,-41.1952,True,False
+sarimax,12,1071,92,-12.372,-27.2146,0.4053,False,False
+xgboost,12,1071,92,-78.9926,-122.8647,-41.5137,True,False

@@ -1,0 +1,1 @@
+SHAP mean absolute value on a sample of horizon-4 test rows. This is explainability, not the B* versus C test.

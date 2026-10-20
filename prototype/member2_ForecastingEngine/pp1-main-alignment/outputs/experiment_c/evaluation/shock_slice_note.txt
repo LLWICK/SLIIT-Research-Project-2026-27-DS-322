@@ -1,0 +1,1 @@
+The 2024 Q1 shock slice is not evaluable for LightGBM C horizon 4. No matched national-progress test row has an issue week from 2024-01-01 to 2024-03-31. Rows outside that window: 453.

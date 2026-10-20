@@ -1,0 +1,8 @@
+{
+  "horizon": 4,
+  "model": "lightgbm",
+  "feature_set": "C",
+  "shock_rows": 0,
+  "evaluable": false,
+  "note": "2024 Q1 shock at horizon 4 is not evaluable: this run has zero Experiment C horizon-4 rows in that window."
+}

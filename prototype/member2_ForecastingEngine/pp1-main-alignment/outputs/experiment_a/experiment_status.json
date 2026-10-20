@@ -1,0 +1,25 @@
+{
+  "A": {
+    "status": "trained",
+    "reason": "Experiment A trained on price lags and seasonal features."
+  },
+  "B": {
+    "status": "not_trained",
+    "reason": "Diesel, USD/LKR, and inflation each have non-null as-of values. This task trains Experiment A only."
+  },
+  "C": {
+    "status": "unavailable",
+    "reason": "Experiment C is the national matched-row run in run_experiment_c. It is not fit inside Experiment A."
+  },
+  "S": {
+    "status": "not_run",
+    "reason": "S is the synthetic calendar curve and was not trained. It is not Experiment C, and its scores are not in the A/B/C accuracy table."
+  },
+  "sarimax": "fitted 8811 SARIMAX rows at fixed order (1, 1, 1) x (1, 0, 0, 52)",
+  "protocol": "notebook_2022_early_stop",
+  "artifacts": {
+    "predictions": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\outputs\\experiment_a\\predictions.csv",
+    "metrics": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\outputs\\experiment_a\\metrics_by_model_horizon.csv",
+    "manifest": "D:\\SLIIT\\4th Year\\Reaserch\\Cobweb effect\\CobwebProj\\SLIIT-Research-Project-2026-27-DS-322\\outputs\\experiment_a\\manifest.json"
+  }
+}

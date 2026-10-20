@@ -1,0 +1,13 @@
+{
+  "notebook_protocol": "early stopping on 2022 target weeks after training on eligible targets through 2021-12-31; 2023 used only for conformal calibration",
+  "repository_protocol": "same notebook calendar: 2021 selector fit, 2022 early stop, refit through 2022, 2023 only for qhat",
+  "retrained_for_this_note": true,
+  "tree_fit": "htfe.training.run_experiment_a.fit_quantile_trees",
+  "notebook_protocol_produced_saved_cards": true,
+  "sentences": [
+    "This run uses the notebook calendar. Selector training uses eligible targets through 2021-12-31. Early stopping uses 2022 target weeks. The trees are refit through 2022-12-31. 2023 issue weeks set qhat only. Optuna is not used. The seed is 42.",
+    "Full-sample LightGBM B horizon 4 from the studio file: MAE 110.14, MAPE 43.96, calibrated PICP 83.42%, which is below the intended 90%, interval width 439.50, on 1164 test rows. SARIMAX order is (1, 1, 1) x (1, 0, 0, 52). Horizon 1 MAE is 60.96 and MAPE is 22.94.",
+    "On this matched-row LightGBM run, C MAE is lower than B* at horizon 2 (-1.46% MAE, B* 65.90, C 64.94); horizon 4 (-4.24% MAE, B* 83.58, C 80.04); horizon 8 (-9.63% MAE, B* 131.02, C 118.40); horizon 12 (-2.76% MAE, B* 171.62, C 166.88). C MAE is not lower at horizon 1. These rows are not the full-sample A/B table.",
+    "Experiment C LightGBM calibrated PICP is below 90% at horizon 1. Report the measured share. The nominal interval is 90%."
+  ]
+}

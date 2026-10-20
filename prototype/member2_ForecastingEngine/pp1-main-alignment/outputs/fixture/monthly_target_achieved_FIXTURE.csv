@@ -1,0 +1,7 @@
+year,month,crop,district,target_ha,achieved_ha,available_date,note
+2024,4,carrot,Nuwara Eliya,100,40,2024-04-30,FIXTURE_NOT_OBSERVED. These hectares were typed to test the loader. They are not Census or Department of Agriculture records.
+2024,4,carrot,Badulla,50,25,2024-04-30,FIXTURE_NOT_OBSERVED. These hectares were typed to test the loader. They are not Census or Department of Agriculture records.
+2024,5,carrot,Nuwara Eliya,100,80,2024-05-31,FIXTURE_NOT_OBSERVED. These hectares were typed to test the loader. They are not Census or Department of Agriculture records.
+2024,5,carrot,Badulla,50,40,2024-05-31,FIXTURE_NOT_OBSERVED. These hectares were typed to test the loader. They are not Census or Department of Agriculture records.
+2024,6,carrot,Nuwara Eliya,100,140,2024-06-30,FIXTURE_NOT_OBSERVED. These hectares were typed to test the loader. They are not Census or Department of Agriculture records.
+2024,6,carrot,Badulla,50,70,2024-06-30,FIXTURE_NOT_OBSERVED. These hectares were typed to test the loader. They are not Census or Department of Agriculture records.

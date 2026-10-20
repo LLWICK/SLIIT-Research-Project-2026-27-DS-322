@@ -1,0 +1,6 @@
+model,horizon,n_scored,raw_crossing_count,raw_crossing_rate_pct,projected_order_violation_count,projected_order_violation_rate_pct,calibrated_order_violation_count,calibrated_order_violation_rate_pct,status
+lightgbm,1,462,0,0.0,0,0.0,0,0.0,PASS_NO_RAW_CROSSING
+lightgbm,2,459,0,0.0,0,0.0,0,0.0,PASS_NO_RAW_CROSSING
+lightgbm,4,453,14,3.090507726269316,0,0.0,0,0.0,CORRECTED_FROM_RAW_CROSSING
+lightgbm,8,447,0,0.0,0,0.0,0,0.0,PASS_NO_RAW_CROSSING
+lightgbm,12,450,30,6.666666666666667,0,0.0,0,0.0,CORRECTED_FROM_RAW_CROSSING

@@ -1,0 +1,42 @@
+{
+  "project": "J26-DS-322",
+  "component": "Hybrid Temporal Forecasting Engine",
+  "target": "weekly wholesale price, LKR/kg",
+  "saved_artifact_tree_selection": "Eligible targets through 2021-12-31, early stopping on 2022 target weeks, refit through 2022-12-31. 2023 is used only for qhat. This is the fit behind the Experiment A, B, and C cards from this run.",
+  "tree_fit": "htfe.training.run_experiment_a.fit_quantile_trees",
+  "notebook_protocol_produced_these_cards": true,
+  "notebook_protocol": "selector training through 2021-12-31, early stopping on 2022 target weeks, refit through 2022-12-31, 2023 reserved for conformal calibration",
+  "app_data_rewritten": false,
+  "experiment_c_trained": true,
+  "experiment_c_status": "trained_real_experiment_c",
+  "spatial_scope": "national",
+  "district_rows_used_for_scoring": false,
+  "sarimax_order": "(1, 1, 1) x (1, 0, 0, 52)",
+  "lstm": "not run",
+  "measured_picp_pct_by_horizon": {
+    "1": 85.71,
+    "2": 91.29,
+    "4": 91.17,
+    "8": 93.74,
+    "12": 93.56
+  },
+  "saved_b_reproduction": {
+    "check": "reproduce_one_saved_b_forecast",
+    "fit_called": false,
+    "crop": "carrot",
+    "market": "meegoda",
+    "forecast_issue_week": "2025-12-22",
+    "target_week": "2025-12-29",
+    "horizon_weeks": 1,
+    "last_observed_price": 234.0,
+    "lower_price": 164.44,
+    "predicted_price": 227.39,
+    "upper_price": 425.32,
+    "actual_price_historical_demo": 264.0,
+    "saved_median": 227.391094,
+    "reproduction_absolute_difference": 2.842170943040401e-14,
+    "feature_set": "B",
+    "model": "lightgbm",
+    "note": "The stored live file had forecast_week and origin_price, and no issue week. The issue week is the unique training-table row with that target week and origin price. That row is horizon 1. The file does not contain a separate horizon-4 vector."
+  }
+}
