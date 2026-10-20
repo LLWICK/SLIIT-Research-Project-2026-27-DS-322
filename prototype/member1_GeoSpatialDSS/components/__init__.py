@@ -2,22 +2,25 @@
 Reusable UI and visualization components for the Geo-Spatial DSS Dashboard.
 """
 
-from components.maps import (
+from .maps import (
+    render_sri_lanka_map,
     render_sri_lanka_saturation_map,
     render_district_viability_map,
 )
-from components.charts import (
+from .charts import (
     render_price_history_chart,
     render_cobweb_phase_plot,
     render_district_commitment_barchart,
     render_weather_trend_chart,
 )
-from components.metrics_cards import (
+from .metrics_cards import (
     render_kpi_card_html,
     render_executive_overview_cards,
 )
-from components.recommendations import (
+from .recommendations import (
     render_advisory_card,
+    render_crop_recommendations_table,
+    render_district_drilldown_panel,
 )
 
 __all__ = [

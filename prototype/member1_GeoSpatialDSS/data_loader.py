@@ -14,13 +14,30 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 import pandas as pd
 
-# Optional Streamlit caching decorator fallback
-try:
-    import streamlit as st
-    cache_decorator = st.cache_data
-except ImportError:
-    def cache_decorator(func):
-        return func
+# Streamlit caching decorator with technical status spinners suppressed (show_spinner=False)
+def cache_decorator(*args, **kwargs):
+    """
+    Wrapper around st.cache_data that defaults show_spinner to False,
+    suppressing technical execution messages (e.g. 'Running _cached_func(...)')
+    from the user interface.
+    """
+    try:
+        import streamlit as st
+        if "show_spinner" not in kwargs:
+            kwargs["show_spinner"] = False
+
+        if len(args) == 1 and callable(args[0]) and len(kwargs) == 1:
+            return st.cache_data(show_spinner=False)(args[0])
+        elif len(args) == 1 and callable(args[0]):
+            return st.cache_data(**kwargs)(args[0])
+        else:
+            return st.cache_data(*args, **kwargs)
+    except (ImportError, Exception):
+        if len(args) == 1 and callable(args[0]):
+            return args[0]
+        def noop(f):
+            return f
+        return noop
 
 
 def get_project_root() -> Path:

@@ -80,9 +80,10 @@ def render_price_history_chart(
     Render weekly price historical time series with rolling moving average.
     Accurately constrained to observed dates (no artificial future extrapolation).
     """
-    sub = df_price[df_price["crop"] == crop_name].copy()
     if district_filter and district_filter != "All Island (National Average)":
-        sub = sub[sub["district"] == district_filter]
+        sub = df_price[(df_price["crop"] == crop_name) & (df_price["district"] == district_filter)]
+    else:
+        sub = df_price[df_price["crop"] == crop_name]
 
     if sub.empty:
         fig = go.Figure()
@@ -94,13 +95,18 @@ def render_price_history_chart(
         fig.update_layout(**DARK_PLOT_THEME, height=height)
         return fig
 
-    sub["price_date"] = pd.to_datetime(sub["price_date"])
+    if not pd.api.types.is_datetime64_any_dtype(sub["price_date"]):
+        sub = sub.copy()
+        sub["price_date"] = pd.to_datetime(sub["price_date"])
+
+    sub = sub.sort_values(by="price_date")
     piv = sub.groupby(["price_date", "price_type"])["price"].mean().reset_index()
+    piv = piv.sort_values(by="price_date")
 
     fig = go.Figure()
 
-    retail = piv[piv["price_type"] == "retail"].sort_values("price_date")
-    wholesale = piv[piv["price_type"] == "wholesale"].sort_values("price_date")
+    retail = piv[piv["price_type"] == "retail"].sort_values("price_date").reset_index(drop=True)
+    wholesale = piv[piv["price_type"] == "wholesale"].sort_values("price_date").reset_index(drop=True)
 
     # Accurate Observed Date Range
     all_dates = piv["price_date"]
@@ -109,7 +115,6 @@ def render_price_history_chart(
 
     # 1. Retail Series (Mint / Sage Green)
     if not retail.empty:
-        retail["rolling_ma"] = retail["price"].rolling(window=8, min_periods=1).mean()
         fig.add_trace(go.Scatter(
             x=retail["price_date"],
             y=retail["price"],
@@ -119,18 +124,22 @@ def render_price_history_chart(
             opacity=0.65,
             hovertemplate="<b>Retail Observed</b>: Rs. %{y:.1f}/kg<extra></extra>",
         ))
-        fig.add_trace(go.Scatter(
-            x=retail["price_date"],
-            y=retail["rolling_ma"],
-            mode="lines",
-            name="Retail 8-Wk Trend (MA)",
-            line=dict(color="#22C55E", width=2.8),
-            hovertemplate="<b>Retail 8W MA</b>: Rs. %{y:.1f}/kg<extra></extra>",
-        ))
+        # Add 8-week moving average only where at least 8 observations exist
+        if len(retail) >= 8:
+            retail["rolling_ma"] = retail["price"].rolling(window=8, min_periods=8).mean()
+            ma_valid = retail.dropna(subset=["rolling_ma"])
+            if not ma_valid.empty:
+                fig.add_trace(go.Scatter(
+                    x=ma_valid["price_date"],
+                    y=ma_valid["rolling_ma"],
+                    mode="lines",
+                    name="Retail 8-Wk Trend (MA)",
+                    line=dict(color="#22C55E", width=2.8),
+                    hovertemplate="<b>Retail 8W MA</b>: Rs. %{y:.1f}/kg<extra></extra>",
+                ))
 
     # 2. Wholesale Series (Warm Amber / Gold)
     if not wholesale.empty:
-        wholesale["rolling_ma"] = wholesale["price"].rolling(window=8, min_periods=1).mean()
         fig.add_trace(go.Scatter(
             x=wholesale["price_date"],
             y=wholesale["price"],
@@ -140,24 +149,30 @@ def render_price_history_chart(
             opacity=0.60,
             hovertemplate="<b>Wholesale Observed</b>: Rs. %{y:.1f}/kg<extra></extra>",
         ))
-        fig.add_trace(go.Scatter(
-            x=wholesale["price_date"],
-            y=wholesale["rolling_ma"],
-            mode="lines",
-            name="Wholesale 8-Wk Trend (MA)",
-            line=dict(color="#D97706", width=2.5, dash="dash"),
-            hovertemplate="<b>Wholesale 8W MA</b>: Rs. %{y:.1f}/kg<extra></extra>",
-        ))
+        # Add 8-week moving average only where at least 8 observations exist
+        if len(wholesale) >= 8:
+            wholesale["rolling_ma"] = wholesale["price"].rolling(window=8, min_periods=8).mean()
+            ma_valid_ws = wholesale.dropna(subset=["rolling_ma"])
+            if not ma_valid_ws.empty:
+                fig.add_trace(go.Scatter(
+                    x=ma_valid_ws["price_date"],
+                    y=ma_valid_ws["rolling_ma"],
+                    mode="lines",
+                    name="Wholesale 8-Wk Trend (MA)",
+                    line=dict(color="#D97706", width=2.5, dash="dash"),
+                    hovertemplate="<b>Wholesale 8W MA</b>: Rs. %{y:.1f}/kg<extra></extra>",
+                ))
 
     loc_str = district_filter if district_filter else "National Average"
     fig.update_layout(
         **DARK_PLOT_THEME,
         title=dict(
-            text=f"<b>Weekly Price Trajectory & Trend</b> — {crop_name} ({loc_str})",
-            font=dict(color=COLOR_TEXT_WHITE, size=13),
+            text=f"<b>Weekly Price Trajectory & Trend</b><br><span style='font-size:10px;color:{COLOR_TEXT_MUTED}'>{crop_name} ({loc_str})</span>",
+            font=dict(color=COLOR_TEXT_WHITE, size=12),
             x=0.01,
-            y=0.97,
+            y=0.98,
             xanchor="left",
+            yanchor="top",
         ),
         xaxis=dict(
             title="Timeline (Weekly ISO Monday)",
@@ -167,7 +182,7 @@ def render_price_history_chart(
         height=height,
         hovermode="x unified",
         legend=DARK_LEGEND,
-        margin=dict(l=15, r=15, t=65, b=25),
+        margin=dict(l=60, r=25, t=85, b=45),
     )
 
     apply_dark_axes(fig)
@@ -241,9 +256,13 @@ def render_cobweb_phase_plot(
             arrowhead=2,
             arrowsize=1,
             arrowcolor="#A3B899",
-            font=dict(size=9, color=COLOR_TEXT_LIGHT_GREY),
-            ax=35,
-            ay=-25,
+            font=dict(size=9, color="#E8EFEA", family="Inter, sans-serif"),
+            bgcolor="rgba(15, 30, 20, 0.90)",
+            bordercolor="#2B5237",
+            borderwidth=1,
+            borderpad=4,
+            ax=-40,
+            ay=-30,
         )
         last_pt = merged.iloc[-1]
         fig.add_annotation(
@@ -254,9 +273,13 @@ def render_cobweb_phase_plot(
             arrowhead=2,
             arrowsize=1,
             arrowcolor="#4ADE80",
-            font=dict(size=10, color="#4ADE80", family="Arial Black"),
-            ax=-35,
-            ay=25,
+            font=dict(size=10, color="#FFFFFF", family="Inter, sans-serif"),
+            bgcolor="rgba(10, 20, 13, 0.95)",
+            bordercolor="#4ADE80",
+            borderwidth=1.5,
+            borderpad=5,
+            ax=45,
+            ay=-40,
         )
 
     mean_target = merged["target_hectares"].mean()
@@ -278,11 +301,12 @@ def render_cobweb_phase_plot(
     fig.update_layout(
         **DARK_PLOT_THEME,
         title=dict(
-            text=f"<b>Empirical Cobweb Phase-Space Dynamics</b> — {crop_name}",
-            font=dict(color=COLOR_TEXT_WHITE, size=13),
+            text=f"<b>Empirical Cobweb Dynamics</b><br><span style='font-size:10px;color:{COLOR_TEXT_MUTED}'>{crop_name} Phase-Space Trajectory</span>",
+            font=dict(color=COLOR_TEXT_WHITE, size=12),
             x=0.01,
-            y=0.97,
+            y=0.98,
             xanchor="left",
+            yanchor="top",
         ),
         xaxis=dict(
             title="National Committed Extent (Hectares)",
@@ -294,7 +318,7 @@ def render_cobweb_phase_plot(
         ),
         height=height,
         legend=DARK_LEGEND,
-        margin=dict(l=15, r=15, t=65, b=25),
+        margin=dict(l=60, r=25, t=85, b=45),
     )
 
     apply_dark_axes(fig)
@@ -335,11 +359,12 @@ def render_district_commitment_barchart(
         **DARK_PLOT_THEME,
         barmode="group",
         title=dict(
-            text=f"<b>Commitment vs. Sustainable Quota</b> — {crop_name} ({season_label})",
-            font=dict(color=COLOR_TEXT_WHITE, size=13),
+            text=f"<b>Commitment vs. Sustainable Quota</b><br><span style='font-size:10px;color:{COLOR_TEXT_MUTED}'>{crop_name} ({season_label})</span>",
+            font=dict(color=COLOR_TEXT_WHITE, size=12),
             x=0.01,
-            y=0.97,
+            y=0.98,
             xanchor="left",
+            yanchor="top",
         ),
         xaxis=dict(
             title="Administrative District",
@@ -348,7 +373,7 @@ def render_district_commitment_barchart(
         yaxis=dict(title="Area (Hectares)"),
         height=height,
         legend=DARK_LEGEND,
-        margin=dict(l=15, r=15, t=65, b=45),
+        margin=dict(l=60, r=25, t=85, b=45),
     )
 
     apply_dark_axes(fig)
@@ -364,7 +389,7 @@ def render_weather_trend_chart(
     Render dual-axis chart of weekly precipitation accumulation and mean temperature.
     Coordinates with dark forest theme and constraints to verified 52-week data.
     """
-    sub = df_weather[df_weather["district"] == district].copy()
+    sub = df_weather[df_weather["district"] == district]
     if sub.empty:
         fig = go.Figure()
         fig.add_annotation(
@@ -375,7 +400,11 @@ def render_weather_trend_chart(
         fig.update_layout(**DARK_PLOT_THEME, height=height)
         return fig
 
-    sub["obs_date"] = pd.to_datetime(sub["obs_date"])
+    if not pd.api.types.is_datetime64_any_dtype(sub["obs_date"]):
+        sub = sub.copy()
+        sub["obs_date"] = pd.to_datetime(sub["obs_date"])
+
+    sub = sub.copy()
     sub["week"] = sub["obs_date"].dt.to_period("W").dt.start_time
     weekly_w = sub.groupby("week").agg({"rainfall_mm": "sum", "temp_c": "mean"}).reset_index()
 
@@ -409,16 +438,17 @@ def render_weather_trend_chart(
     fig.update_layout(
         **DARK_PLOT_THEME,
         title=dict(
-            text=f"<b>Agro-Meteorological Environment (NASA POWER)</b> — {district} (Last 52 Weeks)",
-            font=dict(color=COLOR_TEXT_WHITE, size=13),
+            text=f"<b>Agro-Meteorological Environment</b><br><span style='font-size:10px;color:{COLOR_TEXT_MUTED}'>{district} (NASA POWER Last 52 Weeks)</span>",
+            font=dict(color=COLOR_TEXT_WHITE, size=12),
             x=0.01,
-            y=0.97,
+            y=0.98,
             xanchor="left",
+            yanchor="top",
         ),
         xaxis=dict(title="Timeline (Weekly)"),
         height=height,
         legend=DARK_LEGEND,
-        margin=dict(l=15, r=15, t=65, b=25),
+        margin=dict(l=60, r=50, t=85, b=45),
     )
 
     fig.update_yaxes(
@@ -452,18 +482,83 @@ def render_forecast_trajectory_chart(
     """
     fig = go.Figure()
 
-    # 1. Historical Observed Series
+    # 0. Empty State Check
+    if historical_df.empty and (forecast_df.empty or "predicted_price" not in forecast_df.columns):
+        fig.add_annotation(
+            text=f"No verified historical price observations available for {crop_name} in {district}.",
+            xref="paper", yref="paper",
+            x=0.5, y=0.5,
+            showarrow=False,
+            font=dict(size=13, color=COLOR_TEXT_LIGHT_GREY),
+            bgcolor="rgba(19, 38, 25, 0.90)",
+            bordercolor=COLOR_BORDER_DARK,
+            borderwidth=1,
+            borderpad=10,
+        )
+        fig.update_layout(
+            **DARK_PLOT_THEME,
+            title=dict(
+                text=f"<b>Observed Historical Baseline</b><br><span style='font-size:10px;color:{COLOR_TEXT_MUTED}'>{crop_name} ({district})</span>",
+                font=dict(color=COLOR_TEXT_WHITE, size=12),
+                x=0.01, y=0.98, xanchor="left", yanchor="top",
+            ),
+            xaxis=dict(title="Timeline (Weekly ISO Monday)"),
+            yaxis=dict(title="Price (Rs./kg)"),
+            height=height,
+            margin=dict(l=60, r=25, t=85, b=45),
+        )
+        apply_dark_axes(fig)
+        return fig
+
+    # 1. Historical Observed Series (Genuine observations with gap preservation)
     if not historical_df.empty:
-        hist_sorted = historical_df.sort_values(by="price_date")
+        hist_sorted = historical_df.sort_values(by="price_date").copy()
         hist_sorted["price_date"] = pd.to_datetime(hist_sorted["price_date"])
+
+        # Detect intermediate missing weeks (>14 days) and insert NaN to leave gaps rather than drawing misleading continuous lines
+        records_with_gaps = []
+        for i in range(len(hist_sorted)):
+            curr_row = hist_sorted.iloc[i]
+            if i > 0:
+                prev_row = hist_sorted.iloc[i - 1]
+                day_gap = (curr_row["price_date"] - prev_row["price_date"]).days
+                if day_gap > 14:
+                    # Intermediate gap detected: insert NaN marker so Plotly leaves a gap
+                    records_with_gaps.append({
+                        "price_date": prev_row["price_date"] + pd.Timedelta(days=7),
+                        "price": np.nan,
+                    })
+            records_with_gaps.append({
+                "price_date": curr_row["price_date"],
+                "price": curr_row["price"],
+            })
+        plot_hist_df = pd.DataFrame(records_with_gaps)
+
+        # Plot with markers and no gap bridging
         fig.add_trace(go.Scatter(
-            x=hist_sorted["price_date"],
-            y=hist_sorted["price"],
-            mode="lines",
-            name="Observed Price (HARTI Real Data)",
+            x=plot_hist_df["price_date"],
+            y=plot_hist_df["price"],
+            mode="lines+markers",
+            name="Verified Historical Observations (HARTI)",
             line=dict(color="#4ADE80", width=2.5),
-            hovertemplate="<b>Observed Date</b>: %{x|%Y-%m-%d}<br><b>Price</b>: Rs. %{y:.1f}/kg<extra></extra>",
+            marker=dict(size=5, color="#4ADE80"),
+            connectgaps=False,  # Never interpolate or connect unobserved missing weeks
+            hovertemplate="<b>Observed Date</b>: %{x|%Y-%m-%d}<br><b>Verified Price</b>: Rs. %{y:.1f}/kg<extra></extra>",
         ))
+
+        # If only 1 or 2 observations exist, provide transparent limited coverage disclosure
+        if len(hist_sorted) <= 2:
+            fig.add_annotation(
+                text=f"Limited historical coverage: {len(hist_sorted)} observation(s) recorded in dataset.",
+                xref="paper", yref="paper",
+                x=0.02, y=0.08,
+                showarrow=False,
+                font=dict(size=11, color="#F59E0B"),
+                bgcolor="rgba(20, 30, 22, 0.90)",
+                bordercolor="#F59E0B",
+                borderwidth=1,
+                borderpad=5,
+            )
 
     # 2. Forward Forecast Projection with Confidence Interval
     if not forecast_df.empty and "predicted_price" in forecast_df.columns:
@@ -484,15 +579,15 @@ def render_forecast_trajectory_chart(
             bridge_upper = list(fc_sorted["upper_bound_95"])
             bridge_lower = list(fc_sorted["lower_bound_95"])
 
-        # 95% Confidence Band
+        # 95% Calibrated Confidence Band (Genuine models only)
         fig.add_trace(go.Scatter(
             x=bridge_x + bridge_x[::-1],
             y=bridge_upper + bridge_lower[::-1],
             fill="toself",
-            fillcolor="rgba(245, 158, 11, 0.20)",
+            fillcolor="rgba(34, 197, 94, 0.15)",
             line=dict(color="rgba(255,255,255,0)"),
             hoverinfo="skip",
-            name="95% Confidence Corridor (DEMO)",
+            name="95% Confidence Interval",
             showlegend=True,
         ))
 
@@ -501,22 +596,24 @@ def render_forecast_trajectory_chart(
             x=bridge_x,
             y=bridge_y,
             mode="lines+markers",
-            name="Projected Mean (DEMO DATA)",
-            line=dict(color="#F59E0B", width=2.5, dash="dash"),
-            marker=dict(size=6, color="#F59E0B"),
+            name="Forecast Trajectory",
+            line=dict(color="#22C55E", width=2.5, dash="dash"),
+            marker=dict(size=6, color="#22C55E"),
             hovertemplate="<b>Forecast Date</b>: %{x|%Y-%m-%d}<br><b>Projected Price</b>: Rs. %{y:.1f}/kg<extra></extra>",
         ))
 
-        title_text = f"<b>Price Trajectory & 12-Week Forward Forecast</b> — {crop_name} ({district}) [DEMO DATA]"
+        title_text = f"<b>Price Trajectory & Forecast Projection</b><br><span style='font-size:10px;color:{COLOR_TEXT_MUTED}'>{crop_name} ({district})</span>"
     else:
-        title_text = f"<b>Observed Historical Price Baseline</b> — {crop_name} ({district})"
+        title_text = f"<b>Observed Historical Baseline</b><br><span style='font-size:10px;color:{COLOR_TEXT_MUTED}'>{crop_name} ({district})</span>"
+        # Badge placed at top-right corner to avoid colliding with plot lines or axes
         fig.add_annotation(
-            text="Historical Baseline Active — Enable 'Demo Forecast Curve' in sidebar to simulate 12-week projections",
+            text="Forecast service not connected — Verified historical baseline",
             xref="paper", yref="paper",
-            x=0.5, y=0.92,
+            x=0.98, y=0.95,
+            xanchor="right", yanchor="top",
             showarrow=False,
             font=dict(size=11, color=COLOR_TEXT_LIGHT_GREY),
-            bgcolor="#132619",
+            bgcolor="rgba(19, 38, 25, 0.88)",
             bordercolor=COLOR_BORDER_DARK,
             borderwidth=1,
             borderpad=6,
@@ -526,17 +623,18 @@ def render_forecast_trajectory_chart(
         **DARK_PLOT_THEME,
         title=dict(
             text=title_text,
-            font=dict(color=COLOR_TEXT_WHITE, size=13),
+            font=dict(color=COLOR_TEXT_WHITE, size=12),
             x=0.01,
-            y=0.97,
+            y=0.98,
             xanchor="left",
+            yanchor="top",
         ),
         xaxis=dict(title="Timeline (Weekly ISO Monday)"),
         yaxis=dict(title="Price (Rs./kg)"),
         height=height,
         hovermode="x unified",
         legend=DARK_LEGEND,
-        margin=dict(l=15, r=15, t=65, b=25),
+        margin=dict(l=60, r=25, t=85, b=45),
     )
 
     apply_dark_axes(fig)

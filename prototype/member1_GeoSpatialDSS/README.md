@@ -1,105 +1,106 @@
 # Geo-Spatial Decision Support System (DSS) Dashboard
 
-**SLIIT Research Project 2026/27 (DS-322)**  
-**Research Title**: *Data-Driven Decision Support System to Mitigate the Cobweb Effect in Sri Lankan Vegetable Markets*  
-**Member 1 Responsibility**: Data Engineering and Geo-Spatial Decision Support System (DSS)  
+**SLIIT Research Project 2026/27 (J26-DS-322)**
+**Research Title**: *Data-Driven Decision Support System to Mitigate the Cobweb Effect in Sri Lankan Vegetable Markets*
+**Collaboration**: Hector Kobbekaduwa Agrarian Research and Training Institute (HARTI) collaboration | SLIIT | J26-DS-322
+**Component**: Member 1 — Data Engineering & Geo-Spatial Decision Support System
 
 ---
 
 ## 1. Executive Summary
 
-This interactive dashboard serves as the operational command center for **Member 1**, synthesizing real agricultural price reports, continuous NASA POWER meteorological streams, and regional farmer planting commitments to identify and mitigate the Cobweb Effect across Sri Lanka's 25 administrative districts.
+This research-grade Geo-Spatial Decision Support System (DSS) serves as the operational intelligence dashboard for analyzing agricultural market dynamics and mitigating the Cobweb Effect across Sri Lanka's 25 administrative districts.
 
-### Key Capabilities:
-- **Sri Lanka District Geo-Spatial Mapping**: Visualizes real-time Market Saturation Risk (MSRS) and Dynamic Crop Viability (DCVS) across all 25 districts using Plotly.
-- **Cobweb Effect Phase Dynamics**: Plots cyclical phase spirals (Price vs. Supply Extent) confirming oversupply oscillations.
-- **Evidence-Based Farmer Advisory**: Provides transparent planting guidance (Favorable, Caution, Diversify) with alternative crop suggestions.
-- **Data Readiness Index (DRI) Quality Audit**: Direct integration with the empirical DRI audit ledger (`data/processed/prices/dri_audit_ledger.jsonl`).
-- **Member 2 Forecasting Adapter**: Decoupled contract bridge for forward price forecasts with uncertainty bands, with clearly watermarked demo simulations.
+The dashboard integrates real weekly retail and wholesale market prices from HARTI, continuous NASA POWER daily agro-meteorological records, and seasonal cultivation planning records into standardized indices:
+- **Market Saturation Risk Score (MSRS)** (0.0–100.0): Quantifies oversupply risk against regional market demand capacity.
+- **Dynamic Crop Viability Score (DCVS)** (0.0–100.0): Balances agronomic weather favorability, price momentum, and market capacity.
+- **Data Reliability Index (DRI)** (0.0–100.0): Core empirical quality audit based on Completeness (40%), Recency (30%), and Consistency (30%).
 
 ---
 
-## 2. Research Data Schemas
+## 2. Dashboard Structure (6 Research Tabs)
 
-The dashboard directly interfaces with the primary research data streams without duplication:
+The dashboard provides six decision-focused, professional views (without emojis):
+1. **Overview**: Executive summary with 5 standardized KPI cards (`Market Price`, `MSRS`, `DCVS`, `DRI`, `Confidence`), district saturation preview, and evidence-based advisory banner.
+2. **Market Saturation**: Interactive Plotly district map (sized by cultivation density, colored by MSRS or DRI), MSRS/DRI layer toggle, CSV export, and complete 25-district quota breakdown table.
+3. **Price Dynamics**: Chronologically sorted weekly price trends with 8-week moving average (computed only when $\ge 8$ observations exist), price spread analysis, and Cobweb phase-space plot with clear label spacing.
+4. **Agro-Meteorology**: District-specific weekly rainfall accumulation, mean temperature, and seasonal distribution from NASA POWER records.
+5. **Recommendations**: Sortable multi-crop planning table across all 5 research crops (`Crop | MSRS | DCVS | DRI | Confidence | Recommendation | Key Reason`), actionable farmer guidance with 2–3 alternative crops, and district drill-down panel.
+6. **Data Reliability**: Empirical 3-component DRI breakdown (Completeness 0.4, Recency 0.3, Consistency 0.3), category audits (Price, Weather, Cultivation, and neutral unavailable for Yield), dynamic "Why this score?" explanation, and 25-district reliability table.
+---
 
-| Stream | Local File Path | Records | Key Schema Fields |
-| :--- | :--- | :--- | :--- |
-| **Weekly Prices** | `data/v1/analysis_ready_price.csv` | 110,019 | `price_date` (Monday), `district`, `crop`, `price_type` (`retail`/`wholesale`), `granularity` (`Retail - W`), `price` (Rs./kg), `source` (`harti`) |
-| **Commitments** | `data/v1/analysis_ready_commitment.csv` | 2,875 | `district`, `crop_name`, `season_type` (`Maha`/`Yala`), `season_year` (2014–2025), `target_hectares`, `committed_hectares`, `source` (`synthetic_proxy`) |
-| **Weather** | `data/v1/weather_data.json` | 100,225 | `district_name_raw`, `obs_date`, `rainfall_mm`, `temp_c`, `source` (`nasa_power`) |
-| **DRI Audits** | `data/processed/prices/dri_audit_ledger.jsonl` | Audited | `calculated_dri`, `reliability_tier`, `source_agency`, `completeness_score`, `timeliness_score`, `consistency_score` |
+## 3. Standardized Scale & Risk Bands
+
+All primary indicators are standardized to a continuous **0.0 to 100.0** scale, displayed to one decimal place:
+
+| Risk Band | Scale Range | Saturation Status | Viability Status | Operational Guidance |
+| :--- | :--- | :--- | :--- | :--- |
+| **Low** | 0.0 – 20.0 | Safe / Low Saturation | Critical Viability Concern | Favorable for Planting / Quota Available |
+| **Moderate** | 20.0 – 60.0 | Moderate Saturation | Moderate Viability | Proceed with Caution / Maintain Quotas |
+| **High** | 60.0 – 80.0 | High Saturation | High Viability | High Risk / Restrict Expansion |
+| **Critical** | 80.0 – 100.0 | Critical Oversupply Glut | Superior Agronomic Viability | Avoid Expansion / Diversify to Alternatives |
+
+### Plain-Language Confidence Tiers
+- **80.0 or above**: High confidence
+- **60.0 to below 80.0**: Moderate confidence
+- **Below 60.0**: Low confidence — verify with local officer
 
 ---
 
-## 3. Windows PowerShell Setup & Local Execution
+## 4. Empirical Data Sources & Provenance
+
+| Data Category | Primary Source | Granularity | Scope & Records | Provenance Classification |
+| :--- | :--- | :--- | :--- | :--- |
+| **Vegetable Prices** | HARTI Colombo & District Markets | Weekly (Retail & Wholesale) | 110,019 records (2014–2025) | Real Measured Observations |
+| **Agro-Meteorology** | NASA POWER Agroclimatology | Daily ($0.5^\circ \times 0.5^\circ$) | 100,225 records (25 districts) | Real Measured Observations |
+| **Cultivation Baseline** | HARTI / DOA District Records | Seasonal (Maha / Yala) | 2,875 seasonal quotas | Planning Baseline |
+| **Yield Data** | Field Agronomic Surveys | Seasonal | Unavailable in current intake | Neutral Unavailable State |
+
+> **Operational Refresh Note**: Cultivation commitment values for the prototype are derived from historical HARTI district records and refreshed per season.
+
+---
+
+## 5. Local Setup and Execution Instructions
 
 ### Prerequisites
-- Python 3.10, 3.11, or 3.12 (or Anaconda3 environment)
-- Windows PowerShell
+- Python 3.10, 3.11, 3.12, or 3.13 (or Anaconda environment)
+- Windows PowerShell or Bash terminal
 
-### Step 1: Open PowerShell and Navigate to the Repository Root
-```powershell
-cd c:\Users\SAKUNI\Desktop\Research_Project\SLIIT-Research-Project-2026-27-DS-322
+### Step 1: Install Dependencies
+From the repository root:
+```bash
+pip install -r prototype/member1_GeoSpatialDSS/requirements.txt
 ```
 
-### Step 2: (Optional) Install Dependencies
-If running in a fresh virtual environment:
-```powershell
-pip install -r geospatial-dss-dashboard/requirements.txt
+### Step 2: Run the Streamlit Dashboard
+Execute from the repository root:
+```bash
+streamlit run prototype/member1_GeoSpatialDSS/app.py --server.port 8501
 ```
+The application will open automatically in your browser at `http://localhost:8501`.
 
-### Step 3: Launch the Streamlit Dashboard
-Execute the following PowerShell command:
-```powershell
-C:\Users\SAKUNI\anaconda3\python.exe -m streamlit run geospatial-dss-dashboard/app.py --server.port 8501
+### Step 3: Run the Optional Standalone FastAPI Microservice
+A decoupled FastAPI service is provided in `api_server.py` exposing REST endpoints for external cross-component integration:
+```bash
+uvicorn prototype.member1_GeoSpatialDSS.api_server:app --host 127.0.0.1 --port 8000 --reload
 ```
-*(Or if standard `streamlit` is in your PATH)*:
-```powershell
-streamlit run geospatial-dss-dashboard/app.py --server.port 8501
-```
+Available REST Endpoints:
+- `GET http://127.0.0.1:8000/health`: Health status and project metadata.
+- `GET http://127.0.0.1:8000/dri?district=Badulla&crop=Carrot`: Empirical 3-component DRI score and audit breakdown.
+- `GET http://127.0.0.1:8000/fused-data?crop=Carrot&season=Maha&year=2024`: Unified multi-stream fused dataset.
+- Interactive Swagger UI: `http://127.0.0.1:8000/docs`
 
-### Step 4: Open in Web Browser
-Open your browser and navigate to:
-```
-http://localhost:8501
-```
+*Note: The Streamlit dashboard runs completely independently and does NOT require the FastAPI service to launch.*
 
----
-
-## 4. Architecture & Module Structure
-
-```
-geospatial-dss-dashboard/
-├── app.py                      # Main executive Streamlit application
-├── config.py                   # 25 district coordinates, crop palettes, CSS tokens
-├── data_loader.py              # Cached loaders for price, commitment, weather, and DRI ledger
-├── requirements.txt            # Dedicated dependencies
-├── README.md                   # Setup, execution, and research documentation
-├── engine/
-│   ├── __init__.py
-│   ├── msrs_engine.py          # Market Saturation Risk Score computation (Member 3 bridge)
-│   ├── dcvs_engine.py          # Dynamic Crop Viability Score computation (Member 3 bridge)
-│   ├── dri_bridge.py           # Data Readiness Index auditor (Member 1 quality bridge)
-│   ├── forecast_bridge.py      # Price forecasting adapter (Member 2 bridge)
-│   └── advisor.py              # Farmer advisory engine with alternative crop routing
-├── components/
-│   ├── __init__.py
-│   ├── maps.py                 # Plotly Sri Lanka district geospatial maps
-│   ├── charts.py               # Price trends, Cobweb phase plot, commitment bars, weather trends
-│   ├── metrics_cards.py        # Executive KPI widgets with provenance tags
-│   └── recommendations.py      # Farmer advisory UI cards
-└── tests/
-    ├── __init__.py
-    └── test_dashboard_modules.py # Automated test suite for dashboard engines & adapters
+### Step 4: Run the Automated Pytest Suite
+Execute all 31 unit, regression, and data-reliability tests:
+```bash
+pytest prototype/member1_GeoSpatialDSS/tests/test_dashboard_modules.py -v
 ```
 
 ---
 
-## 5. Research Provenance & Transparency Standards
+## 6. Project Boundaries & Collaboration
 
-In accordance with academic rigor for SLIIT research viva:
-- **`REAL DATA`**: High-frequency weekly prices (HARTI) and daily weather (NASA POWER).
-- **`SYNTHETIC PROXY`**: Planning commitment quotas (`analysis_ready_commitment.csv`) simulating farmer registrations.
-- **`PENDING ADAPTER`**: Member 2 econometric forecasting bridge.
-- **`DEMO DATA`**: Clearly watermarked simulation placeholders toggled during live viva demonstrations.
+- **Collaboration**: Hector Kobbekaduwa Agrarian Research and Training Institute (HARTI) collaboration | SLIIT | J26-DS-322
+- **Isolated Target**: All modifications and assets are strictly contained within `prototype/member1_GeoSpatialDSS/`.

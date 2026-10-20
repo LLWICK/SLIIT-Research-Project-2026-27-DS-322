@@ -1,129 +1,150 @@
 """
-Farmer Recommendation UI Cards and Alternative Crop Routing Component.
-
-Presents evidence-based decision support with strict separation between
-data readiness (DRI), market saturation (MSRS), and crop viability (DCVS).
+Actionable Farmer Advisory Presentation Components.
+Presents transparent, evidence-based recommendations, structured rationale,
+and alternative crop options with dark forest-green styling.
 """
 
-import sys
-from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, Optional
 import streamlit as st
-
-# Ensure dashboard root is on sys.path
-_dashboard_root = str(Path(__file__).resolve().parent.parent)
-if _dashboard_root not in sys.path:
-    sys.path.insert(0, _dashboard_root)
-
+import pandas as pd
 from engine.advisor import Recommendation
 
 
 def render_advisory_card(rec: Recommendation) -> None:
     """
-    Render transparent evidence-based farmer advisory card.
-
-    Displays:
-    1. Action and Headline.
-    2. Selected Crop and Geographic Scope.
-    3. Market Saturation (MSRS) and qualitative classification.
-    4. Crop Viability (DCVS) and documented interpretation.
-    5. Source Data Reliability (DRI) benchmark and scope.
-    6. Recommendation Evidence and Confidence Limitation.
-    7. Diagnostic breakdown and viable alternative crops.
-
-    Args:
-        rec: Recommendation object from FarmerAdvisoryEngine.
+    Render executive recommendation banner and transparent evidence breakdown.
+    No scattered badges; standardized 0–100 scales with 1 decimal place.
     """
-    # 1. Main Action Banner
+    # 1. Actionable Guidance Banner
     st.markdown(
-        f"""
-        <div class="{rec.banner_class}">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-                <span style="font-size: 1.15rem; font-weight: 700; color: #FFFFFF;">{rec.headline}</span>
-                <span class="badge-proxy">{rec.data_provenance}</span>
-            </div>
-            <div style="font-size: 1.35rem; font-weight: 800; color: {rec.action_color}; margin-bottom: 0.5rem; letter-spacing: -0.01em;">
-                ACTION: {rec.action}
-            </div>
-            <div style="font-size: 0.86rem; color: #E8EFEA; line-height: 1.4;">
-                Evaluated for <strong>{rec.crop}</strong> in <strong>{rec.district}</strong> ({rec.season_label}).
-            </div>
-        </div>
-        """,
+        f'<div class="{rec.banner_class}">'
+        f'<div style="font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: #A3B899; margin-bottom: 0.25rem;">'
+        f'Operational Guidance — {rec.district} ({rec.season_label})'
+        f'</div>'
+        f'<div style="font-size: 1.25rem; font-weight: 800; color: {rec.action_color}; margin-bottom: 0.35rem;">'
+        f'{rec.action}'
+        f'</div>'
+        f'<div style="font-size: 0.95rem; color: #E8EFEA; font-weight: 500;">'
+        f'{rec.headline}'
+        f'</div>'
+        f'</div>',
         unsafe_allow_html=True,
     )
 
-    # 2. Four Core Evaluated Parameters (Structured Panel Grid)
-    st.markdown(
-        f"""
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 12px 0 16px 0;">
-            <div style="background: #132619; border: 1px solid #1E3A26; border-radius: 6px; padding: 10px 12px;">
-                <div style="font-size: 0.72rem; text-transform: uppercase; color: #A3B899; font-weight: 700;">Market Saturation (MSRS)</div>
-                <div style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF;">{rec.msrs_score:.2f}</div>
-                <div style="font-size: 0.76rem; color: #C8D8CC;">Classification: <strong>{rec.msrs_tier}</strong></div>
-            </div>
-            <div style="background: #132619; border: 1px solid #1E3A26; border-radius: 6px; padding: 10px 12px;">
-                <div style="font-size: 0.72rem; text-transform: uppercase; color: #A3B899; font-weight: 700;">Crop Viability (DCVS)</div>
-                <div style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF;">{rec.dcvs_score:.1f}%</div>
-                <div style="font-size: 0.76rem; color: #C8D8CC;">Viability Tier: <strong>{rec.dcvs_tier}</strong></div>
-            </div>
-            <div style="background: #132619; border: 1px solid #1E3A26; border-radius: 6px; padding: 10px 12px;">
-                <div style="font-size: 0.72rem; text-transform: uppercase; color: #A3B899; font-weight: 700;">Source Data Reliability (DRI)</div>
-                <div style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF;">{rec.dri_score:.2f}%</div>
-                <div style="font-size: 0.76rem; color: #C8D8CC;">Source: <strong>{rec.dri_source} ({rec.dri_tier})</strong></div>
-            </div>
-            <div style="background: #132619; border: 1px solid #1E3A26; border-radius: 6px; padding: 10px 12px;">
-                <div style="font-size: 0.72rem; text-transform: uppercase; color: #A3B899; font-weight: 700;">Reliability Scope</div>
-                <div style="font-size: 1.05rem; font-weight: 700; color: #4ADE80; margin-top: 3px;">{rec.dri_scope}</div>
-                <div style="font-size: 0.76rem; color: #C8D8CC;">Target: <strong>{rec.district}</strong></div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    # 2. Transparent Evidence Rationale (Collapsible Expander)
+    with st.expander("🔍 Transparent Evidence Rationale & Indicator Breakdown", expanded=True):
+        st.markdown("#### Indicator Evaluation Summary")
 
-    # 3. Evidence Transparency & Confidence Limitation Callout Box
-    st.markdown(
-        f"""
-        <div style="background: #0E1F14; border: 1px solid #204229; border-left: 4px solid #4ADE80; border-radius: 6px; padding: 12px 14px; margin-bottom: 16px;">
-            <div style="font-size: 0.85rem; color: #E8EFEA; margin-bottom: 6px;">
-                <strong>Recommendation Evidence:</strong> {rec.evidence_sufficiency}
-            </div>
-            <div style="font-size: 0.80rem; color: #A3B899; line-height: 1.45;">
-                <strong>Confidence Limitation:</strong> {rec.confidence_limitation}
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+        m1, m2, m3, m4 = st.columns(4)
+        with m1:
+            st.metric(
+                label="Market Saturation (MSRS)",
+                value=f"{rec.msrs_score:.1f}",
+                delta=rec.msrs_tier,
+                delta_color="inverse",
+            )
+        with m2:
+            st.metric(
+                label="Crop Viability (DCVS)",
+                value=f"{rec.dcvs_score:.1f}",
+                delta=rec.dcvs_tier,
+                delta_color="normal",
+            )
+        with m3:
+            st.metric(
+                label="Data Reliability (DRI)",
+                value=f"{rec.dri_score:.1f}",
+                delta=rec.dri_tier,
+                delta_color="normal",
+            )
+        with m4:
+            st.metric(
+                label="Advisory Confidence",
+                value=rec.confidence.split("—")[0].strip(),
+                delta=rec.confidence,
+                delta_color="off",
+            )
 
-    # 4. Diagnostic & Evidence Breakdown
-    st.markdown("#### Evidence & Diagnostic Breakdown")
-    for pt in rec.rationale_points:
-        st.markdown(f"- {pt}")
-
-    # 5. Alternative Crop Recommendations
-    if rec.suggested_alternatives:
         st.markdown("---")
-        st.markdown(f"#### Recommended Alternative Crops for {rec.district}")
-        st.caption("Evidence-based crop routing based on regional saturation (MSRS) and dynamic viability (DCVS):")
+        st.markdown("#### Comprehensive Decision Rationale")
+        for pt in rec.rationale_points:
+            st.markdown(f"- {pt}")
+
+    # 3. Alternative Crop Recommendations (Displayed only when crop is High Risk / Diversify)
+    if rec.suggested_alternatives:
+        st.markdown("#### Recommended Diversification Alternatives")
+        st.caption(
+            "Evidence-based crop routing based on regional saturation (MSRS) and dynamic viability (DCVS):"
+        )
 
         cols = st.columns(len(rec.suggested_alternatives), gap="medium")
         for i, alt in enumerate(rec.suggested_alternatives):
-            status_color = "#2E7D32" if alt["msrs"] < 0.30 else ("#D97706" if alt["msrs"] < 0.70 else "#C53030")
+            status_color = "#2E7D32" if alt["msrs"] <= 20.0 else ("#D97706" if alt["msrs"] <= 60.0 else "#C53030")
             expl_text = alt.get("explanation", "Alternative crop candidate.")
             with cols[i]:
+                # Completely dark-green themed alternative cards (no harsh white surfaces)
                 st.markdown(
-                    f"""
-                    <div style="background: #FFFFFF; border: 1px solid #C8DEC9; border-radius: 8px; padding: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.20); height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <div style="font-weight: 800; font-size: 1.05rem; color: #1E5631; margin-bottom: 4px;">{alt['crop']}</div>
-                            <div style="font-size: 0.82rem; color: {status_color}; font-weight: 700; margin-bottom: 2px;">MSRS: {alt['msrs']:.2f} — {alt['status']}</div>
-                            <div style="font-size: 0.82rem; color: #1A2E1A; font-weight: 600; margin-bottom: 2px;">Viability (DCVS): <strong>{alt['dcvs']:.1f}%</strong></div>
-                            <div style="font-size: 0.80rem; color: #2D4A33; margin-bottom: 6px;">Quoted Price: Rs. {alt['current_price']:.1f}/kg</div>
-                        </div>
-                        <div style="font-size: 0.76rem; color: #3D5743; border-top: 1px dashed #C8DEC9; padding-top: 6px; margin-top: 4px;">{expl_text}</div>
-                    </div>
-                    """,
+                    f'<div style="background: #112417; border: 1px solid #1E3D27; border-radius: 8px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.35); height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">'
+                    f'<div>'
+                    f'<div style="font-weight: 800; font-size: 1.05rem; color: #4ADE80; margin-bottom: 4px;">{alt["crop"]}</div>'
+                    f'<div style="font-size: 0.82rem; color: {status_color}; font-weight: 700; margin-bottom: 2px;">MSRS: {alt["msrs"]:.1f} — {alt["status"]}</div>'
+                    f'<div style="font-size: 0.82rem; color: #E8EFEA; font-weight: 600; margin-bottom: 2px;">Viability (DCVS): <strong>{alt["dcvs"]:.1f}</strong></div>'
+                    f'<div style="font-size: 0.80rem; color: #A3B899; margin-bottom: 6px;">Quoted Price: Rs. {alt["current_price"]:.1f}/kg</div>'
+                    f'</div>'
+                    f'<div style="font-size: 0.76rem; color: #C8D8CC; border-top: 1px dashed #1E3D27; padding-top: 6px; margin-top: 4px;">{expl_text}</div>'
+                    f'</div>',
                     unsafe_allow_html=True,
                 )
+
+
+def render_crop_recommendations_table(df_recs: pd.DataFrame) -> None:
+    """
+    Render clear, sortable recommendation table:
+    Crop | MSRS | DCVS | DRI | Confidence | Recommendation | Key Reason
+    Formatted to 1 decimal place with no applymap deprecation warnings.
+    """
+    st.markdown("### Multi-Crop Planning Recommendations")
+    st.caption("Comparison across all 5 research target crops for the selected planning scope.")
+
+    # Color styling function for Recommendation column
+    def color_rec(val):
+        if val == "Recommended":
+            return "color: #4ADE80; font-weight: bold;"
+        elif val == "Consider":
+            return "color: #FBBF24; font-weight: bold;"
+        elif val == "High Risk/Avoid":
+            return "color: #F87171; font-weight: bold;"
+        return ""
+
+    # Explicit format string for numeric columns to prevent unrounded numbers (e.g., 48.600000)
+    format_dict = {}
+    for col in ["MSRS", "DCVS", "DRI"]:
+        if col in df_recs.columns:
+            format_dict[col] = "{:.1f}"
+
+    styled_df = df_recs.style.format(format_dict)
+
+    # Use Styler.map if available (Pandas >= 2.1), fallback to Styler.applymap (Pandas < 2.1)
+    map_func = getattr(styled_df, "map", getattr(styled_df, "applymap", None))
+    if map_func:
+        styled_df = map_func(color_rec, subset=["Recommendation"])
+
+    st.dataframe(styled_df, hide_index=True, use_container_width=True)
+
+
+def render_district_drilldown_panel(summary: Dict[str, Any]) -> None:
+    """
+    Render District Drill-Down Panel showing:
+    - Price trends & moving averages
+    - Committed vs. target hectares
+    - Agro-weather summary
+    - DRI component breakdown
+    """
+    st.markdown(f"### District Drill-Down: {summary['district']} ({summary['crop']})")
+    st.caption(f"Detailed agronomic and market parameters for {summary['season']}.")
+
+    c1, c2, c3, c4 = st.columns(4, gap="medium")
+    c1.metric("Latest Quoted Price", f"Rs. {summary['latest_price']:.1f}/kg", delta=f"8W MA: Rs. {summary['eight_week_ma']:.1f}")
+    c2.metric("Cultivation Quota", f"{summary['committed_ha']:.1f} ha", delta=f"{summary['overshoot_pct']:+.1f}% vs Target ({summary['target_ha']:.1f} ha)")
+    c3.metric("Rainfall Accumulation", f"{summary['rainfall_avg_mm']:.1f} mm/day", f"Temp: {summary['temp_avg_c']:.1f}°C")
+    c4.metric("Data Reliability (DRI)", f"{summary['dri_score']:.1f}", summary['confidence'])

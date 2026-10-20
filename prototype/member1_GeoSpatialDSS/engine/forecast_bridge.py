@@ -5,9 +5,10 @@ Provides a decoupled interface for connecting Member 2's price forecasting model
 (ARIMA, SARIMAX, LSTM, Prophet) into Member 1's Geo-Spatial DSS.
 
 CRITICAL RESEARCH INTEGRITY RULE:
-Never present invented forecasts as real. If a genuine model output file is not present,
-the adapter explicitly reports 'Pending integration'. When a demonstration simulation is
-toggled by the user, all outputs are strictly watermarked with 'DEMO DATA'.
+Never invent data, forecasts, or confidence bands. Only display forecasts and
+confidence corridors when a verified model file or validated REST endpoint response exists.
+When no live service is connected, return a professional empty state:
+'Forecast service not connected' and show verified historical price observations only.
 """
 
 import sys
@@ -42,135 +43,114 @@ class ForecastResult:
 class ForecastAdapter:
     """
     Decoupled adapter bridging Member 2's forecasting models to the Geo-Spatial DSS.
+    Strictly reports genuine forecast availability without synthetic placeholders.
     """
 
     def __init__(self):
         self.root = get_project_root()
         self.forecast_dir = self.root / "data" / "processed" / "forecasts"
+        self.m2_output_packet = (
+            self.root / "prototype" / "member2_ForecastingEngine" / "htfe-studio" / "outputs" / "forecast_packet.json"
+        )
 
     def check_live_model_available(self, crop: str) -> bool:
         """Check if real empirical forecast files exist on disk for the crop."""
-        if not self.forecast_dir.exists():
-            return False
-        crop_file = self.forecast_dir / f"price_forecast_{crop.lower().replace(' ', '_')}.csv"
-        return crop_file.exists()
+        if self.forecast_dir.exists():
+            crop_file = self.forecast_dir / f"price_forecast_{crop.lower().replace(' ', '_')}.csv"
+            if crop_file.exists():
+                return True
+        if self.m2_output_packet.exists():
+            return True
+        return False
 
     def get_forecast(
         self,
         crop: str,
         district: str,
         historical_price_df: pd.DataFrame,
+        price_type: str = "retail",
         enable_demo_simulation: bool = False,
         weeks_ahead: int = 12,
     ) -> ForecastResult:
         """
         Retrieve price forecast for the target crop and district.
 
-        If a live model export exists, it loads real projections.
-        If unavailable, it returns a pending status unless the user explicitly
-        activates the demo simulation toggle for viva UI demonstration.
+        Follows documented contract:
+        - If live model file exists and is validated, loads real projections and confidence bounds.
+        - If no working service or valid response exists, returns honest empty state:
+          'Forecast service not connected'.
+        - Never fabricates numbers, random walks, or fake confidence bands.
 
         Args:
             crop: Selected crop name.
-            district: Selected administrative district.
+            district: Selected administrative district or National Aggregate.
             historical_price_df: Available historical weekly prices.
-            enable_demo_simulation: If True, generates a clearly watermarked demonstration curve.
+            price_type: 'retail' or 'wholesale' quotation level.
+            enable_demo_simulation: Kept for contract compatibility; does NOT generate fake numbers.
             weeks_ahead: Prediction horizon in weeks.
 
         Returns:
             ForecastResult containing projection data, uncertainty bounds, and provenance tags.
         """
-        # Step 0: Extract recent historical price baseline
-        sub_p = historical_price_df[
-            (historical_price_df["crop"] == crop) &
-            (historical_price_df["district"] == district)
-        ].sort_values(by="price_date")
+        # Step 0: Extract recent historical price baseline matching selected filters
+        sub_p = historical_price_df[historical_price_df["crop"] == crop].copy()
+        if "price_type" in sub_p.columns and price_type:
+            sub_p = sub_p[sub_p["price_type"] == price_type]
+        if district and district not in ["All Island (National Average)", "National", "All Island"]:
+            dist_sub = sub_p[sub_p["district"] == district]
+            if not dist_sub.empty:
+                sub_p = dist_sub
+            else:
+                sub_p = pd.DataFrame(columns=historical_price_df.columns)
 
         if sub_p.empty:
-            sub_p = historical_price_df[historical_price_df["crop"] == crop].sort_values(by="price_date")
+            hist_context = pd.DataFrame(columns=["price_date", "price"])
+        else:
+            sub_p["price_date"] = pd.to_datetime(sub_p["price_date"])
+            # Aggregate by price_date to obtain genuine single weekly observation values
+            grouped_p = sub_p.groupby("price_date")["price"].mean().reset_index()
+            grouped_p = grouped_p.sort_values(by="price_date")
+            # Keep up to the last 52 weekly dates (1 full seasonal year)
+            hist_context = grouped_p.tail(52).copy().reset_index(drop=True)
 
-        # Keep the last 52 weeks for historical context
-        hist_context = sub_p.tail(52).copy() if not sub_p.empty else pd.DataFrame(columns=["price_date", "price"])
-
-        # Step 1: Check for real model file
+        # Step 1: Check for real model file from Member 2
         if self.check_live_model_available(crop):
             crop_file = self.forecast_dir / f"price_forecast_{crop.lower().replace(' ', '_')}.csv"
-            df_live = pd.read_csv(crop_file)
-            return ForecastResult(
-                is_live=True,
-                status_label="LIVE MODEL OUTPUT (Price Forecast Model)",
-                provenance_tag="REAL MODEL PREDICTION",
-                warning_banner=None,
-                forecast_df=df_live,
-                historical_df=hist_context,
-                model_name=df_live.get("model_name", ["Ensemble"])[0],
-                confidence_level=0.95,
-                narrative_summary=f"Live econometric model output integrated for {crop} in {district}.",
-            )
+            if crop_file.exists():
+                try:
+                    df_live = pd.read_csv(crop_file)
+                    req_cols = {"forecast_date", "predicted_price"}
+                    if req_cols.issubset(set(df_live.columns)):
+                        return ForecastResult(
+                            is_live=True,
+                            status_label="LIVE MODEL OUTPUT (Price Forecast Model)",
+                            provenance_tag="REAL MODEL PREDICTION",
+                            warning_banner=None,
+                            forecast_df=df_live,
+                            historical_df=hist_context,
+                            model_name=str(df_live.get("model_name", ["Ensemble"])[0]),
+                            confidence_level=0.95,
+                            narrative_summary=f"Live econometric model output integrated for {crop} in {district}.",
+                        )
+                except Exception:
+                    pass
 
-        # Step 2: Handle case where live model is not toggled for demo
-        if not enable_demo_simulation:
-            empty_df = pd.DataFrame(columns=[
-                "forecast_date", "predicted_price", "lower_bound_95", "upper_bound_95", "data_tag"
-            ])
-            return ForecastResult(
-                is_live=False,
-                status_label="HISTORICAL BASELINE ACTIVE",
-                provenance_tag="REAL OBSERVED PRICES",
-                warning_banner=None,
-                forecast_df=empty_df,
-                historical_df=hist_context,
-                model_name="Econometric Price Forecasting Model (SARIMAX / LSTM Architecture)",
-                confidence_level=0.0,
-                narrative_summary=(
-                    f"Observing verified historical price baseline for {crop} ({district}). "
-                    "Toggle 'Enable 12-Week Forecast Projection' in the sidebar to simulate forward price trajectories and uncertainty corridors."
-                ),
-            )
-
-        # Step 3: Explicitly Watermarked Demo Simulation (DEMO DATA ONLY)
-        last_price = float(sub_p["price"].iloc[-1]) if not sub_p.empty else 150.0
-        last_date = pd.to_datetime(sub_p["price_date"].iloc[-1]) if not sub_p.empty else pd.to_datetime("2024-01-01")
-
-        # Generate realistic cobweb cyclical fluctuation around mean
-        future_dates = [last_date + pd.Timedelta(weeks=i + 1) for i in range(weeks_ahead)]
-        rng = np.random.default_rng(seed=42)
-
-        predictions = []
-        lower_bounds = []
-        upper_bounds = []
-
-        curr = last_price
-        for i in range(weeks_ahead):
-            drift = -0.015 * (curr - last_price)
-            shock = rng.normal(0, 0.04 * last_price)
-            curr = max(curr + drift + shock, 20.0)
-
-            uncertainty_margin = (0.06 + (i * 0.012)) * curr
-            predictions.append(round(curr, 2))
-            lower_bounds.append(round(max(curr - 1.96 * uncertainty_margin, 10.0), 2))
-            upper_bounds.append(round(curr + 1.96 * uncertainty_margin, 2))
-
-        df_demo = pd.DataFrame({
-            "forecast_date": future_dates,
-            "predicted_price": predictions,
-            "lower_bound_95": lower_bounds,
-            "upper_bound_95": upper_bounds,
-            "data_tag": ["DEMO DATA"] * weeks_ahead,
-        })
-
+        # Step 2: Honest empty state when service is not connected
+        empty_df = pd.DataFrame(columns=[
+            "forecast_date", "predicted_price", "lower_bound_95", "upper_bound_95", "data_tag"
+        ])
         return ForecastResult(
             is_live=False,
-            status_label="DEMO FORECAST — PROJECTION SIMULATION",
-            provenance_tag="PROTOTYPE DEMONSTRATION DATA (Simulated Output)",
+            status_label="Forecast service not connected",
+            provenance_tag="HISTORICAL BASELINE ONLY",
             warning_banner=None,
-            forecast_df=df_demo,
+            forecast_df=empty_df,
             historical_df=hist_context,
-            model_name="Autoregressive Prototype Simulator (Forecast Demonstration)",
-            confidence_level=0.95,
+            model_name="Econometric Price Forecasting Model (Pending Connection)",
+            confidence_level=0.0,
             narrative_summary=(
-                f"Illustrative 12-week forward projection for {crop} in {district} showing projected price "
-                f"decay/rebound dynamics within 95% confidence intervals. "
-                "This demonstration illustrates how future price uncertainty guides planting decisions to mitigate Cobweb crashes."
+                f"Observing verified historical price baseline for {crop} ({district}). "
+                "Predictive forecast REST endpoint is currently disconnected. "
+                "Showing verified historical price observations only."
             ),
         )

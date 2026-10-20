@@ -22,9 +22,14 @@ from config import (
     DISTRICT_NAMES,
     BASE_REFERENCE_PRICES,
 )
+from data_loader import cache_decorator
 from engine.msrs_engine import (
     compute_district_msrs_table,
 )
+
+# Cache for district weather aggregates to avoid repeated groupby aggregations over 100k rows
+_WEATHER_DISTRICT_AGG_CACHE: Dict[int, Dict[str, Dict[str, float]]] = {}
+
 
 
 def calculate_dcvs(
@@ -36,15 +41,16 @@ def calculate_dcvs(
     saturation_weight: float = 0.3,
 ) -> float:
     """
-    Calculate the Dynamic Crop Viability Score (DCVS) (0 to 100%).
+    Calculate Dynamic Crop Viability Score (DCVS) standardized to 0.0 - 100.0.
 
     Formula (Member 3 Standard):
-    - Saturation factor: (1.0 - msrs) [lower saturation increases viability]
-    - Raw score: (weather_index * 0.4) + (price_index * 0.3) + ((1 - msrs) * 0.3)
-    - Scale: 0 to 100%
+    - Normalized MSRS: msrs_norm = msrs / 100.0 if msrs > 1.0 else msrs
+    - Saturation factor: (1.0 - msrs_norm) [lower saturation increases viability]
+    - Raw score: (weather_index * 0.4) + (price_index * 0.3) + ((1 - msrs_norm) * 0.3)
+    - Scale: 0.0 to 100.0 (one decimal place)
 
     Args:
-        msrs: Market Saturation Risk Score (0.0 to 1.0).
+        msrs: Market Saturation Risk Score (0.0 to 100.0 or 0.0 to 1.0).
         weather_index: Agro-meteorological suitability index (0.0 to 1.0).
         price_forecast_index: Price incentive / trend index (0.0 to 1.0).
         weather_weight: Weight for weather suitability (default 0.4).
@@ -52,9 +58,10 @@ def calculate_dcvs(
         saturation_weight: Weight for market saturation (default 0.3).
 
     Returns:
-        DCVS percentage between 0.0 and 100.0.
+        DCVS score between 0.0 and 100.0 with 1 decimal place.
     """
-    msrs_clamped = min(max(msrs, 0.0), 1.0)
+    msrs_norm = (msrs / 100.0) if msrs > 1.0 else msrs
+    msrs_clamped = min(max(msrs_norm, 0.0), 1.0)
     weather_clamped = min(max(weather_index, 0.0), 1.0)
     price_clamped = min(max(price_forecast_index, 0.0), 1.0)
 
@@ -84,43 +91,30 @@ def evaluate_viability_tier(dcvs: float) -> Tuple[str, str, str]:
         return "LOW", "Low Viability (High Crash Risk)", "#C53030"
 
 
-def compute_district_dcvs_table(
-    df_comm: pd.DataFrame,
-    df_price: pd.DataFrame,
-    df_weather: pd.DataFrame,
+@cache_decorator
+def _cached_compute_district_dcvs_table(
     crop_name: str,
     season_type: str,
     season_year: int,
-    price_type: str = "retail",
+    price_type: str,
+    _df_comm: pd.DataFrame,
+    _df_price: pd.DataFrame,
+    _df_weather: pd.DataFrame,
+    data_sig: tuple = (),
 ) -> pd.DataFrame:
-    """
-    Compute DCVS scores for all 25 districts combining real price momentum,
-    real weather suitability, and seasonal commitment saturation.
-
-    Args:
-        df_comm: Commitment dataset.
-        df_price: Weekly price dataset.
-        df_weather: Daily weather dataset.
-        crop_name: Selected vegetable crop.
-        season_type: 'Maha' or 'Yala'.
-        season_year: Planning year.
-        price_type: 'retail' or 'wholesale'. Defaults to 'retail'.
-
-    Returns:
-        DataFrame containing DCVS, MSRS, component indices, and coordinates.
-    """
+    """Internal cached implementation of district DCVS scoring."""
     # Step 1: Compute MSRS table for districts
-    df_msrs = compute_district_msrs_table(df_comm, crop_name, season_type, season_year)
+    df_msrs = compute_district_msrs_table(_df_comm, crop_name, season_type, season_year)
 
     # Step 2: Compute recent price index from real price data matching quotation level
     ref_price = BASE_REFERENCE_PRICES.get(crop_name, 120.0)
-    
-    price_sub = df_price[
-        (df_price["crop"] == crop_name) & 
-        (df_price["price_type"] == price_type)
+
+    price_sub = _df_price[
+        (_df_price["crop"] == crop_name) &
+        (_df_price["price_type"] == price_type)
     ]
     if price_sub.empty:
-        price_sub = df_price[df_price["crop"] == crop_name]
+        price_sub = _df_price[_df_price["crop"] == crop_name]
 
     recent_prices = (
         price_sub.groupby("district")["price"]
@@ -128,12 +122,15 @@ def compute_district_dcvs_table(
         .to_dict()
     )
 
-    # Step 3: Compute weather suitability index per district
-    recent_weather = (
-        df_weather.groupby("district")
-        .agg({"rainfall_mm": "mean", "temp_c": "mean"})
-        .to_dict(orient="index")
-    )
+    # Step 3: Compute weather suitability index per district (memoized)
+    w_len = len(_df_weather)
+    if w_len not in _WEATHER_DISTRICT_AGG_CACHE:
+        _WEATHER_DISTRICT_AGG_CACHE[w_len] = (
+            _df_weather.groupby("district")
+            .agg({"rainfall_mm": "mean", "temp_c": "mean"})
+            .to_dict(orient="index")
+        )
+    recent_weather = _WEATHER_DISTRICT_AGG_CACHE[w_len]
 
     records = []
     for _, row in df_msrs.iterrows():
@@ -180,7 +177,49 @@ def compute_district_dcvs_table(
             "latitude": row["latitude"],
             "longitude": row["longitude"],
             "province": row["province"],
-            "data_provenance": "EVIDENCE-BASED (Price: HARTI / Weather: NASA / Commitment: Proxy)",
+            "data_provenance": "HARTI Weekly Prices, NASA POWER Agro-Weather, Planning Baseline",
         })
 
     return pd.DataFrame(records).sort_values(by="dcvs", ascending=False).reset_index(drop=True)
+
+
+def compute_district_dcvs_table(
+    df_comm: pd.DataFrame,
+    df_price: pd.DataFrame,
+    df_weather: pd.DataFrame,
+    crop_name: str,
+    season_type: str,
+    season_year: int,
+    price_type: str = "retail",
+) -> pd.DataFrame:
+    """
+    Compute DCVS scores for all 25 districts combining real price momentum,
+    real weather suitability, and seasonal commitment saturation.
+
+    Args:
+        df_comm: Commitment dataset.
+        df_price: Weekly price dataset.
+        df_weather: Daily weather dataset.
+        crop_name: Selected vegetable crop.
+        season_type: 'Maha' or 'Yala'.
+        season_year: Planning year.
+        price_type: 'retail' or 'wholesale'. Defaults to 'retail'.
+
+    Returns:
+        DataFrame containing DCVS, MSRS, component indices, and coordinates.
+    """
+    data_sig = (
+        len(df_comm) if df_comm is not None else 0,
+        len(df_price) if df_price is not None else 0,
+        len(df_weather) if df_weather is not None else 0,
+    )
+    return _cached_compute_district_dcvs_table(
+        crop_name=crop_name,
+        season_type=season_type,
+        season_year=season_year,
+        price_type=price_type,
+        _df_comm=df_comm,
+        _df_price=df_price,
+        _df_weather=df_weather,
+        data_sig=data_sig,
+    )

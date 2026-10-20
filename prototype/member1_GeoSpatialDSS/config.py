@@ -3,7 +3,7 @@ Configuration, constants, district geographic coordinates, crop vocabularies,
 and visual theme tokens for the Member 1 Geo-Spatial DSS Dashboard.
 """
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple, Optional
 
 # Dashboard Metadata & Research Identity
 RESEARCH_TOPIC = "Data-Driven Decision Support System to Mitigate the “Cobweb Effect” in Sri Lankan Vegetable Markets"
@@ -12,6 +12,20 @@ SIDEBAR_BRAND_SUBTITLE = "Sri Lankan Vegetable Market Intelligence"
 SIDEBAR_BRAND_DESC = "Data-driven insights to understand and mitigate the Cobweb Effect in Sri Lankan vegetable markets."
 RESEARCH_MEMBER = "Member 1 — Data Engineering & Geo-Spatial Decision Support System"
 SLIIT_PROJECT_ID = "SLIIT-Research-Project-2026-27-DS-322"  # Retained in config for internal reference only
+
+# Required Collaboration Footer & Truthful Provenance Note
+FOOTER_TEXT = "Hector Kobbekaduwa Agrarian Research and Training Institute (HARTI) collaboration | SLIIT | J26-DS-322"
+COMMITMENT_PROVENANCE_NOTE = "Cultivation commitment values for the prototype are derived from historical HARTI district records and refreshed per season."
+
+# Standardized 6 Research Tabs for Member 1 Geo-Spatial DSS (No Emojis)
+DASHBOARD_TABS = [
+    "Overview",
+    "Market Saturation",
+    "Price Dynamics",
+    "Agro-Meteorology",
+    "Recommendations",
+    "Data Reliability",
+]
 
 # Dashboard Primary Display Titles
 APP_TITLE = RESEARCH_TOPIC
@@ -104,14 +118,72 @@ COLOR_CARD_TITLE = "#2D4A33"       # Dark green card label text
 COLOR_CARD_SUB = "#3D5743"         # Dark muted card subtext
 COLOR_CARD_BORDER = "#C8DEC9"      # Crisp card border
 
-# Restrained Status & Risk Palette
-COLOR_SAFE_GREEN = "#2E7D32"       # Low saturation / High viability (Safe)
-COLOR_WARNING_AMBER = "#D97706"    # Moderate saturation / Balanced (Warning)
-COLOR_CRITICAL_RED = "#C53030"     # High saturation / Oversupply glut (Critical)
+# Standardized Risk Bands (0–100 Scale)
+# Low: 0–20, Moderate: 20–60, High: 60–80, Critical: 80–100
+RISK_BAND_LOW_MAX = 20.0
+RISK_BAND_MODERATE_MAX = 60.0
+RISK_BAND_HIGH_MAX = 80.0
+RISK_BAND_CRITICAL_MAX = 100.0
 
-# Saturation Risk Thresholds
-MSRS_SAFE_MAX = 0.30
-MSRS_WARNING_MAX = 0.70
+# Backward compatibility threshold aliases
+MSRS_SAFE_MAX = 20.0
+MSRS_WARNING_MAX = 60.0
+
+# Consistent Risk & Status Palette
+COLOR_SAFE_GREEN = "#2E7D32"       # Low Risk (0–20) / High Viability (Safe)
+COLOR_WARNING_AMBER = "#D97706"    # Moderate Risk (20–60) (Warning)
+COLOR_HIGH_ORANGE = "#EA580C"      # High Risk (60–80)
+COLOR_CRITICAL_RED = "#C53030"     # Critical Risk (80–100) / Glut Crash
+
+# Configurable DRI Component Weights (Sum = 1.0)
+DRI_WEIGHT_COMPLETENESS = 0.4
+DRI_WEIGHT_RECENCY = 0.3
+DRI_WEIGHT_CONSISTENCY = 0.3
+
+# Plain-Language Confidence Thresholds
+CONFIDENCE_HIGH_MIN = 80.0
+CONFIDENCE_MODERATE_MIN = 60.0
+
+
+def get_risk_band(score: float) -> Tuple[str, str, str]:
+    """
+    Evaluate standardized 0–100 risk score into unambiguous risk band.
+    Bands:
+      Low: 0.0 <= score <= 20.0
+      Moderate: 20.0 < score <= 60.0
+      High: 60.0 < score <= 80.0
+      Critical: 80.0 < score <= 100.0
+    Returns:
+      (band_key, band_label, hex_color)
+    """
+    s = min(max(float(score), 0.0), 100.0)
+    if s <= RISK_BAND_LOW_MAX:
+        return "LOW", "Low Risk", COLOR_SAFE_GREEN
+    elif s <= RISK_BAND_MODERATE_MAX:
+        return "MODERATE", "Moderate Risk", COLOR_WARNING_AMBER
+    elif s <= RISK_BAND_HIGH_MAX:
+        return "HIGH", "High Risk", COLOR_HIGH_ORANGE
+    else:
+        return "CRITICAL", "Critical Risk", COLOR_CRITICAL_RED
+
+
+def get_plain_language_confidence(score: float) -> Tuple[str, str]:
+    """
+    Standard plain-language confidence based on DRI score (0-100):
+      80 or above: High confidence
+      60 to below 80: Moderate confidence
+      below 60: Low confidence — verify with local officer
+    Returns:
+      (plain_text_label, hex_color)
+    """
+    s = min(max(float(score), 0.0), 100.0)
+    if s >= CONFIDENCE_HIGH_MIN:
+        return "High confidence", COLOR_SAFE_GREEN
+    elif s >= CONFIDENCE_MODERATE_MIN:
+        return "Moderate confidence", COLOR_WARNING_AMBER
+    else:
+        return "Low confidence — verify with local officer", COLOR_CRITICAL_RED
+
 
 # Custom CSS for Dark Forest-Green / Charcoal Professional Agriculture Theme
 CUSTOM_CSS = """
@@ -134,7 +206,7 @@ CUSTOM_CSS = """
 
     /* Main Container Padding - Optimized for 1366x768 and 1920x1080 Laptops */
     .block-container {
-        padding-top: 2.4rem !important;
+        padding-top: 3.2rem !important;
         padding-bottom: 2rem !important;
         padding-left: 1.5rem !important;
         padding-right: 1.5rem !important;
@@ -191,6 +263,16 @@ CUSTOM_CSS = """
         flex-wrap: wrap !important;
         align-items: center !important;
         gap: 0.50rem !important;
+    }
+
+    /* Suppress Streamlit default cache-miss function execution spinners (e.g. 'Running func(...)') */
+    [data-testid="stSpinner"]:has(code),
+    .stSpinner:has(code) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     /* =========================================================================
@@ -329,17 +411,23 @@ CUSTOM_CSS = """
     .stTabs [data-baseweb="tab-border"] {
         background-color: #1E3A26 !important;
     }
+    .stTabs [data-baseweb="tab-panel"] {
+        padding-top: 1.25rem !important;
+        padding-bottom: 1.5rem !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
 
     /* =========================================================================
-       EXECUTIVE KPI CARDS (Light Surfaces on Dark Background - Strictly Consistent)
+       EXECUTIVE KPI CARDS (Dark Forest-Green Theme with High Contrast)
        ========================================================================= */
     .metric-card {
-        background: #FFFFFF !important;
-        border: 1px solid #C8DEC9 !important;
+        background: #112417 !important;
+        border: 1px solid #1E3D27 !important;
         border-radius: 8px !important;
         padding: 0.75rem 0.95rem !important;
         border-left: 5px solid #1E5631 !important;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
         margin-bottom: 0.6rem !important;
         transition: transform 0.15s ease-in-out;
         min-height: 118px !important;
@@ -352,13 +440,14 @@ CUSTOM_CSS = """
     }
     .metric-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35) !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
+        border-color: #2E5A38 !important;
     }
     .metric-title {
         font-size: 0.73rem !important;
         text-transform: uppercase !important;
         letter-spacing: 0.04em !important;
-        color: #2D4A33 !important;
+        color: #A3B899 !important;
         font-weight: 700 !important;
         margin-bottom: 0.15rem !important;
         line-height: 1.25 !important;
@@ -366,12 +455,12 @@ CUSTOM_CSS = """
     .metric-value {
         font-size: 1.45rem !important;
         font-weight: 800 !important;
-        color: #0E1C11 !important;
+        color: #FFFFFF !important;
         line-height: 1.15 !important;
     }
     .metric-sub {
         font-size: 0.76rem !important;
-        color: #3D5743 !important;
+        color: #C8D8CC !important;
         margin-top: 0.15rem !important;
         font-weight: 500 !important;
         white-space: nowrap !important;
@@ -477,5 +566,87 @@ CUSTOM_CSS = """
         color: #E8EFEA !important;
         border: 1px solid #1E3A26 !important;
     }
+
+    /* Dashboard Research Collaboration Footer */
+    .dashboard-footer {
+        border-top: 1px solid #1E3A26 !important;
+        padding: 1.5rem 0.5rem !important;
+        margin-top: 3rem !important;
+        margin-bottom: 1.5rem !important;
+        text-align: center !important;
+        color: #A3B899 !important;
+        font-size: 0.84rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        background-color: transparent !important;
+    }
+    /* Plotly Modebar & Chart Header Positioning */
+    .stPlotlyChart .modebar-container {
+        top: 2px !important;
+        right: 4px !important;
+    }
+    .stPlotlyChart .modebar-btn {
+        padding: 3px !important;
+    }
+
+    /* Suppress Plotly snapshot toast notifications completely */
+    .notifier-note,
+    .notifier-close,
+    .notifier,
+    div[class*="notifier"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
 </style>
 """
+
+# Plotly Modebar Configurations
+# For maps: High-resolution PNG export with CORS-friendly tiles, removing lasso/select and suppressing notifiers
+MAP_PLOTLY_CONFIG: Dict[str, Any] = {
+    "displayModeBar": True,
+    "displaylogo": False,
+    "displayNotifier": False,
+    "toImageButtonOptions": {
+        "format": "png",
+        "filename": "geospatial_sri_lanka_map",
+        "height": 650,
+        "width": 750,
+        "scale": 2,
+    },
+    "modeBarButtonsToRemove": ["select2d", "lasso2d"],
+    "scrollZoom": True,
+}
+
+# For standard time-series & scatter charts: Clean modebar with reliable PNG export and no notifiers
+CHART_PLOTLY_CONFIG: Dict[str, Any] = {
+    "displayModeBar": True,
+    "displaylogo": False,
+    "displayNotifier": False,
+    "toImageButtonOptions": {
+        "format": "png",
+        "filename": "chart_export",
+        "height": 500,
+        "width": 800,
+        "scale": 2,
+    },
+    "modeBarButtonsToRemove": ["lasso2d", "select2d"],
+    "scrollZoom": False,
+}
+
+# For categorical bar charts: Keep toImage & resetScale, remove 2D pan/zoom & notifiers
+BAR_CHART_PLOTLY_CONFIG: Dict[str, Any] = {
+    "displayModeBar": True,
+    "displaylogo": False,
+    "displayNotifier": False,
+    "toImageButtonOptions": {
+        "format": "png",
+        "filename": "quota_commitment_barchart",
+        "height": 500,
+        "width": 800,
+        "scale": 2,
+    },
+    "modeBarButtonsToRemove": ["lasso2d", "select2d", "pan2d", "zoom2d", "zoomIn2d", "zoomOut2d", "autoScale2d"],
+    "scrollZoom": False,
+}

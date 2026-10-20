@@ -21,7 +21,17 @@ _dashboard_root = str(Path(__file__).resolve().parent.parent)
 if _dashboard_root not in sys.path:
     sys.path.insert(0, _dashboard_root)
 
-from config import TARGET_CROPS
+from config import (
+    TARGET_CROPS,
+    RISK_BAND_LOW_MAX,
+    RISK_BAND_MODERATE_MAX,
+    RISK_BAND_HIGH_MAX,
+    COLOR_SAFE_GREEN,
+    COLOR_WARNING_AMBER,
+    COLOR_CRITICAL_RED,
+    get_plain_language_confidence,
+)
+from data_loader import cache_decorator
 from engine.msrs_engine import (
     calculate_msrs,
     compute_district_msrs_table,
@@ -62,6 +72,10 @@ class Recommendation:
     confidence_limitation: str
     suggested_alternatives: List[Dict[str, Any]]
     data_provenance: str
+    confidence: str = "High confidence"
+    recommendation_category: str = "Consider"
+    key_reason: str = ""
+
 
 
 class FarmerAdvisoryEngine:
@@ -82,6 +96,7 @@ class FarmerAdvisoryEngine:
         price_type: str = "retail",
         precomputed_msrs: Optional[float] = None,
         precomputed_dcvs: Optional[float] = None,
+        compute_alternatives: bool = True,
     ) -> Recommendation:
         """
         Generate evidence-based planting advisory for a target district or national aggregate.
@@ -116,7 +131,7 @@ class FarmerAdvisoryEngine:
             comm_ha = float(df_msrs["committed_hectares"].sum()) if not df_msrs.empty else 0.0
             tgt_ha = float(df_msrs["target_hectares"].sum()) if not df_msrs.empty else 100.0
             overshoot_pct = ((comm_ha - tgt_ha) / tgt_ha * 100.0) if tgt_ha > 0 else 0.0
-            comm_source = "SYNTHETIC PROXY (NATIONAL AGGREGATE)"
+            comm_source = "Planning Baseline (National Aggregate)"
         else:
             row_msrs = df_msrs[df_msrs["district"] == district]
             if not row_msrs.empty:
@@ -124,13 +139,19 @@ class FarmerAdvisoryEngine:
                 comm_ha = float(row_msrs["committed_hectares"].iloc[0])
                 tgt_ha = float(row_msrs["target_hectares"].iloc[0])
                 overshoot_pct = float(row_msrs["overshoot_pct"].iloc[0])
-                comm_source = str(row_msrs["data_source"].iloc[0]).upper()
+                comm_source = str(row_msrs["data_source"].iloc[0])
             else:
-                msrs_val = float(precomputed_msrs) if precomputed_msrs is not None else 0.50
+                msrs_val = float(precomputed_msrs) if precomputed_msrs is not None else 50.0
                 comm_ha = 0.0
                 tgt_ha = 100.0
                 overshoot_pct = 0.0
-                comm_source = "SYNTHETIC PROXY"
+                comm_source = "Planning Baseline"
+
+        if 0.0 < msrs_val <= 1.0:
+            msrs_val = msrs_val * 100.0
+
+        if "synthetic" in comm_source.lower():
+            comm_source = "Planning Baseline"
 
         msrs_tier, msrs_label, _ = evaluate_saturation_risk(msrs_val)
 
@@ -173,13 +194,21 @@ class FarmerAdvisoryEngine:
         # Step 4: Evaluate Actionable Guidance & Decision Logic
         rationale = []
 
-        if msrs_val >= 0.70:
+        # Plain-language confidence from DRI
+        confidence_lbl, _ = get_plain_language_confidence(dri_score)
+
+        if msrs_val >= 60.0 or dcvs_val < 45.0:
             action = "AVOID EXPANSION / DIVERSIFY"
-            action_color = "#C53030"
+            action_color = COLOR_CRITICAL_RED
             banner_class = "banner-critical"
             headline = f"Critical Saturation Alert: {crop} in {scope_name} ({season_label})"
+            rec_category = "High Risk/Avoid"
+            key_reason = (
+                f"Severe glut risk: MSRS {msrs_val:.1f} ({overshoot_pct:+.1f}% quota gap, "
+                f"Rs. {curr_price:.1f}/kg {price_type})."
+            )
             rationale.append(
-                f"**Cobweb Glut Crash Risk (MSRS: {msrs_val:.2f} — {msrs_tier})**: Regional cultivation commitments "
+                f"**Cobweb Glut Crash Risk (MSRS: {msrs_val:.1f} — {msrs_tier})**: Regional cultivation commitments "
                 f"have exceeded sustainable absorption limits ({overshoot_pct:+.1f}% quota gap). "
                 f"Concurrent harvesting without coordinated allocation will trigger an oversupply price collapse."
             )
@@ -187,29 +216,43 @@ class FarmerAdvisoryEngine:
                 f"**Price Incentive Signal ({price_type.capitalize()} Quotes)**: Current quote is Rs. {curr_price:.1f}/kg. "
                 f"Growers are cautioned against supply-lag price signals: trailing high spot prices frequently mislead growers into concurrent overplanting."
             )
-        elif msrs_val >= 0.30:
+        elif msrs_val >= 20.0:
             action = "PROCEED WITH CAUTION"
-            action_color = "#D97706"
+            action_color = COLOR_WARNING_AMBER
             banner_class = "banner-warning"
             headline = f"Moderate Saturation Warning: {crop} in {scope_name} ({season_label})"
+            rec_category = "Consider"
+            if dcvs_val >= 60.0:
+                key_reason = f"Moderate crowding (MSRS {msrs_val:.1f}) with sound viability (DCVS {dcvs_val:.1f}, {temp_c:.1f}°C avg)."
+            elif overshoot_pct > 0:
+                key_reason = f"Approaching quota limit ({overshoot_pct:+.1f}% gap, MSRS {msrs_val:.1f}); maintain existing acreage."
+            else:
+                key_reason = f"Balanced capacity (MSRS {msrs_val:.1f}, DCVS {dcvs_val:.1f}, quote Rs. {curr_price:.1f}/kg)."
             rationale.append(
-                f"**Moderate Saturation (MSRS: {msrs_val:.2f} — {msrs_tier})**: Commitment registrations are approaching quota threshold. "
+                f"**Moderate Saturation (MSRS: {msrs_val:.1f} — {msrs_tier})**: Commitment registrations are approaching quota threshold. "
                 f"Maintain existing planned planting without acreage expansion, and secure forward off-take contracts."
             )
             rationale.append(
-                f"**Viability Index (DCVS)**: {dcvs_val:.1f}% ({dcvs_tier} Viability). Climatic favorability and market prices balance quota pressure."
+                f"**Viability Index (DCVS)**: {dcvs_val:.1f} ({dcvs_tier} Viability). Climatic favorability and market prices balance quota pressure."
             )
         else:
             action = "FAVORABLE FOR PLANTING"
-            action_color = "#2E7D32"
+            action_color = COLOR_SAFE_GREEN
             banner_class = "banner-safe"
             headline = f"Sustainable Market Capacity: {crop} in {scope_name} ({season_label})"
+            rec_category = "Recommended"
+            if overshoot_pct < -20.0:
+                key_reason = f"Ample quota headroom ({overshoot_pct:.1f}% under target, MSRS {msrs_val:.1f}); favorable DCVS {dcvs_val:.1f}."
+            elif curr_price > 180.0:
+                key_reason = f"Strong price return (Rs. {curr_price:.1f}/kg {price_type}, MSRS {msrs_val:.1f}); capacity available."
+            else:
+                key_reason = f"Sustainable capacity (MSRS {msrs_val:.1f}, DCVS {dcvs_val:.1f}, rain {rainfall_mm:.1f} mm)."
             rationale.append(
-                f"**Market Capacity Available (MSRS: {msrs_val:.2f} — {msrs_tier})**: Cultivation commitments remain comfortably within sustainable demand quotas. "
+                f"**Market Capacity Available (MSRS: {msrs_val:.1f} — {msrs_tier})**: Cultivation commitments remain comfortably within sustainable demand quotas. "
                 f"Minimal risk of an oversupply collapse."
             )
             rationale.append(
-                f"**Dynamic Crop Viability (DCVS)**: {dcvs_val:.1f}% ({dcvs_tier} Viability). Favorable convergence of demand capacity, price returns, and weather."
+                f"**Dynamic Crop Viability (DCVS)**: {dcvs_val:.1f} ({dcvs_tier} Viability). Favorable convergence of demand capacity, price returns, and weather."
             )
 
         # Cultivation Commitment Evidence
@@ -227,59 +270,61 @@ class FarmerAdvisoryEngine:
 
         # Data Reliability Transparency Point
         rationale.append(
-            f"**Source Data Reliability (DRI: {dri_score:.2f}%)**: Sourced from official {dri_source} intake audit ({dri_tier} Reliability). "
+            f"**Source Data Reliability (DRI: {dri_score:.1f})**: Sourced from empirical data readiness audit ({dri_tier} Reliability, {confidence_lbl}). "
             f"Verified data intake health confirms that downstream models receive complete and consistent input feeds."
         )
 
         # Step 5: Identify Alternative Crops with Rigorous Comparative Scoring
         candidates = []
-        for alt_crop in TARGET_CROPS:
-            if alt_crop == crop:
-                continue
+        if compute_alternatives:
+            for alt_crop in TARGET_CROPS:
+                if alt_crop == crop:
+                    continue
 
-            alt_dcvs_df = compute_district_dcvs_table(
-                df_comm, df_price, df_weather, alt_crop, season_type, season_year, price_type=price_type
-            )
+                alt_dcvs_df = compute_district_dcvs_table(
+                    df_comm, df_price, df_weather, alt_crop, season_type, season_year, price_type=price_type
+                )
 
-            if is_national:
-                alt_msrs_summary = compute_national_msrs_summary(df_comm, alt_crop, season_type, season_year)
-                alt_msrs = float(alt_msrs_summary["national_msrs"])
-                alt_dcvs = float(alt_dcvs_df["dcvs"].mean()) if not alt_dcvs_df.empty else 60.0
-                alt_p_sub = df_price[(df_price["crop"] == alt_crop) & (df_price["price_type"] == price_type)]
-                alt_p = float(alt_p_sub["price"].iloc[-1]) if not alt_p_sub.empty else 100.0
-            else:
-                alt_row = alt_dcvs_df[alt_dcvs_df["district"] == district]
-                if not alt_row.empty:
-                    alt_msrs = float(alt_row["msrs"].iloc[0])
-                    alt_dcvs = float(alt_row["dcvs"].iloc[0])
-                    alt_p = float(alt_row["current_price"].iloc[0])
+                if is_national:
+                    alt_msrs_summary = compute_national_msrs_summary(df_comm, alt_crop, season_type, season_year)
+                    alt_msrs = float(alt_msrs_summary["national_msrs"])
+                    alt_dcvs = float(alt_dcvs_df["dcvs"].mean()) if not alt_dcvs_df.empty else 60.0
+                    alt_p_sub = df_price[(df_price["crop"] == alt_crop) & (df_price["price_type"] == price_type)]
+                    alt_p = float(alt_p_sub["price"].iloc[-1]) if not alt_p_sub.empty else 100.0
                 else:
-                    alt_msrs = 0.50
-                    alt_dcvs = 50.0
-                    alt_p = 100.0
+                    alt_row = alt_dcvs_df[alt_dcvs_df["district"] == district]
+                    if not alt_row.empty:
+                        alt_msrs = float(alt_row["msrs"].iloc[0])
+                        alt_dcvs = float(alt_row["dcvs"].iloc[0])
+                        alt_p = float(alt_row["current_price"].iloc[0])
+                    else:
+                        alt_msrs = 20.0
+                        alt_dcvs = 50.0
+                        alt_p = 100.0
 
-            if alt_msrs < 0.30:
-                status_lbl = "Low Saturation (Safe Diversification)"
-                expl = "Ample market capacity available in this production scope."
-            elif alt_msrs < 0.70:
-                status_lbl = "Moderate Saturation (Viable Alternative)"
-                expl = "Manageable quota status with stable demand."
-            else:
-                status_lbl = "Elevated Saturation (Monitor Quota)"
-                expl = "Quota constrained; evaluate regional commitments carefully."
+                if alt_msrs <= 20.0:
+                    status_lbl = "Low Saturation (Recommended Alternative)"
+                    expl = "Ample market capacity available in this production scope."
+                elif alt_msrs <= 60.0:
+                    status_lbl = "Moderate Saturation (Consider as Alternative)"
+                    expl = "Manageable quota status with stable demand."
+                else:
+                    status_lbl = "Elevated Saturation (High Risk / Monitor Quota)"
+                    expl = "Quota constrained; evaluate regional commitments carefully."
 
-            candidates.append({
-                "crop": alt_crop,
-                "msrs": alt_msrs,
-                "dcvs": alt_dcvs,
-                "current_price": alt_p,
-                "status": status_lbl,
-                "explanation": expl,
-            })
+                candidates.append({
+                    "crop": alt_crop,
+                    "msrs": round(alt_msrs, 1),
+                    "dcvs": round(alt_dcvs, 1),
+                    "current_price": alt_p,
+                    "status": status_lbl,
+                    "explanation": expl,
+                })
 
-        # Sort primarily by lower saturation (MSRS ascending) then higher viability (DCVS descending)
-        candidates = sorted(candidates, key=lambda x: (x["msrs"], -x["dcvs"]))
+            # Sort primarily by lower saturation (MSRS ascending) then higher viability (DCVS descending)
+            candidates = sorted(candidates, key=lambda x: (x["msrs"], -x["dcvs"]))
 
+        # Evaluated alternative crops (sorted by lower saturation and higher viability)
         return Recommendation(
             district=scope_name,
             crop=crop,
@@ -289,18 +334,194 @@ class FarmerAdvisoryEngine:
             banner_class=banner_class,
             headline=headline,
             rationale_points=rationale,
-            msrs_score=msrs_val,
+            msrs_score=round(msrs_val, 1),
             msrs_tier=msrs_tier,
             msrs_label=msrs_label,
-            dcvs_score=dcvs_val,
+            dcvs_score=round(dcvs_val, 1),
             dcvs_tier=dcvs_tier,
             dcvs_label=dcvs_label,
-            dri_score=dri_score,
+            dri_score=round(dri_score, 1),
             dri_source=dri_source,
             dri_tier=dri_tier,
             dri_scope=dri_scope,
             evidence_sufficiency=evidence_sufficiency,
             confidence_limitation=confidence_limitation,
-            suggested_alternatives=candidates[:3],
-            data_provenance="EVIDENCE-BASED ADVISORY (HARTI Price / NASA Weather / Commitment Proxy)",
+            suggested_alternatives=candidates[:3] if compute_alternatives else [],
+            data_provenance="Evidence-Based Synthesis (HARTI Prices, NASA Weather, Planning Baseline)",
+            confidence=confidence_lbl,
+            recommendation_category=rec_category,
+            key_reason=key_reason,
         )
+
+    def generate_crop_recommendations_table(
+        self,
+        district: str,
+        season_type: str,
+        season_year: int,
+        df_comm: pd.DataFrame,
+        df_price: pd.DataFrame,
+        df_weather: pd.DataFrame,
+        price_type: str = "retail",
+    ) -> pd.DataFrame:
+        """
+        Generate standardized, sortable multi-crop recommendation panel across all 5 research crops.
+        Columns:
+          Crop | MSRS | DCVS | DRI | Confidence | Recommendation | Key Reason
+        Categories:
+          Recommended | Consider | High Risk/Avoid
+        """
+        data_sig = (
+            len(df_comm) if df_comm is not None else 0,
+            len(df_price) if df_price is not None else 0,
+            len(df_weather) if df_weather is not None else 0,
+        )
+        return _cached_crop_recommendations_table(
+            district=district,
+            season_type=season_type,
+            season_year=season_year,
+            price_type=price_type,
+            _df_comm=df_comm,
+            _df_price=df_price,
+            _df_weather=df_weather,
+            data_sig=data_sig,
+        )
+
+    def get_district_drilldown_summary(
+        self,
+        district: str,
+        crop: str,
+        season_type: str,
+        season_year: int,
+        df_comm: pd.DataFrame,
+        df_price: pd.DataFrame,
+        df_weather: pd.DataFrame,
+        price_type: str = "retail",
+    ) -> Dict[str, Any]:
+        """
+        Extract drill-down summary data for a specific district:
+        - Price trends and latest quotation.
+        - Committed vs. target hectares.
+        - Weather summary (rainfall accumulation, average temp).
+        - DRI breakdown (completeness, recency, consistency).
+        """
+        data_sig = (
+            len(df_comm) if df_comm is not None else 0,
+            len(df_price) if df_price is not None else 0,
+            len(df_weather) if df_weather is not None else 0,
+        )
+        return _cached_district_drilldown_summary(
+            district=district,
+            crop=crop,
+            season_type=season_type,
+            season_year=season_year,
+            price_type=price_type,
+            _df_comm=df_comm,
+            _df_price=df_price,
+            _df_weather=df_weather,
+            data_sig=data_sig,
+        )
+
+
+@cache_decorator
+def _cached_crop_recommendations_table(
+    district: str,
+    season_type: str,
+    season_year: int,
+    price_type: str,
+    _df_comm: pd.DataFrame,
+    _df_price: pd.DataFrame,
+    _df_weather: pd.DataFrame,
+    data_sig: tuple = (),
+) -> pd.DataFrame:
+    """Cached multi-crop recommendation evaluation across all 5 research crops."""
+    rows = []
+    advisor = FarmerAdvisoryEngine()
+    for cr in TARGET_CROPS:
+        rec = advisor.generate_advisory(
+            district=district,
+            crop=cr,
+            season_type=season_type,
+            season_year=season_year,
+            df_comm=_df_comm,
+            df_price=_df_price,
+            df_weather=_df_weather,
+            price_type=price_type,
+            compute_alternatives=False,
+        )
+        rows.append({
+            "Crop": cr,
+            "MSRS": round(rec.msrs_score, 1),
+            "DCVS": round(rec.dcvs_score, 1),
+            "DRI": round(rec.dri_score, 1),
+            "Confidence": rec.confidence,
+            "Recommendation": rec.recommendation_category,
+            "Key Reason": rec.key_reason,
+        })
+
+    order_map = {"Recommended": 0, "Consider": 1, "High Risk/Avoid": 2}
+    df_res = pd.DataFrame(rows)
+    df_res["_sort_key"] = df_res["Recommendation"].map(order_map)
+    df_res = df_res.sort_values(by=["_sort_key", "MSRS"]).drop(columns=["_sort_key"]).reset_index(drop=True)
+    return df_res
+
+
+@cache_decorator
+def _cached_district_drilldown_summary(
+    district: str,
+    crop: str,
+    season_type: str,
+    season_year: int,
+    price_type: str,
+    _df_comm: pd.DataFrame,
+    _df_price: pd.DataFrame,
+    _df_weather: pd.DataFrame,
+    data_sig: tuple = (),
+) -> Dict[str, Any]:
+    """Cached drilldown summary calculation."""
+    is_national = (district in ["All Island (National Average)", "National", "All Island"])
+    effective_d = district if not is_national else "All Island"
+
+    # 1. Price metrics
+    sub_p = _df_price[(_df_price["crop"] == crop) & (_df_price["price_type"] == price_type)]
+    if not is_national:
+        sub_p = sub_p[sub_p["district"] == district]
+    latest_price = float(sub_p["price"].iloc[-1]) if not sub_p.empty else 120.0
+    ma_8w = float(sub_p["price"].tail(8).mean()) if len(sub_p) >= 8 else latest_price
+
+    # 2. Commitment metrics
+    sub_c = _df_comm[(_df_comm["crop_name"] == crop) & (_df_comm["season_type"] == season_type) & (_df_comm["season_year"] == season_year)]
+    if not is_national:
+        row_c = sub_c[sub_c["district"] == district]
+        comm_ha = float(row_c["committed_hectares"].iloc[0]) if not row_c.empty else 0.0
+        tgt_ha = float(row_c["target_hectares"].iloc[0]) if not row_c.empty else 100.0
+    else:
+        comm_ha = float(sub_c["committed_hectares"].sum()) if not sub_c.empty else 0.0
+        tgt_ha = float(sub_c["target_hectares"].sum()) if not sub_c.empty else 2500.0
+    overshoot_pct = ((comm_ha - tgt_ha) / tgt_ha * 100.0) if tgt_ha > 0 else 0.0
+
+    # 3. Weather metrics
+    sub_w = _df_weather if is_national else _df_weather[_df_weather["district"] == district]
+    avg_rain = float(sub_w["rainfall_mm"].mean()) if not sub_w.empty else 5.0
+    avg_temp = float(sub_w["temp_c"].mean()) if not sub_w.empty else 25.0
+
+    # 4. DRI Readiness
+    dri_info = assess_district_data_readiness(effective_d, crop, _df_price, _df_weather, _df_comm, season_year=season_year)
+
+    return {
+        "district": effective_d,
+        "crop": crop,
+        "season": f"{season_type} {season_year}",
+        "latest_price": round(latest_price, 1),
+        "eight_week_ma": round(ma_8w, 1),
+        "committed_ha": round(comm_ha, 1),
+        "target_ha": round(tgt_ha, 1),
+        "overshoot_pct": round(overshoot_pct, 1),
+        "rainfall_avg_mm": round(avg_rain, 1),
+        "temp_avg_c": round(avg_temp, 1),
+        "dri_score": dri_info["dri_score"],
+        "completeness": dri_info["completeness"],
+        "recency": dri_info["recency"],
+        "consistency": dri_info["consistency"],
+        "confidence": dri_info["confidence_label"],
+        "why_score": dri_info["why_explanation"],
+    }
