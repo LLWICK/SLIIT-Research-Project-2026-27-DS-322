@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 import pandas as pd
@@ -313,6 +314,22 @@ def _refresh_naive(comparison: list[dict], lightgbm_test: pd.DataFrame) -> None:
         row["interval_width"] = None
 
 
+def _json_ready(value):
+    """JSON has no NaN. A missing SARIMAX interval is null, not a number."""
+    if isinstance(value, dict):
+        return {key: _json_ready(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_json_ready(item) for item in value]
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    try:
+        if value is pd.NA or (not isinstance(value, (str, bytes, list, dict)) and pd.isna(value)):
+            return None
+    except (TypeError, ValueError):
+        pass
+    return value
+
+
 def export_this_run_studio(out_dir: Path | None = None) -> Path:
     """Studio JSON for this run. Does not write app/data or the full-sample A/B cards."""
     from htfe.training.evaluate import assert_safe_evaluation_dir
@@ -340,7 +357,8 @@ def export_this_run_studio(out_dir: Path | None = None) -> Path:
     b_example = json.loads((evaluation_root / "inference" / "saved_b_example.json").read_text(encoding="utf-8"))
 
     def dump(name: str, payload: dict) -> None:
-        (destination / name).write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+        text = json.dumps(_json_ready(payload), indent=2, default=str, allow_nan=False)
+        (destination / name).write_text(text, encoding="utf-8")
 
     dump(
         "meta.json",

@@ -207,34 +207,34 @@ def _statements(comparison: pd.DataFrame) -> list[str]:
         "Spatial scope is national. National cultivation progress is not district supply progress. District rows were not used as features.",
         "The full-sample Experiment A and Experiment B table is a different row set and is not mixed with these rows.",
     ]
-        for row in comparison.itertuples(index=False):
-            horizon = int(row.horizon)
-            model = str(row.model)
+    for row in comparison.itertuples(index=False):
+        horizon = int(row.horizon)
+        model = str(row.model)
+        lines.append(
+            f"{model} horizon {horizon} MAE: B* {row.mae_b_star:.2f}, C {row.mae_c:.2f}, on {int(row.n_scored_c)} matched test rows."
+        )
+        lines.append(
+            f"{model} horizon {horizon} MAPE: B* {row.mape_b_star:.2f}%, C {row.mape_c:.2f}%."
+        )
+        if float(row.mae_change_pct) < 0:
             lines.append(
-                f"{model} horizon {horizon} MAE: B* {row.mae_b_star:.2f}, C {row.mae_c:.2f}, on {int(row.n_scored_c)} matched test rows."
+                f"At horizon {horizon}, {model} C MAE is lower than B* by {abs(float(row.mae_change_pct)):.2f}% on this matched-row test."
             )
+        elif float(row.mae_change_pct) > 0:
             lines.append(
-                f"{model} horizon {horizon} MAPE: B* {row.mape_b_star:.2f}%, C {row.mape_c:.2f}%."
+                f"At horizon {horizon}, {model} C MAE is higher than B* by {float(row.mae_change_pct):.2f}% on this matched-row test."
             )
-            if float(row.mae_change_pct) < 0:
-                lines.append(
-                    f"At horizon {horizon}, {model} C MAE is lower than B* by {abs(float(row.mae_change_pct)):.2f}% on this matched-row test."
-                )
-            elif float(row.mae_change_pct) > 0:
-                lines.append(
-                    f"At horizon {horizon}, {model} C MAE is higher than B* by {float(row.mae_change_pct):.2f}% on this matched-row test."
-                )
-            else:
-                lines.append(f"At horizon {horizon}, {model} C MAE matches B*.")
-            picp = float(row.picp_cqr_c)
-            if picp < 90:
-                lines.append(
-                    f"{model} horizon {horizon} calibrated PICP for C is {picp:.2f}%. That is below 90%."
-                )
-            else:
-                lines.append(
-                    f"{model} horizon {horizon} calibrated PICP for C is {picp:.2f}%. The nominal interval is 90%. This is the measured share of test prices inside the interval."
-                )
+        else:
+            lines.append(f"At horizon {horizon}, {model} C MAE matches B*.")
+        picp = float(row.picp_cqr_c)
+        if picp < 90:
+            lines.append(
+                f"{model} horizon {horizon} calibrated PICP for C is {picp:.2f}%. That is below 90%."
+            )
+        else:
+            lines.append(
+                f"{model} horizon {horizon} calibrated PICP for C is {picp:.2f}%. The nominal interval is 90%. This is the measured share of test prices inside the interval."
+            )
     return lines
 
 
