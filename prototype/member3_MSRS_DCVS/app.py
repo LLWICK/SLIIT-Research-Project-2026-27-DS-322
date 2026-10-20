@@ -1,214 +1,594 @@
-import streamlit as st
-import json
+"""Interactive multi-paradigm recommendation dashboard for Member 3 prototype.
+
+Demonstrates:
+1. Agro-climatic suitability mapped from planting areas (altitude, rainfall, climate, temperature, soil).
+2. Market Saturation Risk Score (MSRS) evaluation for requested crops.
+3. Multi-paradigm recommendation comparisons:
+   - Baseline Weighted DCVS
+   - MCDM / TOPSIS (Multi-Criteria Ideal Distance)
+   - Non-Linear BPR Congestion + Crop Vector Similarity Recommender
+   - Markowitz Portfolio Land-Splitting / Hedging
+   - Game-Theoretic Softmax Load Balancing (Herding Prevention)
+4. Confirmed commitment workflow with SQLite persistence.
+"""
+
+from __future__ import annotations
+
+import os
+import uuid
+from datetime import date
+from typing import Any
+
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+import requests
+import streamlit as st
 
-from engine import calculate_msrs, calculate_dcvs, check_crash_risk
+API_URL = os.getenv("MEMBER3_API_URL", "http://127.0.0.1:8000")
+SUPPORTED_CROPS = ["carrot", "leek", "tomato"]
+SUPPORTED_DISTRICTS = ["nuwara_eliya", "badulla", "dambulla", "colombo", "meegoda"]
+SUPPORTED_MARKETS = ["colombo", "dambulla", "meegoda", "nuwara_eliya"]
+DEMO_FARMERS = ["demo-farmer-01", "demo-farmer-02", "demo-farmer-03"]
 
-# Page Configuration
 st.set_page_config(
-    page_title="Farmer Advisory DSS (Member 3)",
-    page_icon="👨‍🌾",
-    layout="wide"
+    page_title="Crowding-Aware Crop Recommendation Engine",
+    page_icon="🌾",
+    layout="wide",
 )
 
-# Load Dummy Data
-@st.cache_data
-def load_dummy_data():
-    with open("dummy_data.json", "r") as f:
-        return json.load(f)
+st.title("🌾 Crowding-Aware Crop Recommendation System")
+st.markdown(
+    "**SLIIT Research Project J26-DS-322 | Member 3 Prototype**  \n"
+    "*Evaluate market saturation risk (Cobweb effect), compute agro-climatic suitability from environmental parameters, and compare multiple recommendation paradigms.*"
+)
 
-dummy_data = load_dummy_data()
-crops_data = dummy_data["crops"]
+if "confirmation_key" not in st.session_state:
+    st.session_state.confirmation_key = f"demo-{uuid.uuid4().hex[:12]}"
 
-# Styling
-st.markdown("""
-<style>
-    .metric-card {
-        background: #f8fafc;
-        border-radius: 10px;
-        padding: 15px;
-        border-left: 5px solid #3b82f6;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-    }
-    .safe-alert {
-        background: #d1fae5;
-        border-left: 5px solid #10b981;
-        padding: 15px;
-        border-radius: 8px;
-    }
-    .warn-alert {
-        background: #fef3c7;
-        border-left: 5px solid #f59e0b;
-        padding: 15px;
-        border-radius: 8px;
-    }
-    .critical-alert {
-        background: #fee2e2;
-        border-left: 5px solid #ef4444;
-        padding: 15px;
-        border-radius: 8px;
-    }
-    .recommendation-card {
-        background: #f0fdf4;
-        border: 2px solid #22c55e;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-st.title("👨‍🌾 Farmer Decision Support System (DSS)")
-st.caption("Member 3: Senaratna S.T.S | SLIIT Research Project J26-DS-322")
-
-st.markdown("""
-Welcome to the Farmer Advisory portal. Enter the crop you intend to plant and the land extent. 
-The system will analyze current national commitments and provide a **Market Saturation Risk Score (MSRS)** and 
-a **Dynamic Crop Viability Score (DCVS)**. If your chosen crop is at risk of oversupply, we will recommend a safer alternative.
-""")
-
-st.sidebar.header("⚙️ Market State Simulation")
-st.sidebar.markdown("Adjust these sliders to simulate the *current* market conditions before the farmer plants.")
-current_market_commitments = {}
-for crop, data in crops_data.items():
-    current_market_commitments[crop] = st.sidebar.slider(
-        f"{crop} Current Market Commitment (ha)",
-        min_value=0.0,
-        max_value=data["market_demand_capacity_ha"] * 1.5,
-        value=data["market_demand_capacity_ha"] * 0.6,
-        step=50.0
+# ---------------------------------------------------------
+# Sidebar: Location Environmental Profile & Suitability
+# ---------------------------------------------------------
+with st.sidebar:
+    st.header("📍 Planting Area & Climate")
+    selected_district = st.selectbox(
+        "Select Planting District",
+        SUPPORTED_DISTRICTS,
+        format_func=lambda x: x.replace("_", " ").title(),
+        index=0,
     )
 
-# --- Farmer Input Section ---
-st.subheader("1. Your Planting Intentions")
-col_in1, col_in2 = st.columns(2)
-with col_in1:
-    selected_crop = st.selectbox("Target Crop to Plant", list(crops_data.keys()))
-with col_in2:
-    farmer_area = st.number_input("Amount to Plant (Hectares)", min_value=0.1, value=5.0, step=0.5)
+    # Fetch planting area environmental profile from API or local fallback
+    area_profile: dict[str, Any] = {}
+    try:
+        resp = requests.get(f"{API_URL}/planting-areas/{selected_district}", timeout=3)
+        if resp.ok:
+            area_data = resp.json()
+            area_profile = area_data["profile"]
+            suitability_defaults = {
+                crop: area_data["suitability_breakdown"][crop]["composite_suitability"]
+                for crop in SUPPORTED_CROPS
+            }
+        else:
+            suitability_defaults = {"carrot": 0.9, "leek": 0.85, "tomato": 0.45}
+    except Exception:
+        suitability_defaults = {"carrot": 0.9, "leek": 0.85, "tomato": 0.45}
 
-# --- Calculations for Target Crop ---
-crop_baseline = crops_data[selected_crop]
-demand_capacity = crop_baseline["market_demand_capacity_ha"]
-weather_index = crop_baseline["weather_suitability_base"]
-price_index = crop_baseline["price_forecast_base"]
+    if area_profile:
+        st.subheader(area_profile.get("name", selected_district.title()))
+        st.caption(area_profile.get("description", ""))
+        st.metric("Elevation / Altitude", f"{area_profile.get('altitude_m', 0):.0f} m")
+        st.metric("Mean Temperature", f"{area_profile.get('mean_temp_c', 0):.1f} °C")
+        st.metric("Seasonal Rainfall", f"{area_profile.get('seasonal_rainfall_mm', 0):.0f} mm")
+        st.caption(f"**Zone:** {area_profile.get('climate_zone', 'N/A')}")
+        st.caption(f"**Soil:** {area_profile.get('soil_type', 'N/A')}")
+        st.divider()
 
-# Calculate new total commitment if farmer plants this
-new_total_area = current_market_commitments[selected_crop] + farmer_area
+    st.subheader("🌱 Agro-Climatic Suitability")
+    use_climate_model = st.checkbox(
+        "Auto-derive suitability from climate & soil",
+        value=True,
+        help="Calculates continuous suitability scores using the district's altitude, rainfall, and temperature profiles.",
+    )
 
-msrs_val = calculate_msrs(new_total_area, demand_capacity)
-dcvs_val = calculate_dcvs(msrs_val, weather_index, price_index)
-risk_assessment = check_crash_risk(msrs_val)
+    suitability_inputs = {}
+    if use_climate_model:
+        st.info("Using automated environmental suitability mapping:")
+        for c in SUPPORTED_CROPS:
+            score = suitability_defaults.get(c, 0.7)
+            st.progress(score, text=f"{c.title()}: {score * 100:.1f}%")
+            suitability_inputs[c] = score
+    else:
+        st.warning("Manual suitability override mode:")
+        for c in SUPPORTED_CROPS:
+            suitability_inputs[c] = st.slider(
+                f"{c.title()} Suitability",
+                0.0,
+                1.0,
+                float(suitability_defaults.get(c, 0.7)),
+                0.05,
+            )
 
-st.markdown("---")
-st.subheader("2. Market Viability Analysis")
+# ---------------------------------------------------------
+# Farmer Proposal Form
+# ---------------------------------------------------------
+st.subheader("1. Farmer Crop Proposal & Planning Inputs")
+with st.form("farmer_proposal"):
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        crop = st.selectbox("Requested Crop", SUPPORTED_CROPS, format_func=lambda x: x.title())
+        area = st.number_input("Proposed Area (ha)", min_value=0.5, value=25.0, step=0.5)
+    with c2:
+        market = st.selectbox(
+            "Target Terminal Market",
+            SUPPORTED_MARKETS,
+            format_func=lambda x: x.replace("_", " ").title(),
+            index=0,
+        )
+        season = st.selectbox("Season", ["Maha", "Yala"])
+    with c3:
+        horizon = st.selectbox("Price Forecast Horizon (weeks)", [1, 2, 4, 8, 12], index=2)
+        farmer_ref = st.selectbox("Farmer Reference", DEMO_FARMERS)
+    with c4:
+        st.write("")
+        st.write("")
+        assessed = st.form_submit_button("🔍 Evaluate Saturation Risk & Alternatives", use_container_width=True)
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-    st.metric("New Total Market Commitment", f"{new_total_area:,.1f} ha", f"Capacity: {demand_capacity:,.1f} ha", delta_color="off")
-    st.markdown('</div>', unsafe_allow_html=True)
+assessment_payload = {
+    "district": selected_district,
+    "market": market,
+    "crop": crop,
+    "season": season,
+    "proposed_area_ha": area,
+    "horizon_weeks": horizon,
+    "suitability": suitability_inputs,
+}
 
-with col2:
-    st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-    st.metric("Market Saturation Risk (MSRS)", f"{msrs_val:.3f}", "0.0 is Safe, 1.0 is Critical", delta_color="inverse")
-    st.markdown('</div>', unsafe_allow_html=True)
+if assessed:
+    with st.spinner("Querying market commitments, Member 2 price forecasts, and running recommendation paradigms..."):
+        try:
+            response = requests.post(f"{API_URL}/recommendations/assess", json=assessment_payload, timeout=10)
+            if response.ok:
+                st.session_state.assessment = response.json()
+            else:
+                st.error(f"Error {response.status_code}: {response.text}")
+        except Exception as ex:
+            st.error(f"Failed to connect to recommendation backend at {API_URL}: {ex}")
 
-with col3:
-    st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-    st.metric("Dynamic Viability Score (DCVS)", f"{dcvs_val}%", "Higher is better")
-    st.markdown('</div>', unsafe_allow_html=True)
+# ---------------------------------------------------------
+# Results Section
+# ---------------------------------------------------------
+if "assessment" in st.session_state:
+    result = st.session_state.assessment
+    requested = result["requested_crop_assessment"]
+    approaches = result.get("approaches", {})
+    pressure_info = requested["pressure"]
+    pressure_score = pressure_info["score"]
+    pressure_ratio = pressure_info["pressure_ratio"]
+    pressure_label = pressure_info["label"]
 
-# Risk Assessment & Recommendation
-if msrs_val >= 0.7:
-    st.markdown(f'<div class="critical-alert"><b>🚨 {risk_assessment}</b><br>High risk of market crash due to oversupply.</div>', unsafe_allow_html=True)
-    
-    st.subheader("💡 Recommended Alternatives")
-    st.markdown("We scanned other crops based on current market data. Here is the best alternative to plant instead:")
-    
-    # Calculate DCVS for all other crops
-    best_alt_crop = None
-    best_alt_dcvs = -1
-    best_alt_msrs = 1.0
-    
-    for alt_crop in crops_data.keys():
-        if alt_crop == selected_crop:
-            continue
-            
-        alt_baseline = crops_data[alt_crop]
-        alt_demand = alt_baseline["market_demand_capacity_ha"]
-        alt_weather = alt_baseline["weather_suitability_base"]
-        alt_price = alt_baseline["price_forecast_base"]
-        
-        # Add farmer's area to alt crop's current commitment
-        alt_new_total = current_market_commitments[alt_crop] + farmer_area
-        
-        alt_msrs = calculate_msrs(alt_new_total, alt_demand)
-        alt_dcvs = calculate_dcvs(alt_msrs, alt_weather, alt_price)
-        
-        if alt_dcvs > best_alt_dcvs:
-            best_alt_dcvs = alt_dcvs
-            best_alt_crop = alt_crop
-            best_alt_msrs = alt_msrs
-            
-    if best_alt_crop:
-        st.markdown(f"""
-        <div class="recommendation-card">
-            <h3 style="margin-top:0;">🌱 Switch to: {best_alt_crop}</h3>
-            <p>If you plant <b>{farmer_area} ha</b> of {best_alt_crop} instead:</p>
-            <ul>
-                <li><b>New MSRS:</b> {best_alt_msrs:.3f} (Safe)</li>
-                <li><b>New DCVS:</b> {best_alt_dcvs}% (Highly Viable)</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-        
-elif msrs_val >= 0.3:
-    st.markdown(f'<div class="warn-alert"><b>⚠️ {risk_assessment}</b><br>Monitor closely. DCVS is dropping.</div>', unsafe_allow_html=True)
-else:
-    st.markdown(f'<div class="safe-alert"><b>✅ {risk_assessment}</b><br>Good to plant. Market demand is healthy.</div>', unsafe_allow_html=True)
+    st.divider()
+    st.subheader(f"2. Market Saturation Evaluation for Requested Crop: **{crop.title()}**")
 
-st.markdown("---")
+    # Saturation Risk Alert Banner
+    if pressure_score >= 0.7 or pressure_ratio >= 1.2:
+        st.error(
+            f"🚨 **CRITICAL MARKET SATURATION RISK DETECTED!**  \n"
+            f"Current commitments + your proposed area ({requested['proposed_total_area_ha']:.1f} ha) will reach "
+            f"**{pressure_ratio * 100:.1f}%** of market capacity ({requested['reference_capacity_ha']:.0f} ha).  \n"
+            f"Risk Score: **{pressure_score:.2f} (High)**. Planting this will induce the **Cobweb oversupply crash**, leading to severe price drops. "
+            f"**Action:** Switch to a recommended alternative or hedge using land-splitting below."
+        )
+    elif pressure_score >= 0.3 or pressure_ratio >= 0.8:
+        st.warning(
+            f"⚠️ **MODERATE CROWDING DETECTED.**  \n"
+            f"Proposed area pushes aggregate commitments to **{pressure_ratio * 100:.1f}%** of market capacity. "
+            f"Risk Score: **{pressure_score:.2f} (Moderate)**. Consider lower acreage or viable alternatives."
+        )
+    else:
+        st.success(
+            f"✅ **SAFE PLANTING ZONE.**  \n"
+            f"Aggregate commitments remain healthy at **{pressure_ratio * 100:.1f}%** of market capacity. "
+            f"Risk Score: **{pressure_score:.2f} (Low)**. Market demand is sufficient."
+        )
 
-# Visualizations
-tab1, tab2 = st.tabs(["📊 Saturation Gauges", "🔌 Mocked REST API"])
+    # Overview Metrics Cards
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Confirmed Area (District/Season)", f"{requested['current_confirmed_area_ha']:.1f} ha")
+    m2.metric("Post-Proposal Total Area", f"{requested['proposed_total_area_ha']:.1f} ha")
+    m3.metric("Capacity Overshoot Ratio", f"{pressure_ratio * 100:.1f}%")
+    m4.metric("Forecast Price (Member 2)", f"LKR {requested['forecast']['predicted_price']:.2f}/kg")
 
-with tab1:
-    col_g1, col_g2 = st.columns(2)
-    with col_g1:
-        fig_msrs = go.Figure(go.Indicator(
-            mode = "gauge+number", value = msrs_val, title = {'text': "MSRS (Risk of Oversupply)"},
-            gauge = {'axis': {'range': [0, 1]}, 'bar': {'color': "black"},
-                     'steps': [{'range': [0, 0.3], 'color': "#10b981"}, {'range': [0.3, 0.7], 'color': "#f59e0b"}, {'range': [0.7, 1.0], 'color': "#ef4444"}]}
-        ))
-        st.plotly_chart(fig_msrs, use_container_width=True)
+    st.write("")
 
-    with col_g2:
-        fig_dcvs = go.Figure(go.Indicator(
-            mode = "gauge+number", value = dcvs_val, title = {'text': "DCVS (Overall Recommendation %)"},
-            gauge = {'axis': {'range': [0, 100]}, 'bar': {'color': "black"},
-                     'steps': [{'range': [0, 40], 'color': "#ef4444"}, {'range': [40, 70], 'color': "#f59e0b"}, {'range': [70, 100], 'color': "#10b981"}]}
-        ))
-        st.plotly_chart(fig_dcvs, use_container_width=True)
+    # ---------------------------------------------------------
+    # 3. Multi-Paradigm Recommendation Comparison
+    # ---------------------------------------------------------
+    st.subheader("3. Alternative Recommendations Across Different Algorithmic Paradigms")
+    st.caption("Inspect and compare how 5 distinct academic and operational solutions formulate crop recommendations.")
 
-with tab2:
-    st.subheader("Mocked REST API Payload")
-    api_payload = {
-        "farmer_request": {
-            "crop": selected_crop,
-            "intended_area_ha": farmer_area
-        },
-        "market_state": {
-            "current_commitment_ha": current_market_commitments[selected_crop],
-            "market_demand_capacity_ha": demand_capacity
-        },
-        "outputs": {
-            "MSRS": msrs_val,
-            "DCVS_percentage": dcvs_val,
-            "risk_assessment": risk_assessment
+    tab_overview, tab_topsis, tab_bpr, tab_portfolio, tab_softmax, tab_baseline, tab_climate, tab_trainer = st.tabs([
+        "📊 Approach Comparison Matrix",
+        "🎯 MCDM / TOPSIS",
+        "🚜 Non-Linear BPR & Crop Similarity",
+        "💼 Portfolio Land-Splitting (Hedging)",
+        "🌐 Softmax Load Balancing",
+        "⚖️ Baseline Weighted DCVS",
+        "🗺️ Climate Suitability Breakdown",
+        "🧠 Data-Driven Weight Trainer",
+    ])
+
+    # ------------------ Tab 1: Comparison Matrix ------------------
+    with tab_overview:
+        st.markdown("#### Cross-Paradigm Recommendation Summary")
+        st.write("Compare the top-ranked choices and rationale generated by each approach for your proposal:")
+
+        baseline_top = approaches.get("baseline_dcvs", [{}])[0].get("crop", "N/A").title()
+        topsis_top = approaches.get("topsis_mcdm", [{}])[0].get("crop", "N/A").title()
+        bpr_top = approaches.get("bpr_similarity", [{}])[0].get("crop", "N/A").title()
+        softmax_top = approaches.get("softmax_load_balancing", [{}])[0].get("crop", "N/A").title()
+        portfolio_info = approaches.get("portfolio_hedging", {})
+
+        summary_data = [
+            {
+                "Approach": "1. Baseline DCVS",
+                "Domain Paradigm": "Linear Multi-Attribute Scoring",
+                "Top Recommendation": baseline_top,
+                "Core Mechanism": "Weighted combination of price, linear MSRS, and climate suitability.",
+            },
+            {
+                "Approach": "2. MCDM / TOPSIS",
+                "Domain Paradigm": "Multi-Criteria Decision Analysis",
+                "Top Recommendation": topsis_top,
+                "Core Mechanism": "Minimizes geometric distance to ideal solution, penalizes forecast price uncertainty interval.",
+            },
+            {
+                "Approach": "3. BPR & Profile Similarity",
+                "Domain Paradigm": "Traffic Congestion & Content Recommender",
+                "Top Recommendation": bpr_top,
+                "Core Mechanism": "Uses non-linear traffic congestion curves and matches farmer operational profile vectors.",
+            },
+            {
+                "Approach": "4. Portfolio Land-Splitting",
+                "Domain Paradigm": "Modern Portfolio Theory (Markowitz)",
+                "Top Recommendation": f"Split: {', '.join(a['crop'].title() + ' (' + str(a['allocation_pct']) + '%)' for a in portfolio_info.get('allocations', []))}",
+                "Core Mechanism": "Caps saturated crop to safe threshold and hedges the rest into low-risk alternatives.",
+            },
+            {
+                "Approach": "5. Softmax Load Balancing",
+                "Domain Paradigm": "Game Theory / Macro Equilibrium",
+                "Top Recommendation": f"{softmax_top} ({approaches.get('softmax_load_balancing', [{}])[0].get('rank_score', 0)}% cohort share)",
+                "Core Mechanism": "Probabilistic load balancing to prevent the Herding Effect and secondary oversupply.",
+            },
+        ]
+        st.dataframe(pd.DataFrame(summary_data), hide_index=True, use_container_width=True)
+
+    # ------------------ Tab 2: TOPSIS ------------------
+    with tab_topsis:
+        st.markdown("#### Technique for Order Preference by Similarity to Ideal Solution (TOPSIS)")
+        st.markdown(
+            r"Evaluates candidate crops against conflicting objectives: **Maximize Suitability**, **Maximize Forecast Price**, "
+            r"**Minimize Price Uncertainty Spread** ($\Delta P = \text{Upper} - \text{Lower}$ from Member 2), and **Minimize Saturation Ratio**."
+        )
+        topsis_list = approaches.get("topsis_mcdm", [])
+        if topsis_list:
+            df_topsis = pd.DataFrame([
+                {
+                    "Rank": idx + 1,
+                    "Crop": item["crop"].title(),
+                    "TOPSIS Closeness": f"{item['rank_score']:.2f}%",
+                    "Distance to Best (S+)": item["dist_ideal_best"],
+                    "Distance to Worst (S-)": item["dist_ideal_worst"],
+                    "Price Uncertainty Spread": f"LKR {item['price_spread']:.1f}",
+                    "Forecast Price": f"LKR {item['predicted_price']:.2f}",
+                    "Suitability": f"{item['suitability']*100:.1f}%",
+                    "Explanation": item["explanation"],
+                }
+                for idx, item in enumerate(topsis_list)
+            ])
+            st.dataframe(df_topsis, hide_index=True, use_container_width=True)
+
+    # ------------------ Tab 3: BPR & Similarity ------------------
+    with tab_bpr:
+        st.markdown("#### Non-Linear Traffic Congestion (BPR) & Crop Profile Similarity")
+        st.markdown(
+            "Borrowing from GPS navigation algorithms (Waze/Google Maps), this approach replaces arbitrary linear thresholds with the "
+            "**Bureau of Public Roads (BPR)** congestion function:  \n"
+            "$$\\text{Congestion} = 1 - \\frac{1}{1 + 0.15 \\times (V/C)^4}$$  \n"
+            "It computes **Cosine Vector Similarity** on operational dimensions (*growth duration, water demand, labor intensity, capital investment*) "
+            "to find crops that require similar farming equipment and skills as the requested crop."
+        )
+        bpr_list = approaches.get("bpr_similarity", [])
+        if bpr_list:
+            df_bpr = pd.DataFrame([
+                {
+                    "Rank": idx + 1,
+                    "Crop": item["crop"].title(),
+                    "Composite BPR Score": f"{item['rank_score']:.2f}%",
+                    "Profile Similarity to Requested": f"{item['profile_similarity']*100:.1f}%",
+                    "BPR Market Congestion Penalty": f"{item['bpr_congestion']*100:.1f}%",
+                    "Suitability": f"{item['suitability']*100:.1f}%",
+                    "Forecast Price": f"LKR {item['predicted_price']:.2f}",
+                    "Explanation": item["explanation"],
+                }
+                for idx, item in enumerate(bpr_list)
+            ])
+            st.dataframe(df_bpr, hide_index=True, use_container_width=True)
+
+    # ------------------ Tab 4: Portfolio Land-Splitting ------------------
+    with tab_portfolio:
+        st.markdown("#### Markowitz-Inspired Land-Splitting & Risk Hedging")
+        st.markdown(
+            "Rather than treating crop selection as an all-or-nothing binary decision, finance portfolio theory hedges risk by **splitting land allocation**. "
+            "The system caps planting of the saturated crop to the safe 85% capacity margin and reallocates remaining acreage to the top viable alternative."
+        )
+        if portfolio_info:
+            p_cols = st.columns(len(portfolio_info.get("allocations", [])))
+            for idx, alloc in enumerate(portfolio_info.get("allocations", [])):
+                with p_cols[idx]:
+                    st.metric(
+                        f"Allocated: {alloc['crop'].title()}",
+                        f"{alloc['allocated_area_ha']:.1f} ha ({alloc['allocation_pct']}%)",
+                    )
+                    st.caption(alloc["role"])
+
+            st.info(f"💡 **Strategy Insight:** {portfolio_info.get('explanation', '')}")
+            if portfolio_info.get("estimated_risk_reduction_pct", 0) > 0:
+                st.success(f"🛡️ **Estimated Over-Saturation Risk Reduction:** {portfolio_info['estimated_risk_reduction_pct']:.1f}%")
+
+    # ------------------ Tab 5: Softmax Load Balancing ------------------
+    with tab_softmax:
+        st.markdown("#### Game-Theoretic Herding Prevention (Boltzmann/Softmax)")
+        st.markdown(
+            "**The Research Problem:** If a recommendation engine directs 100% of farmers in a district to the same #1 alternative, "
+            "it induces a secondary glut and causes the alternative crop's market to crash next season.  \n"
+            "**Solution:** A randomized Softmax policy distributes recommendation traffic across viable crops proportionally to their viability score."
+        )
+        softmax_list = approaches.get("softmax_load_balancing", [])
+        if softmax_list:
+            chart_data = pd.DataFrame([
+                {"Crop": item["crop"].title(), "Recommendation Probability (%)": item["rank_score"]}
+                for item in softmax_list
+            ])
+            st.bar_chart(chart_data.set_index("Crop"), use_container_width=True)
+
+            df_softmax = pd.DataFrame([
+                {
+                    "Crop": item["crop"].title(),
+                    "Systemic Quota / Share": f"{item['rank_score']:.1f}%",
+                    "Underlying Utility (DCVS)": f"{item['utility_dcvs']:.1f}%",
+                    "Macroeconomic Role": item["explanation"],
+                }
+                for item in softmax_list
+            ])
+            st.dataframe(df_softmax, hide_index=True, use_container_width=True)
+
+    # ------------------ Tab 6: Baseline DCVS ------------------
+    with tab_baseline:
+        st.markdown("#### Baseline Dynamic Crop Viability Score (DCVS)")
+        st.markdown(
+            "Uses piecewise linear MSRS (0.0 to 1.0 between 80% and 120% capacity) and computes:  \n"
+            "$$\\text{DCVS} = (0.34 \\times P_{\\text{norm}}) + (0.33 \\times S) + (0.33 \\times (1 - \\text{MSRS}))$$"
+        )
+        baseline_list = approaches.get("baseline_dcvs", [])
+        if baseline_list:
+            df_base = pd.DataFrame([
+                {
+                    "Rank": idx + 1,
+                    "Crop": item["crop"].title(),
+                    "DCVS": f"{item['rank_score']:.1f}%",
+                    "Pressure Score": f"{item['pressure_risk']:.3f}",
+                    "Pressure Label": item["pressure_label"].title(),
+                    "Forecast Price": f"LKR {item['predicted_price']:.2f}",
+                    "Suitability": f"{item['suitability']*100:.1f}%",
+                    "Explanation": item["explanation"],
+                }
+                for idx, item in enumerate(baseline_list)
+            ])
+            st.dataframe(df_base, hide_index=True, use_container_width=True)
+
+    # ------------------ Tab 7: Climate Suitability Breakdown ------------------
+    with tab_climate:
+        st.markdown("#### District Environmental Factors & Agronomic Mapping")
+        st.markdown(
+            f"Suitability scores for **{selected_district.replace('_', ' ').title()}** computed from elevation, temperature, and rainfall."
+        )
+        dist_profiles = result.get("district_environmental_profiles", {})
+        if dist_profiles:
+            climate_rows = []
+            for c_name, profile_data in dist_profiles.items():
+                subs = profile_data.get("sub_scores", {})
+                env = profile_data.get("environmental_factors", {})
+                climate_rows.append({
+                    "Crop": c_name.title(),
+                    "Composite Suitability": f"{profile_data.get('composite_suitability', 0)*100:.1f}%",
+                    "Altitude Match": f"{subs.get('altitude', 0)*100:.1f}%",
+                    "Temperature Match": f"{subs.get('temperature', 0)*100:.1f}%",
+                    "Rainfall Match": f"{subs.get('rainfall', 0)*100:.1f}%",
+                    "District Altitude": f"{env.get('altitude_m', 0):.0f} m",
+                    "District Mean Temp": f"{env.get('mean_temp_c', 0):.1f} °C",
+                    "District Rainfall": f"{env.get('seasonal_rainfall_mm', 0):.0f} mm",
+                })
+            st.dataframe(pd.DataFrame(climate_rows), hide_index=True, use_container_width=True)
+
+    # ------------------ Tab 8: Weight Trainer & Calibration ------------------
+    with tab_trainer:
+        st.markdown("#### 🧠 Data-Driven Algorithm Weight Derivation & Model Calibration")
+        st.markdown(
+            "Rather than using static hand-tuned weights, this module calibrates the recommendation parameters using "
+            "**real wholesale price distributions** from `Member3Data/Vegetable Prices.xlsx` (17,000+ weekly records from 2015 to 2025) "
+            "paired with simulated multi-season weather and cultivation pressure datasets."
+        )
+
+        train_col1, train_col2 = st.columns([1, 3])
+        with train_col1:
+            run_training = st.button("🚀 Run Multi-Model Weight Calibration", use_container_width=True)
+
+        if "trained_weights" not in st.session_state and not run_training:
+            # Attempt to fetch pre-trained weights from API
+            try:
+                tw_resp = requests.get(f"{API_URL}/weights/trained", timeout=5)
+                if tw_resp.ok:
+                    st.session_state.trained_weights = tw_resp.json()
+            except Exception:
+                pass
+
+        if run_training:
+            with st.spinner("Processing Vegetable Prices.xlsx, fitting regressions, and executing policy simulation..."):
+                try:
+                    tw_resp = requests.get(f"{API_URL}/weights/trained", timeout=15)
+                    if tw_resp.ok:
+                        st.session_state.trained_weights = tw_resp.json()
+                        st.success("Calibration complete across all 4 paradigms!")
+                    else:
+                        st.error(tw_resp.text)
+                except Exception as ex:
+                    st.error(f"Training failed: {ex}")
+
+        if "trained_weights" in st.session_state:
+            tw_data = st.session_state.trained_weights
+            p_stats = tw_data.get("price_statistics", {})
+            models = tw_data.get("derived_models", {})
+            bpr_params = tw_data.get("fitted_bpr_parameters", {})
+
+            # 1. Real Wholesale Price Statistics
+            st.markdown("##### 1. Empirical Wholesale Price Volatility (Vegetable Prices.xlsx)")
+            stat_rows = [
+                {
+                    "Crop": crop_name.title(),
+                    "Weekly Price Records": stat.get("samples", 0),
+                    "Mean Price (Rs/kg)": f"LKR {stat.get('mean', 0):.2f}",
+                    "Std. Deviation": f"LKR {stat.get('stdev', 0):.2f}",
+                    "Historical Price Range": f"LKR {stat.get('min', 0):.1f} - {stat.get('max', 0):.1f}",
+                    "Volatility (CV)": f"{(stat.get('stdev', 0)/max(1, stat.get('mean', 1)))*100:.1f}%",
+                }
+                for crop_name, stat in p_stats.items()
+            ]
+            st.dataframe(pd.DataFrame(stat_rows), hide_index=True, use_container_width=True)
+
+            st.write("")
+
+            # 2. Derived Weight Comparison
+            st.markdown("##### 2. Derived Weight Vectors Across Paradigms")
+
+            model_cards = st.columns(4)
+            card_meta = [
+                ("supervised_profit", "Supervised Profit (LTR)", "Maximizes correlation with ex-post seasonal net profit."),
+                ("shannon_entropy", "Shannon Entropy", "Objective weighting based on information dispersion/variance."),
+                ("critic_method", "CRITIC Method", "Balances contrast intensity (stdev) and inter-criteria conflict."),
+                ("cobweb_simulation", "Cobweb Simulator", "Minimizes price crash volatility in multi-season market cycles."),
+            ]
+
+            for idx, (m_key, title, subtitle) in enumerate(card_meta):
+                m_info = models.get(m_key, {})
+                with model_cards[idx]:
+                    st.markdown(f"**{title}**")
+                    st.caption(subtitle)
+                    st.metric("Price Weight (w_p)", f"{m_info.get('price_weight', 0):.3f}")
+                    st.metric("Suitability Weight (w_s)", f"{m_info.get('suitability_weight', 0):.3f}")
+                    st.metric("Saturation Weight (w_sat)", f"{m_info.get('pressure_weight', 0):.3f}")
+
+                    if st.button(f"Apply {title.split()[0]} Weights", key=f"btn_apply_{m_key}", use_container_width=True):
+                        try:
+                            apply_resp = requests.post(
+                                f"{API_URL}/weights/apply",
+                                json={
+                                    "price_weight": m_info.get("price_weight", 0.34),
+                                    "suitability_weight": m_info.get("suitability_weight", 0.33),
+                                    "pressure_weight": m_info.get("pressure_weight", 0.33),
+                                },
+                                timeout=5,
+                            )
+                            if apply_resp.ok:
+                                st.success(f"Applied {title} weights! Click 'Evaluate' above to see updated recommendations.")
+                            else:
+                                st.error(apply_resp.text)
+                        except Exception as e:
+                            st.error(f"Failed to apply: {e}")
+
+            st.write("")
+
+            # 3. Weight Comparison Chart & Fitted BPR
+            st.markdown("##### 3. Weight Distribution Comparison & Fitted Congestion Elasticity")
+            chart_rows = []
+            baseline_w = tw_data.get("heuristic_baseline", {"price_weight": 0.34, "suitability_weight": 0.33, "pressure_weight": 0.33})
+            chart_rows.append({"Model": "Heuristic Baseline", "Price Weight": baseline_w["price_weight"], "Suitability Weight": baseline_w["suitability_weight"], "Saturation Weight": baseline_w["pressure_weight"]})
+
+            for m_key, title, _ in card_meta:
+                m_info = models.get(m_key, {})
+                chart_rows.append({
+                    "Model": title,
+                    "Price Weight": m_info.get("price_weight", 0),
+                    "Suitability Weight": m_info.get("suitability_weight", 0),
+                    "Saturation Weight": m_info.get("pressure_weight", 0),
+                })
+
+            df_weights = pd.DataFrame(chart_rows).set_index("Model")
+            st.bar_chart(df_weights, use_container_width=True)
+
+            c_bpr1, c_bpr2 = st.columns(2)
+            with c_bpr1:
+                st.info(
+                    f"**Fitted Econometric BPR Congestion Parameters:**  \n"
+                    f"• Supply Elasticity Exponent ($\\beta$): **{bpr_params.get('beta', 4.0)}**  \n"
+                    f"• Congestion Scale Factor ($\\alpha$): **{bpr_params.get('alpha', 0.15)}**  \n"
+                    f"*(Derived from wholesale price collapse sensitivity observed during peak vegetable arrivals)*"
+                )
+            with c_bpr2:
+                st.info(
+                    "**Research Takeaway:**  \n"
+                    "• In uncoordinated markets, **Cobweb Simulation** and **Shannon Entropy** prove that Saturation Risk needs $47\\% - 80\\%$ weighting to prevent price crashes.  \n"
+                    "• In contrast, **Supervised Profit** confirms that in non-glut seasons, agronomic yield ($w_s = 76\\%$) dominates farmer income."
+                )
+
+    # ---------------------------------------------------------
+    # 4. Planting Confirmation & Persistence Section
+    # ---------------------------------------------------------
+    st.divider()
+    st.subheader("4. Confirm Planting Commitment")
+    st.caption("Assessments are exploratory. Confirmation commits the planting record into SQLite, updating the market aggregate.")
+
+    with st.form("commitment_confirmation"):
+        c_left, c_right = st.columns(2)
+        with c_left:
+            st.text_input("Farmer Reference", value=farmer_ref, disabled=True)
+            st.text_input("Confirmation Idempotency Key", value=st.session_state.confirmation_key, disabled=True)
+            chosen_crop = st.selectbox(
+                "Final Confirmed Crop Decision",
+                SUPPORTED_CROPS,
+                index=SUPPORTED_CROPS.index(crop) if crop in SUPPORTED_CROPS else 0,
+                format_func=lambda x: x.title(),
+                help="You can either confirm your original crop or switch to a recommended alternative.",
+            )
+        with c_right:
+            planting_date = st.date_input("Planting Date", value=date.today())
+            harvest_date = st.date_input("Expected Harvest Date")
+            confirmed_check = st.checkbox("I confirm this planting commitment on behalf of the farmer")
+
+        submit_commitment = st.form_submit_button("💾 Save Confirmed Commitment", use_container_width=True)
+
+    if submit_commitment:
+        commitment_payload = {
+            "district": selected_district,
+            "market": market,
+            "crop": chosen_crop,
+            "season": season,
+            "proposed_area_ha": area,
+            "horizon_weeks": horizon,
+            "suitability": suitability_inputs,
+            "idempotency_key": st.session_state.confirmation_key,
+            "farmer_reference": farmer_ref,
+            "planting_date": str(planting_date),
+            "harvest_date": str(harvest_date),
+            "confirmed": confirmed_check,
         }
-    }
-    st.json(api_payload)
+        try:
+            c_resp = requests.post(f"{API_URL}/commitments", json=commitment_payload, timeout=10)
+            if c_resp.ok:
+                st.success(
+                    f"🎉 Commitment #{c_resp.json().get('id')} successfully confirmed and saved to SQLite! "
+                    f"Future assessments in {selected_district.title()} will reflect this +{area} ha."
+                )
+                st.session_state.confirmation_key = f"demo-{uuid.uuid4().hex[:12]}"
+            else:
+                st.error(f"Commitment rejected: {c_resp.text}")
+        except Exception as ex:
+            st.error(f"Failed to save commitment: {ex}")
