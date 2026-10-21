@@ -787,7 +787,11 @@ def test_crop_recommendations_table_formatting():
 
     expected_cols = ["Crop", "MSRS", "DCVS", "DRI", "Confidence", "Recommendation", "Key Reason"]
     assert list(df_table.columns) == expected_cols
-    assert len(df_table) == 5
+    assert len(df_table) == len(TARGET_CROPS)
+    assert len(df_table) == 3
+    assert set(df_table["Crop"]) == {"Carrot", "Leek", "Tomato"}
+    assert "Cabbage" not in set(df_table["Crop"])
+    assert "Big Onion (Local)" not in set(df_table["Crop"])
 
     # Check floats are rounded to 1 decimal place
     for col in ["MSRS", "DCVS", "DRI"]:
@@ -846,3 +850,33 @@ def test_category_reliability_audit_excludes_yield():
     assert "Cultivation" in categories
     assert "Yield" not in categories
     assert len(df_cat_summary) == 3
+
+
+def test_target_crops_limited_to_three():
+    """Verify TARGET_CROPS contains only Carrot, Leek, Tomato, and excludes Cabbage and Big Onion."""
+    assert TARGET_CROPS == ["Carrot", "Leek", "Tomato"]
+    assert "Cabbage" not in TARGET_CROPS
+    assert "Big Onion (Local)" not in TARGET_CROPS
+
+
+def test_farmer_advisory_alternatives_contain_only_target_crops():
+    """Verify diversification alternatives never suggest Cabbage or Big Onion."""
+    df_comm = load_commitment_data()
+    df_price = load_price_data()
+    df_weather = load_weather_data()
+
+    advisor = FarmerAdvisoryEngine()
+    for crop in TARGET_CROPS:
+        rec = advisor.generate_advisory(
+            district="Nuwara Eliya",
+            crop=crop,
+            season_type="Maha",
+            season_year=2024,
+            df_comm=df_comm,
+            df_price=df_price,
+            df_weather=df_weather,
+        )
+        for alt in rec.suggested_alternatives:
+            assert alt["crop"] in TARGET_CROPS
+            assert alt["crop"] != crop
+            assert alt["crop"] not in ["Cabbage", "Big Onion (Local)"]

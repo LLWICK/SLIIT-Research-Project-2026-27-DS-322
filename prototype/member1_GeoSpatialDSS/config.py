@@ -62,13 +62,11 @@ DISTRICT_COORDS: Dict[str, Dict[str, Any]] = {
 
 DISTRICT_NAMES: List[str] = sorted(list(DISTRICT_COORDS.keys()))
 
-# The Five Official Research Target Crops
+# The Three Official Research Target Crops
 TARGET_CROPS: List[str] = [
     "Carrot",
     "Leek",
-    "Cabbage",
     "Tomato",
-    "Big Onion (Local)"
 ]
 
 # Curated Visual Palette for Crop Visualizations

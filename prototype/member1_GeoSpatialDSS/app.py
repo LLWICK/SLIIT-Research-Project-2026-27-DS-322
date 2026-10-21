@@ -125,12 +125,12 @@ def main():
 
         st.subheader("Analytical Parameters")
 
-        # 1. Target Crop Selector (5 Official Research Crops)
+        # 1. Target Crop Selector (3 Official Research Crops)
         selected_crop = st.selectbox(
             "Target Vegetable Crop",
             options=TARGET_CROPS,
             index=0,
-            help="Restricted to the five core project research crops.",
+            help="Restricted to the three core project research crops: Carrot, Leek, Tomato.",
         )
 
         # 2. Season & Year Selectors

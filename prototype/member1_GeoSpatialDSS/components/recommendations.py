@@ -104,7 +104,7 @@ def render_crop_recommendations_table(df_recs: pd.DataFrame) -> None:
     Formatted to 1 decimal place with no applymap deprecation warnings.
     """
     st.markdown("### Multi-Crop Planning Recommendations")
-    st.caption("Comparison across all 5 research target crops for the selected planning scope.")
+    st.caption("Comparison across all 3 research target crops for the selected planning scope.")
 
     # Color styling function for Recommendation column
     def color_rec(val):
