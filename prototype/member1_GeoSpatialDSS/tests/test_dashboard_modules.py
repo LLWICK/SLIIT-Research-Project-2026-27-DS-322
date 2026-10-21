@@ -793,3 +793,56 @@ def test_crop_recommendations_table_formatting():
     for col in ["MSRS", "DCVS", "DRI"]:
         for val in df_table[col]:
             assert str(val) == f"{val:.1f}"
+
+
+def test_category_reliability_audit_excludes_yield():
+    """Verify that the rendered Data Category Reliability Audit table excludes the Yield row while keeping Price, Weather, and Cultivation."""
+    df_price = load_price_data()
+    df_weather = load_weather_data()
+    df_comm = load_commitment_data()
+
+    dri_info = assess_district_data_readiness(
+        district="Colombo",
+        crop="Carrot",
+        df_price=df_price,
+        df_weather=df_weather,
+        df_comm=df_comm,
+    )
+
+    cat_audits = dri_info["category_audits"]
+    cat_records = []
+    for cat_name, c_data in cat_audits.items():
+        if cat_name.lower() == "yield":
+            continue
+        if c_data.get("available", False):
+            cat_records.append({
+                "Category": cat_name.capitalize(),
+                "Status": "Available",
+                "Record Count": f"{c_data.get('record_count', 0):,}",
+                "Completeness": f"{c_data.get('completeness', 0) * 100:.1f}%",
+                "Recency": f"{c_data.get('recency', 0) * 100:.1f}%",
+                "Consistency": f"{c_data.get('consistency', 0) * 100:.1f}%",
+                "Category DRI": f"{c_data.get('dri_score', 0):.1f}",
+                "Audit Notes": c_data.get("notes", ""),
+            })
+        else:
+            cat_status = c_data.get("status_label", "Unavailable — source data not yet integrated")
+            rec_cnt = f"{c_data.get('record_count'):,}" if c_data.get("record_count") is not None else "N/A"
+            cat_records.append({
+                "Category": cat_name.capitalize(),
+                "Status": cat_status,
+                "Record Count": rec_cnt,
+                "Completeness": "N/A",
+                "Recency": "N/A",
+                "Consistency": "N/A",
+                "Category DRI": "N/A",
+                "Audit Notes": c_data.get("notes", "Data category not collected in active intake pipeline."),
+            })
+
+    df_cat_summary = pd.DataFrame(cat_records)
+    categories = list(df_cat_summary["Category"])
+    assert "Price" in categories
+    assert "Weather" in categories
+    assert "Cultivation" in categories
+    assert "Yield" not in categories
+    assert len(df_cat_summary) == 3

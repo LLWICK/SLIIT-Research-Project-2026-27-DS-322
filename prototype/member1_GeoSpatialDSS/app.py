@@ -531,6 +531,8 @@ def main():
         cat_audits = dri_info["category_audits"]
         cat_records = []
         for cat_name, c_data in cat_audits.items():
+            if cat_name.lower() == "yield":
+                continue
             if c_data.get("available", False):
                 cat_records.append({
                     "Category": cat_name.capitalize(),
