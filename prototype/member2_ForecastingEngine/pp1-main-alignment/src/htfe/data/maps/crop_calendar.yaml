@@ -1,0 +1,50 @@
+# Research calendar assumptions for the synthetic cultivation prototype.
+# These windows are not observed planting dates and are not a Department of
+# Agriculture crop calendar. Season membership follows the HARTI week rule in
+# supply_lags.season_of_week and last_finished_season:
+#   Yala of year S is HARTI weeks 14-39 of S, and is finished only after week 39.
+#   Maha of year S is weeks 40-52/53 of S plus weeks 1-13 of S+1, and is
+#   finished only after week 13 of S+1.
+# Planting start and end sit inside that season. Edit them here. Do not hard-code
+# the weeks or the logistic profiles in Python.
+#
+# The same window is stored on each crop because no crop-specific planting
+# dates were observed. Yala weeks 14-22 are the opening nine weeks of Yala
+# (about April-May under the HARTI Monday rule). Maha weeks 40-48 are the
+# opening nine weeks of Maha (about October-November).
+
+default_scenario: typical
+
+profiles:
+  early:
+    midpoint: 0.40
+    steepness: 8
+  typical:
+    midpoint: 0.50
+    steepness: 8
+  late:
+    midpoint: 0.60
+    steepness: 8
+
+crops:
+  carrot:
+    Yala:
+      planting_start_week: 14
+      planting_end_week: 22
+    Maha:
+      planting_start_week: 40
+      planting_end_week: 48
+  leeks:
+    Yala:
+      planting_start_week: 14
+      planting_end_week: 22
+    Maha:
+      planting_start_week: 40
+      planting_end_week: 48
+  tomato:
+    Yala:
+      planting_start_week: 14
+      planting_end_week: 22
+    Maha:
+      planting_start_week: 40
+      planting_end_week: 48

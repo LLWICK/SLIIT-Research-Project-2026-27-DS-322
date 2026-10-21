@@ -1,0 +1,6 @@
+model,feature_set,horizon,n_scored,max_abs_median_difference_vs_saved,stored_tail_swap_count,stored_median_outside_tails_count,stored_median_outside_tails_pct,raw_crossing_count,raw_crossing_rate_pct
+lightgbm,C,1,462,5.684341886080802e-14,0,0,0.0,0,0.0
+lightgbm,C,2,459,5.684341886080802e-14,0,0,0.0,0,0.0
+lightgbm,C,4,453,5.684341886080802e-14,0,14,3.09,14,3.09
+lightgbm,C,8,447,5.684341886080802e-14,0,0,0.0,0,0.0
+lightgbm,C,12,450,1.1368683772161603e-13,0,30,6.67,30,6.67

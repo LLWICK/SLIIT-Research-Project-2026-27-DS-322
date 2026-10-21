@@ -1,0 +1,12 @@
+{
+  "found": true,
+  "multiple_real_reports": true,
+  "note": "This target week has at least two issue dates and at least two different real national report dates. Each row is scored with the horizon model for that issue date.",
+  "crop": "carrot",
+  "market": "colombo",
+  "target_week": "2024-09-23",
+  "information_states": 5,
+  "distinct_real_reports": 4,
+  "checked": 5,
+  "max_abs_median_difference": 0.0
+}

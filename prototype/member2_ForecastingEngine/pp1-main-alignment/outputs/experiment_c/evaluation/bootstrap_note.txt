@@ -1,0 +1,1 @@
+The bootstrap resamples target weeks in blocks of 4. mean_ae_difference_c_minus_b_star is C absolute error minus B* absolute error on the matched rows. A negative value means C's absolute error is lower on this run. The interval is uncertainty in that paired difference. It is not a second accuracy table, and it does not replace the horizon MAE and MAPE columns.

@@ -1,0 +1,138 @@
+{
+  "experiment": "A",
+  "description": "Price lags and seasonal features only. No weather, macros, cultivation progress, or lagged extent.",
+  "protocol": "notebook_2022_early_stop",
+  "executed": true,
+  "features": [
+    "price_lag_1w",
+    "price_lag_2w",
+    "price_lag_4w",
+    "price_lag_8w",
+    "price_lag_52w",
+    "price_mean_4w",
+    "price_mean_8w",
+    "price_change_4w_pct",
+    "season",
+    "season_transition",
+    "forecast_week_of_year",
+    "week_within_season"
+  ],
+  "identity_codes": [
+    "crop_id",
+    "market_id"
+  ],
+  "season_code": "season",
+  "label": "target_price_lkr_kg at target_week",
+  "model_target": "log(target_price / last_observed_price), inverted back to LKR/kg",
+  "quantiles": [
+    0.05,
+    0.5,
+    0.95
+  ],
+  "random_state": 42,
+  "direct_multi_horizon": true,
+  "split": {
+    "train_issue_through": "2022-12-31",
+    "selector_train": "eligible training targets through 2021-12-31",
+    "selector_validation": "eligible training targets in 2022",
+    "final_refit": "eligible training targets through 2022-12-31",
+    "calibrate": "2023 issue weeks only, not used for early stopping",
+    "test": "2024-2025",
+    "shuffle": false
+  },
+  "score_markets": [
+    "Dambulla",
+    "Colombo",
+    "Meegoda",
+    "Nuwara Eliya"
+  ],
+  "train_pool_markets": [
+    "Kandy",
+    "Keppetipola",
+    "Thambuttegama"
+  ],
+  "score_rule": "last observed price and target price both originally observed",
+  "optuna": {
+    "used": false,
+    "reason": "Notebook 1 uses fixed LightGBM and XGBoost hyperparameters. Optuna is not run.",
+    "lightgbm": {
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "min_child_samples": 20,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "n_estimators_cap": 500,
+      "early_stopping_rounds": 50
+    },
+    "xgboost": {
+      "learning_rate": 0.05,
+      "max_depth": 6,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "n_estimators_cap": 500,
+      "early_stopping_rounds": 50
+    },
+    "tree_count_records": 30
+  },
+  "sarimax": "fitted 8811 SARIMAX rows at fixed order (1, 1, 1) x (1, 0, 0, 52)",
+  "sarimax_order": {
+    "order": [
+      1,
+      1,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      52
+    ],
+    "note": "fixed order because statsforecast is not installed",
+    "protocol": "notebook_append_refit_false"
+  },
+  "lstm": "not run",
+  "feature_sets": {
+    "A": [
+      "price_lag_1w",
+      "price_lag_2w",
+      "price_lag_4w",
+      "price_lag_8w",
+      "price_lag_52w",
+      "price_mean_4w",
+      "price_mean_8w",
+      "price_change_4w_pct",
+      "season",
+      "season_transition",
+      "forecast_week_of_year",
+      "week_within_season"
+    ],
+    "B": [
+      "price_lag_1w",
+      "price_lag_2w",
+      "price_lag_4w",
+      "price_lag_8w",
+      "price_lag_52w",
+      "price_mean_4w",
+      "price_mean_8w",
+      "price_change_4w_pct",
+      "season",
+      "season_transition",
+      "forecast_week_of_year",
+      "week_within_season",
+      "origin_rainfall_1w_mm",
+      "origin_rainfall_sum_4w_mm",
+      "origin_rainfall_sum_8w_mm",
+      "origin_mean_temp_4w_c",
+      "origin_rainfall_anomaly_4w_mm",
+      "diesel_price_lkr_litre",
+      "usd_lkr_rate",
+      "inflation_rate_pct",
+      "previous_season_extent",
+      "same_season_previous_year_extent",
+      "historical_mean_season_extent",
+      "extent_change_vs_previous_season"
+    ],
+    "C": null
+  },
+  "rows": 54243
+}

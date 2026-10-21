@@ -1,0 +1,1 @@
+The frozen_saved_vector row is the unchanged horizon-4 test vector. The q25, median, and q75 rows replace only cultivation progress on that same vector with observed national ratios for this crop. Ratios above 1 are kept. This is not another held-out accuracy result.

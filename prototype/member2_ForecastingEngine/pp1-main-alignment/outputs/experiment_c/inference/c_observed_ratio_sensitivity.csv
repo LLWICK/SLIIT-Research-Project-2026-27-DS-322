@@ -1,0 +1,5 @@
+state,observed_progress_ratio_used,target_exceeded,lower_price,predicted_price,upper_price,role
+frozen_saved_vector,0.5487842413050169,0,20.91,126.53,262.02,unchanged saved vector
+observed_low_q25,0.4423165118645009,0,20.91,126.53,262.02,"sensitivity only, not a held-out accuracy result"
+observed_median,0.6401760363429869,0,21.37,126.53,262.02,"sensitivity only, not a held-out accuracy result"
+observed_high_q75,0.8215446998845096,0,21.21,126.53,262.02,"sensitivity only, not a held-out accuracy result"

@@ -1,0 +1,5 @@
+market_key,n,mae,rmse,mape,mean_bias_pred_minus_actual
+colombo,117,83.4,121.57,45.31,24.54
+dambulla,117,79.67,107.81,46.84,25.31
+meegoda,114,80.09,111.72,39.57,28.02
+nuwara_eliya,105,76.64,101.35,45.34,34.95

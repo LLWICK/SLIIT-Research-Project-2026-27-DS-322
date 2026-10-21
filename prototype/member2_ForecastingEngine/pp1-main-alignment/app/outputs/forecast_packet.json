@@ -1,0 +1,27 @@
+{
+  "from_member": 2,
+  "to_member": 3,
+  "engine": "Hybrid Temporal Forecasting Engine",
+  "request": {
+    "crop": "CARROT",
+    "market": "COLOMBO",
+    "forecast_week": "2025-12-29",
+    "latest_cultivation_information": {
+      "cultivation_progress": 0.45
+    }
+  },
+  "response": {
+    "crop": "CARROT",
+    "market": "COLOMBO",
+    "forecast_week": "2025-12-29",
+    "predicted_price": 173.43,
+    "lower_price": 114.53,
+    "upper_price": 325.93,
+    "coverage_level": 0.9,
+    "cultivation_progress": 0.45,
+    "cultivation_intensity": null,
+    "commitment_source": "commitment_record",
+    "model_version": "runtime_synthetic_progress",
+    "applied_cultivation_update": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "check": "reproduce_one_saved_c_forecast",
+  "fit_called": false,
+  "crop": "tomato",
+  "market": "meegoda",
+  "forecast_issue_week": "2025-09-29",
+  "target_week": "2025-10-27",
+  "horizon_weeks": 4,
+  "cultivation_report_date": "2025-07-15",
+  "cultivation_progress_ratio": 0.5487842413050169,
+  "target_exceeded": 0,
+  "last_observed_price": 134.0,
+  "lower_price": 20.91,
+  "predicted_price": 126.53,
+  "upper_price": 262.02,
+  "saved_median": 126.525455,
+  "actual_price_historical_demo": 140.0,
+  "reproduction_absolute_difference": 1.4210854715202004e-14,
+  "raw_quantile_crossing": false,
+  "interval_rule": "Lower and upper use the ordered 5% and 95% prices plus this run's 2023 qhat. The median is the frozen q50 prediction.",
+  "model": "lightgbm",
+  "feature_set": "C"
+}

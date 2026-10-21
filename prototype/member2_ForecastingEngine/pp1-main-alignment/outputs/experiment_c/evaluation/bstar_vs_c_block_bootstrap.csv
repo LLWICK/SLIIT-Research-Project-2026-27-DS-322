@@ -1,0 +1,6 @@
+horizon,n_matched_rows,n_target_weeks,mean_ae_difference_c_minus_b_star,bootstrap_95_ci_low,bootstrap_95_ci_high,ci_entirely_below_zero,ci_entirely_above_zero
+1,462,39,1.8738,-0.2392,4.5911,False,False
+2,459,39,-0.9573,-1.6327,-0.3329,True,False
+4,453,39,-3.5412,-5.6294,-1.6198,True,False
+8,447,39,-12.6209,-18.8991,-6.653,True,False
+12,450,39,-4.737,-6.9181,-2.9991,True,False

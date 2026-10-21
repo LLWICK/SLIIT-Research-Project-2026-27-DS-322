@@ -1,0 +1,4 @@
+crop_key,n,mae,rmse,mape,mean_bias_pred_minus_actual
+carrot,151,98.49,121.89,48.58,60.75
+leeks,151,46.77,60.24,27.83,40.7
+tomato,151,94.86,136.15,56.39,-17.36

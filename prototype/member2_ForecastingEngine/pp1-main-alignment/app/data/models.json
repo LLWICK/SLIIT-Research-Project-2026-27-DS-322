@@ -1,0 +1,130 @@
+{
+  "lightgbm": {
+    "backend": "lightgbm",
+    "qhat": 6.0922,
+    "qhat_by_horizon": {
+      "1": 6.0922,
+      "2": 5.1549,
+      "4": 25.5959,
+      "8": 69.4008,
+      "12": 101.9411
+    },
+    "note": "Intervals are split-conformal on 2023 only. Test coverage is below the nominal 90%.",
+    "metrics": {
+      "overall": {
+        "n_scored": 1164,
+        "mae": 110.14,
+        "mape": 43.96,
+        "picp": 83.42,
+        "interval_width": 439.47,
+        "note": "Experiment B LightGBM, horizon 4, 2024-2025 test. PICP uses the 2023 conformal adjustment on the ordered interval. Measured calibrated PICP is 83.42%. That is below the intended 90%."
+      },
+      "by_crop": {
+        "carrot": {
+          "n_scored": 388,
+          "mae": 143.02,
+          "mape": 45.44,
+          "picp": 78.61,
+          "interval_width": 536.81
+        },
+        "leeks": {
+          "n_scored": 388,
+          "mae": 59.76,
+          "mape": 24.06,
+          "picp": 94.33,
+          "interval_width": 336.94
+        },
+        "tomato": {
+          "n_scored": 388,
+          "mae": 127.62,
+          "mape": 62.36,
+          "picp": 77.32,
+          "interval_width": 444.66
+        }
+      },
+      "by_market": {
+        "colombo": {
+          "n_scored": 300,
+          "mae": 108.2,
+          "mape": 42.0,
+          "picp": 84.0,
+          "interval_width": 430.92
+        },
+        "dambulla": {
+          "n_scored": 294,
+          "mae": 104.29,
+          "mape": 45.74,
+          "picp": 83.33,
+          "interval_width": 422.45
+        },
+        "meegoda": {
+          "n_scored": 297,
+          "mae": 116.14,
+          "mape": 38.34,
+          "picp": 84.18,
+          "interval_width": 469.67
+        },
+        "nuwara_eliya": {
+          "n_scored": 273,
+          "mae": 112.02,
+          "mape": 50.29,
+          "picp": 82.05,
+          "interval_width": 434.34
+        }
+      },
+      "by_season": {}
+    },
+    "train_curve": [],
+    "feature_set": "B"
+  },
+  "xgboost": {
+    "backend": "xgboost",
+    "qhat": null,
+    "note": "Quantile XGBoost on the same feature set as LightGBM. Intervals are raw quantiles.",
+    "metrics": {
+      "overall": {
+        "n_scored": 1164,
+        "mae": 107.56,
+        "rmse": 170.78,
+        "mape": 42.38,
+        "pinball": 53.78,
+        "picp": 81.53,
+        "interval_width": 481.67,
+        "note": "Horizon 4, 2024-2025 test, this notebook-protocol run. Not pooled across horizons."
+      },
+      "by_crop": {},
+      "by_market": {},
+      "by_season": {}
+    },
+    "train_curve": []
+  },
+  "sarima": {
+    "backend": "sarimax",
+    "qhat": null,
+    "note": "Univariate SARIMAX reused from the price-only walk-forward. It does not use weather or cultivation progress.",
+    "metrics": {
+      "overall": {
+        "n_scored": 1164,
+        "mae": 121.48,
+        "rmse": 188.44,
+        "mape": 51.8,
+        "pinball": null,
+        "picp": null,
+        "interval_width": null,
+        "note": "Horizon 4, 2024-2025 test, this notebook-protocol run. Not pooled across horizons."
+      },
+      "by_crop": {},
+      "by_market": {},
+      "by_season": {}
+    },
+    "train_curve": []
+  },
+  "lstm": {
+    "backend": "not_run",
+    "qhat": null,
+    "metrics": {
+      "overall": {}
+    },
+    "train_curve": []
+  }
+}

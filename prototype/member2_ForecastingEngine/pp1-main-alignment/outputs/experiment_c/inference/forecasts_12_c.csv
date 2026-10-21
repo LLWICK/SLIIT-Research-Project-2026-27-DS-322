@@ -1,0 +1,13 @@
+crop,market,forecast_issue_week,forecast_week,horizon_weeks,cultivation_report_date,cultivation_progress,target_exceeded,last_observed_price,lower_price,predicted_price,upper_price,actual_price_historical_demo,inside_interval_historical_demo,model,feature_set,model_version,reproduction_absolute_difference
+carrot,colombo,2025-09-29,2025-10-06,1,2025-07-15,0.54,0,113.64,69.24,107.44,167.51,122.0,True,lightgbm,C,experiment_c,0.0
+carrot,dambulla,2025-09-29,2025-10-06,1,2025-07-15,0.54,0,106.0,64.76,100.22,156.29,136.0,True,lightgbm,C,experiment_c,1.4210854715202004e-14
+carrot,meegoda,2025-09-29,2025-10-06,1,2025-07-15,0.54,0,142.0,84.16,134.26,209.17,160.0,True,lightgbm,C,experiment_c,2.842170943040401e-14
+carrot,nuwara_eliya,2025-09-29,2025-10-06,1,2025-07-15,0.54,0,134.0,80.56,126.7,197.42,136.0,True,lightgbm,C,experiment_c,0.0
+leeks,colombo,2025-09-29,2025-10-06,1,2025-07-15,0.5791447861965492,0,89.09,55.22,81.73,134.67,131.67,True,lightgbm,C,experiment_c,0.0
+leeks,dambulla,2025-09-29,2025-10-06,1,2025-07-15,0.5791447861965492,0,86.0,54.31,78.9,131.77,106.0,True,lightgbm,C,experiment_c,0.0
+leeks,meegoda,2025-09-29,2025-10-06,1,2025-07-15,0.5791447861965492,0,104.0,64.35,95.41,156.26,128.0,True,lightgbm,C,experiment_c,0.0
+leeks,nuwara_eliya,2025-09-29,2025-10-06,1,2025-07-15,0.5791447861965492,0,94.0,58.54,86.23,142.05,110.0,True,lightgbm,C,experiment_c,0.0
+tomato,colombo,2025-09-29,2025-10-06,1,2025-07-15,0.5487842413050169,0,113.64,60.69,104.25,177.25,130.0,True,lightgbm,C,experiment_c,1.4210854715202004e-14
+tomato,dambulla,2025-09-29,2025-10-06,1,2025-07-15,0.5487842413050169,0,116.0,59.73,106.42,180.92,96.0,True,lightgbm,C,experiment_c,0.0
+tomato,meegoda,2025-09-29,2025-10-06,1,2025-07-15,0.5487842413050169,0,134.0,73.26,122.93,208.9,146.0,True,lightgbm,C,experiment_c,0.0
+tomato,nuwara_eliya,2025-09-29,2025-10-06,1,2025-07-15,0.5487842413050169,0,127.0,67.25,116.51,193.09,118.0,True,lightgbm,C,experiment_c,1.4210854715202004e-14

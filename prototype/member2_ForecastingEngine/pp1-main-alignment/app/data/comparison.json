@@ -1,0 +1,74 @@
+[
+  {
+    "model": "Last-value naive",
+    "id": "naive_last",
+    "n_scored": 1164,
+    "mae": 142.91,
+    "rmse": 217.1,
+    "mape": 64.65,
+    "pinball": null,
+    "picp": null,
+    "interval_width": null,
+    "backend": "naive_last"
+  },
+  {
+    "model": "Seasonal naive (52)",
+    "id": "seasonal_naive_52",
+    "n_scored": 1137,
+    "mae": 161.7,
+    "rmse": 246.86,
+    "mape": 73.05,
+    "pinball": null,
+    "picp": null,
+    "interval_width": null,
+    "backend": "seasonal_naive_52"
+  },
+  {
+    "model": "SARIMAX (1,1,1)(1,0,0,52)",
+    "id": "sarima",
+    "n_scored": 1164,
+    "mae": 121.48,
+    "rmse": 188.44,
+    "mape": 51.8,
+    "pinball": null,
+    "picp": null,
+    "interval_width": null,
+    "backend": "sarimax"
+  },
+  {
+    "model": "LightGBM quantile",
+    "id": "lightgbm",
+    "n_scored": 1164,
+    "mae": 110.14,
+    "rmse": 172.73,
+    "mape": 43.96,
+    "pinball": 55.07,
+    "picp": 83.42,
+    "interval_width": 439.47,
+    "backend": "lightgbm"
+  },
+  {
+    "model": "XGBoost quantile",
+    "id": "xgboost",
+    "n_scored": 1164,
+    "mae": 107.56,
+    "rmse": 170.78,
+    "mape": 42.38,
+    "pinball": 53.78,
+    "picp": 81.53,
+    "interval_width": 481.67,
+    "backend": "xgboost"
+  },
+  {
+    "model": "LSTM-style MLP (not run)",
+    "id": "lstm",
+    "n_scored": 0,
+    "mae": null,
+    "rmse": null,
+    "mape": null,
+    "pinball": null,
+    "picp": null,
+    "interval_width": null,
+    "backend": "not_run"
+  }
+]

@@ -1,0 +1,175 @@
+{
+  "source_path": "D:\\SLIIT\\4th Year\\Reaserch\\data sets\\processed\\doa_cultivation_progress.csv",
+  "spatial_scope_for_scoring": "national",
+  "spatial_scope_note": "National cultivation progress is not district supply progress. District rows stay in the audit and are not features.",
+  "district_rows_used_for_scoring": false,
+  "ratio_rule": "achieved_ha / target_ha when target_ha > 0. Ratios above 1 are kept. target_ha <= 0 is not replaced with 1.",
+  "asof_rule": "same crop, official source season equals the forecast Monday operational season, available_date <= forecast Monday",
+  "report_age_cutoff_days": null,
+  "allowed_issue_years": [
+    2018,
+    2019,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "excluded_issue_years": [
+    2016,
+    2017,
+    2020,
+    2021
+  ],
+  "n_source_rows_after_crop_filter": 172,
+  "n_national_rows": 72,
+  "n_district_rows": 100,
+  "n_valid_national_rows": 72,
+  "n_nonpositive_target_rows": 70,
+  "n_national_ratios_above_one": 5,
+  "n_source_date_season_mismatches": 0,
+  "asof_rows": 10941,
+  "asof_rows_with_national_signal": 2688,
+  "coverage_by_issue_year": [
+    {
+      "issue_year": 2016,
+      "rows": 1092,
+      "rows_with_progress": 0,
+      "coverage_pct": 0.0
+    },
+    {
+      "issue_year": 2017,
+      "rows": 1092,
+      "rows_with_progress": 0,
+      "coverage_pct": 0.0
+    },
+    {
+      "issue_year": 2018,
+      "rows": 1113,
+      "rows_with_progress": 546,
+      "coverage_pct": 49.06
+    },
+    {
+      "issue_year": 2019,
+      "rows": 1092,
+      "rows_with_progress": 63,
+      "coverage_pct": 5.77
+    },
+    {
+      "issue_year": 2020,
+      "rows": 1092,
+      "rows_with_progress": 0,
+      "coverage_pct": 0.0
+    },
+    {
+      "issue_year": 2021,
+      "rows": 1092,
+      "rows_with_progress": 0,
+      "coverage_pct": 0.0
+    },
+    {
+      "issue_year": 2022,
+      "rows": 1092,
+      "rows_with_progress": 567,
+      "coverage_pct": 51.92
+    },
+    {
+      "issue_year": 2023,
+      "rows": 1092,
+      "rows_with_progress": 693,
+      "coverage_pct": 63.46
+    },
+    {
+      "issue_year": 2024,
+      "rows": 1113,
+      "rows_with_progress": 336,
+      "coverage_pct": 30.19
+    },
+    {
+      "issue_year": 2025,
+      "rows": 1071,
+      "rows_with_progress": 483,
+      "coverage_pct": 45.1
+    }
+  ],
+  "coverage_by_exact_season": [
+    {
+      "cultivation_exact_season_id": "Maha 2017",
+      "rows_with_progress": 231,
+      "report_dates": 3
+    },
+    {
+      "cultivation_exact_season_id": "Maha 2019",
+      "rows_with_progress": 63,
+      "report_dates": 1
+    },
+    {
+      "cultivation_exact_season_id": "Maha 2021",
+      "rows_with_progress": 126,
+      "report_dates": 2
+    },
+    {
+      "cultivation_exact_season_id": "Maha 2022",
+      "rows_with_progress": 399,
+      "report_dates": 1
+    },
+    {
+      "cultivation_exact_season_id": "Maha 2024",
+      "rows_with_progress": 147,
+      "report_dates": 1
+    },
+    {
+      "cultivation_exact_season_id": "Yala 2018",
+      "rows_with_progress": 315,
+      "report_dates": 3
+    },
+    {
+      "cultivation_exact_season_id": "Yala 2022",
+      "rows_with_progress": 315,
+      "report_dates": 2
+    },
+    {
+      "cultivation_exact_season_id": "Yala 2023",
+      "rows_with_progress": 420,
+      "report_dates": 1
+    },
+    {
+      "cultivation_exact_season_id": "Yala 2024",
+      "rows_with_progress": 336,
+      "report_dates": 4
+    },
+    {
+      "cultivation_exact_season_id": "Yala 2025",
+      "rows_with_progress": 336,
+      "report_dates": 2
+    }
+  ],
+  "wired_through_district_month_loader": false,
+  "renamed_to_cultivation_monthly": false,
+  "b_features": [
+    "price_lag_1w",
+    "price_lag_2w",
+    "price_lag_4w",
+    "price_lag_8w",
+    "price_lag_52w",
+    "price_mean_4w",
+    "price_mean_8w",
+    "price_change_4w_pct",
+    "season",
+    "season_transition",
+    "forecast_week_of_year",
+    "week_within_season",
+    "origin_rainfall_1w_mm",
+    "origin_rainfall_sum_4w_mm",
+    "origin_rainfall_sum_8w_mm",
+    "origin_mean_temp_4w_c",
+    "origin_rainfall_anomaly_4w_mm",
+    "diesel_price_lkr_litre",
+    "usd_lkr_rate",
+    "inflation_rate_pct",
+    "previous_season_extent",
+    "same_season_previous_year_extent",
+    "historical_mean_season_extent",
+    "extent_change_vs_previous_season"
+  ],
+  "lightgbm_params_source": "notebook fixed hyperparameters; Optuna was not run"
+}
