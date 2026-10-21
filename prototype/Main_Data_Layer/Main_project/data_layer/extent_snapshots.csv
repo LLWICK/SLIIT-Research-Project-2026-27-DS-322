@@ -1,0 +1,473 @@
+source,report_date,season_label,as_of_date,crop_code,region_name,region_level,region_group,target_ha,achievement_ha,target_missing,achievement_missing,page_number,source_file
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Provincial DDA Areas,subtotal,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Colombo,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Gampaha,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Kalutara,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Kandy,area,provincial,65.0,52.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Matale,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Nuwaraeliya,area,provincial,1224.0,1292.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Galle,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Matara,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Hambantota,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Jaffna,area,provincial,38.0,22.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Kilinochchi,area,provincial,12.0,0.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mannar,area,provincial,6.0,,False,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Vavuniya,area,provincial,8.0,7.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mullathivu,area,provincial,6.0,0.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Batticaloa,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Ampara,area,provincial,10.0,7.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Trincomalee,area,provincial,7.0,3.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Kurunegala,area,provincial,1.0,,False,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Puttalam,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Anuradhapura,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Badulla,area,provincial,614.0,790.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Moneragala,area,provincial,4.0,1.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Ratnapura,area,provincial,6.0,4.0,False,False,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Kegalle,area,provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Polonnaruwa IP,area,inter_provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Ampara IP,area,inter_provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Monaragala IP,area,inter_provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Hambantota IP,area,inter_provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Hasalaka IP,area,inter_provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Anuradhapura IP,area,inter_provincial,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mahaweli Areas,subtotal,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mahaweli H,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mahaweli H 1,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mahaweli L,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mahaweli B,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mahaweli C,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mahaweli G,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Udawalawa,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Mahaweli D,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Rambakanoya,area,mahaweli,,,True,True,9,maha-2024-25-final.pdf
+doa,2025-04-15,2024/25 Maha,2025-03-31,carrot,Sri Lanka,national,national,2001.0,2178.0,False,False,9,maha-2024-25-final.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Provincial DDA Areas,subtotal,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Colombo,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Gampaha,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Kalutara,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Kandy,area,provincial,90.0,44.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Matale,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Nuwaraeliya,area,provincial,968.0,863.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Galle,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Matara,area,provincial,0.0,,False,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Hambantota,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Jaffna,area,provincial,68.0,50.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Kilinochchi,area,provincial,12.0,2.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mannar,area,provincial,10.0,2.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Vavuniya,area,provincial,16.0,8.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mullathivu,area,provincial,29.0,2.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Baticaloa,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Ampara,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Trincomalee,area,provincial,2.0,1.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Kurunegala,area,provincial,6.0,0.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Puttalam,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Anuradhapura,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Badulla,area,provincial,535.0,889.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Moneragala,area,provincial,1.0,3.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Ratnapura,area,provincial,6.0,2.0,False,False,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Kegalle,area,provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Polonnaruwa IP,area,inter_provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Ampara IP,area,inter_provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Monaragala IP,area,inter_provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Hambantota IP,area,inter_provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Hasalaka IP,area,inter_provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Anuradhapura IP,area,inter_provincial,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mahaweli Areas,subtotal,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mahaweli H,area,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mahaweli H 1,area,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mahaweli L,area,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mahaweli C,area,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mahaweli G,area,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Udawalawa,area,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Mahaweli D,area,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Rambakanoya,area,mahaweli,,,True,True,10,maha-april-2022.pdf
+doa,2022-04-15,2021/22 Maha,2022-03-31,carrot,Sri Lanka,national,national,1743.0,1866.0,False,False,10,maha-april-2022.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Provincial DDA Areas,subtotal,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Colombo,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Gampaha,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Kalutara,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Kandy,area,provincial,25.0,8.0,False,False,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Matale,area,provincial,1.0,,False,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Nuwaraeliya,area,provincial,1081.0,310.0,False,False,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Galle,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Matara,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Hambantota,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Jaffna,area,provincial,10.0,0.0,False,False,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Kilinochchi,area,provincial,3.0,,False,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mannar,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Vavuniya,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mullathivu,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Batticaloa,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Ampara,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Trincomalee,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Kurunegala,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Puttalam,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Anuradhapura,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Badulla,area,provincial,203.0,97.0,False,False,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Moneragala,area,provincial,1.0,1.0,False,False,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Ratnapura,area,provincial,2.0,2.0,False,False,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Kegalle,area,provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Polonnaruwa IP,area,inter_provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Ampara IP,area,inter_provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Monaragala IP,area,inter_provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Hambantota IP,area,inter_provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Hasalaka IP,area,inter_provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Anuradhapura IP,area,inter_provincial,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mahaweli Areas,subtotal,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mahaweli H,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mahaweli H 1,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mahaweli L,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mahaweli B,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mahaweli C,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mahaweli G,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Udawalawa,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Mahaweli D,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Rambakanoya,area,mahaweli,,,True,True,9,maha-december-2024-25.pdf
+doa,2024-12-15,2024/25 Maha,2024-11-30,leeks,Sri Lanka,national,national,1326.0,418.0,False,False,9,maha-december-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Provincial DDA Areas,subtotal,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Colombo,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Gampaha,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Kalutara,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Kandy,area,provincial,25.0,14.0,False,False,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Matale,area,provincial,1.0,,False,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Nuwaraeliya,area,provincial,1084.0,697.0,False,False,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Galle,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Matara,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Hambantota,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Jaffna,area,provincial,10.0,1.0,False,False,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Kilinochchi,area,provincial,3.0,,False,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mannar,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Vavuniya,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mullathivu,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Batticaloa,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Ampara,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Trincomalee,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Kurunegala,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Puttalam,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Anuradhapura,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Badulla,area,provincial,203.0,191.0,False,False,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Moneragala,area,provincial,1.0,1.0,False,False,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Ratnapura,area,provincial,2.0,2.0,False,False,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Kegalle,area,provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Polonnaruwa IP,area,inter_provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Ampara IP,area,inter_provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Monaragala IP,area,inter_provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Hambantota IP,area,inter_provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Hasalaka IP,area,inter_provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Anuradhapura IP,area,inter_provincial,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mahaweli Areas,subtotal,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mahaweli H,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mahaweli H 1,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mahaweli L,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mahaweli B,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mahaweli C,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mahaweli G,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Udawalawa,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Mahaweli D,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Rambakanoya,area,mahaweli,,,True,True,9,maha-february-2024-25.pdf
+doa,2025-02-15,2024/25 Maha,2025-01-31,leeks,Sri Lanka,national,national,1329.0,906.0,False,False,9,maha-february-2024-25.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Provincial DDA Areas,subtotal,provincial,1333.0,1120.0,False,False,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Colombo,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Gampaha,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Kalutara,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Kandy,area,provincial,53.0,37.0,False,False,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Matale,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Nuwaraeliya,area,provincial,1080.0,823.0,False,False,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Galle,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Matara,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Hambantota,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Jaffna,area,provincial,8.0,1.0,False,False,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Kilinochchi,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mannar,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Vavuniya,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mullathivu,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Batticaloa,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Ampara,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Trincomalee,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Kurunegala,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Puttalam,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Anuradhapura,area,provincial,,0.0,True,False,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Badulla,area,provincial,190.0,257.0,False,False,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Moneragala,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Ratnapura,area,provincial,2.0,2.0,False,False,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Kegalle,area,provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Polonnaruwa IP,area,inter_provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Ampara IP,area,inter_provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Monaragala IP,area,inter_provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Hambantota IP,area,inter_provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Hasalaka IP,area,inter_provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Anuradhapura IP,area,inter_provincial,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mahaweli Areas,subtotal,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mahaweli H,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mahaweli H 1,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mahaweli L,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mahaweli B,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mahaweli C,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mahaweli G,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Udawalawa,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Mahaweli D,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Rambakanoya,area,mahaweli,,,True,True,10,yala-august-2025.pdf
+doa,2025-08-15,2025 Yala,2025-07-31,leeks,Sri Lanka,national,national,1333.0,1120.0,False,False,10,yala-august-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Provincial DDA Areas,subtotal,provincial,1333.0,772.0,False,False,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Colombo,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Gampaha,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Kalutara,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Kandy,area,provincial,53.0,24.0,False,False,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Matale,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Nuwaraeliya,area,provincial,1080.0,579.0,False,False,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Galle,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Matara,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Hambantota,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Jaffna,area,provincial,8.0,,False,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Kilinochchi,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mannar,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Vavuniya,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mullathivu,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Batticaloa,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Ampara,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Trincomalee,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Kurunegala,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Puttalam,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Anuradhapura,area,provincial,,0.0,True,False,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Badulla,area,provincial,190.0,167.0,False,False,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Moneragala,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Ratnapura,area,provincial,2.0,2.0,False,False,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Kegalle,area,provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Polonnaruwa IP,area,inter_provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Ampara IP,area,inter_provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Monaragala IP,area,inter_provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Hambantota IP,area,inter_provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Hasalaka IP,area,inter_provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Anuradhapura IP,area,inter_provincial,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mahaweli Areas,subtotal,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mahaweli H,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mahaweli H 1,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mahaweli L,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mahaweli B,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mahaweli C,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mahaweli G,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Udawalawa,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Mahaweli D,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Rambakanoya,area,mahaweli,,,True,True,10,yala-july-2025.pdf
+doa,2025-07-15,2025 Yala,2025-06-30,leeks,Sri Lanka,national,national,1333.0,772.0,False,False,10,yala-july-2025.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Provincial DDA Areas,subtotal,provincial,2285.0,1195.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Colombo,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Gampaha,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Kalutara,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Kandy,area,provincial,64.0,26.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Matale,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Nuwaraeliya,area,provincial,1565.0,738.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Galle,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Matara,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Hambantota,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Jaffna,area,provincial,25.0,6.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Kilinochchi,area,provincial,6.0,,False,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mannar,area,provincial,1.0,,False,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Vavuniya,area,provincial,6.0,1.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mullathivu,area,provincial,3.0,2.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Batticaloa,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Ampara,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Trincomalee,area,provincial,1.0,,False,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Kurunegala,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Puttalam,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Anuradhapura,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Badulla,area,provincial,608.0,421.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Moneragala,area,provincial,1.0,0.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Ratnapura,area,provincial,5.0,1.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Kegalle,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Polonnaruwa IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Ampara IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Monaragala IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Hambantota IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Hasalaka IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Anuradhapura IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mahaweli Areas,subtotal,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mahaweli H,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mahaweli H 1,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mahaweli L,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mahaweli B,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mahaweli C,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mahaweli G,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Udawalawa,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Mahaweli D,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Rambakanoya,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,carrot,Sri Lanka,national,national,2285.0,1195.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Provincial DDA Areas,subtotal,provincial,1341.0,761.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Colombo,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Gampaha,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Kalutara,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Kandy,area,provincial,49.0,14.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Matale,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Nuwaraeliya,area,provincial,1040.0,550.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Galle,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Matara,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Hambantota,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Jaffna,area,provincial,8.0,0.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Kilinochchi,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mannar,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Vavuniya,area,provincial,,0.0,True,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mullathivu,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Batticaloa,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Ampara,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Trincomalee,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Kurunegala,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Puttalam,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Anuradhapura,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Badulla,area,provincial,241.0,196.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Moneragala,area,provincial,1.0,1.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Ratnapura,area,provincial,2.0,0.0,False,False,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Kegalle,area,provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Polonnaruwa IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Ampara IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Monaragala IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Hambantota IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Hasalaka IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Anuradhapura IP,area,inter_provincial,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mahaweli Areas,subtotal,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mahaweli H,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mahaweli H 1,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mahaweli L,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mahaweli B,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mahaweli C,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mahaweli G,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Udawalawa,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Mahaweli D,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Rambakanoya,area,mahaweli,,,True,True,11,yala-july-2026.pdf
+doa,2026-07-15,2026 Yala,2026-06-30,leeks,Sri Lanka,national,national,1341.0,761.0,False,False,11,yala-july-2026.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Provincial DDA Areas,subtotal,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Colombo,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Gampaha,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Kalutara,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Kandy,area,provincial,53.0,17.0,False,False,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Matale,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Nuwaraeliya,area,provincial,1069.0,353.0,False,False,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Galle,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Matara,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Hambantota,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Jaffna,area,provincial,8.0,,False,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Kilinochchi,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mannar,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Vavuniya,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mullathivu,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Batticaloa,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Ampara,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Trincomalee,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Kurunegala,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Puttalam,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Anuradhapura,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Badulla,area,provincial,190.0,99.0,False,False,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Moneragala,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Ratnapura,area,provincial,2.0,2.0,False,False,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Kegalle,area,provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Polonnaruwa IP,area,inter_provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Ampara IP,area,inter_provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Monaragala IP,area,inter_provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Hambantota IP,area,inter_provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Hasalaka IP,area,inter_provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Anuradhapura IP,area,inter_provincial,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mahaweli Areas,subtotal,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mahaweli H,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mahaweli H 1,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mahaweli L,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mahaweli B,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mahaweli C,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mahaweli G,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Udawalawa,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Mahaweli D,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Rambakanoya,area,mahaweli,,,True,True,10,yala-june-2025.pdf
+doa,2025-06-15,2025 Yala,2025-05-31,leeks,Sri Lanka,national,national,1322.0,471.0,False,False,10,yala-june-2025.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Provincial DDA Areas,subtotal,provincial,1333.0,1557.0,False,False,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Colombo,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Gampaha,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Kalutara,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Kandy,area,provincial,53.0,50.0,False,False,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Matale,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Nuwaraeliya,area,provincial,1080.0,1107.0,False,False,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Galle,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Matara,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Hambantota,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Jaffna,area,provincial,8.0,4.0,False,False,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Kilinochchi,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mannar,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Vavuniya,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mullathivu,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Batticaloa,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Ampara,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Trincomalee,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Kurunegala,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Puttalam,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Anuradhapura,area,provincial,,0.0,True,False,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Badulla,area,provincial,190.0,394.0,False,False,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Moneragala,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Ratnapura,area,provincial,2.0,2.0,False,False,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Kegalle,area,provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Polonnaruwa IP,area,inter_provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Ampara IP,area,inter_provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Monaragala IP,area,inter_provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Hambantota IP,area,inter_provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Hasalaka IP,area,inter_provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Anuradhapura IP,area,inter_provincial,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mahaweli Areas,subtotal,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mahaweli H,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mahaweli H 1,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mahaweli L,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mahaweli B,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mahaweli C,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mahaweli G,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Udawalawa,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Mahaweli D,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Rambakanoya,area,mahaweli,,,True,True,9,yala-october-2025-yala-final.pdf
+doa,2025-10-15,2025 Yala,2025-09-30,leeks,Sri Lanka,national,national,1333.0,1557.0,False,False,9,yala-october-2025-yala-final.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Provincial DDA Areas,subtotal,provincial,1333.0,1346.0,False,False,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Colombo,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Gampaha,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Kalutara,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Kandy,area,provincial,53.0,45.0,False,False,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Matale,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Nuwaraeliya,area,provincial,1080.0,965.0,False,False,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Galle,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Matara,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Hambantota,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Jaffna,area,provincial,8.0,4.0,False,False,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Kilinochchi,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mannar,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Vavuniya,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mullathivu,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Batticaloa,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Ampara,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Trincomalee,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Kurunegala,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Puttalam,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Anuradhapura,area,provincial,,0.0,True,False,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Badulla,area,provincial,190.0,330.0,False,False,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Moneragala,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Ratnapura,area,provincial,2.0,2.0,False,False,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Kegalle,area,provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Inter Provincial DDA Area,subtotal,inter_provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Polonnaruwa IP,area,inter_provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Ampara IP,area,inter_provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Monaragala IP,area,inter_provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Hambantota IP,area,inter_provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Hasalaka IP,area,inter_provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Anuradhapura IP,area,inter_provincial,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mahaweli Areas,subtotal,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mahaweli H,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mahaweli H 1,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mahaweli L,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mahaweli B,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mahaweli C,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mahaweli G,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Udawalawa,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Mahaweli D,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Rambakanoya,area,mahaweli,,,True,True,12,yala-september-2025.pdf
+doa,2025-09-15,2025 Yala,2025-08-31,leeks,Sri Lanka,national,national,1333.0,1346.0,False,False,12,yala-september-2025.pdf
