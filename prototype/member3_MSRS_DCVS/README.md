@@ -10,6 +10,11 @@ claiming a validated market-oversupply model.
 - Separates `POST /recommendations/assess` from `POST /commitments`.
 - Maps mock agro-climatic parameters (elevation, temperature, rainfall, soil type) to planting districts for suitability calculation.
 - Evaluates Market Saturation Risk (MSRS) to warn of Cobweb price crashes.
+- **Simplified UI Workflow**:
+  - Displays primary recommendation when saturation risk is safe/low.
+  - Automatically triggers and highlights the optimal alternative crop only when saturation risk is high.
+  - Presents a streamlined commitment confirmation form at the end with the recommended crop pre-selected.
+  - Collapses multi-paradigm research models (TOPSIS, BPR, Softmax, Weight Trainer) in an expandable drawer for clean usability.
 - Computes and compares 5 recommendation paradigms:
   1. **Baseline DCVS**: Linear weighted multi-attribute score.
   2. **MCDM / TOPSIS**: Multi-criteria ranking minimizing distance to ideal solution while penalizing price forecast uncertainty intervals.
