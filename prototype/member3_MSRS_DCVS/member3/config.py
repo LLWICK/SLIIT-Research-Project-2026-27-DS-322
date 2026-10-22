@@ -19,7 +19,7 @@ class ScoringConfig:
 # Temporary UI/API configuration only. It is deliberately kept separate from
 # observed data so it cannot be mistaken for an estimated market demand value.
 DEMO_CAPACITY_HA = {
-    "carrot": 1_000.0,
+    "carrot": 5_000.0,
     "leek": 800.0,
     "tomato": 900.0,
 }
