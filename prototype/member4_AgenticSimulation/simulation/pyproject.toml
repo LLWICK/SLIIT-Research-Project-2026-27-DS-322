@@ -1,0 +1,12 @@
+[project]
+name = "main-project"
+version = "0.1.0"
+description = "Agentic simulation for the cobweb decision-support project"
+readme = "simulation/README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "altair>=6.3.0",
+    "duckdb>=1.5.6",
+    "pandas>=3.0.6",
+    "streamlit>=1.66.0",
+]

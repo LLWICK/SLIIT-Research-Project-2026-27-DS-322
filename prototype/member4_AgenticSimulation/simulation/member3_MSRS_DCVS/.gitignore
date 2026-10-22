@@ -1,0 +1,7 @@
+.DS_Store
+.xlsx
+/member3Data
+
+# Local Member 3 prototype runtime state
+member3_commitments.sqlite3
+.pytest_cache/
